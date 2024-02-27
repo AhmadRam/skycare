@@ -1,0 +1,25 @@
+{
+    "name": "bagisto/laravel-myfatoorah",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Eng. Ahmad Alsaid Ramdan",
+            "email": "a.n.s.r.96@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Webkul\\Myfatoorah\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Webkul\\Myfatoorah\\Providers\\MyfatoorahServiceProvider"
+            ],
+            "aliases": {}
+        }
+    },
+    "minimum-stability": "dev"
+}

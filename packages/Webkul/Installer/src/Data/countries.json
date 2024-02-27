@@ -1,0 +1,26 @@
+[
+   {
+      "id": 1,
+      "code": "KW",
+      "name": "Kuwait",
+      "phone_code": "+965"
+   },
+   {
+      "id": 2,
+      "code": "SA",
+      "name": "Saudi Arabia",
+      "phone_code": "+966"
+   },
+   {
+      "id": 3,
+      "code": "QA",
+      "name": "Qatar",
+      "phone_code": "+974"
+   },
+   {
+      "id": 4,
+      "code": "AE",
+      "name": "United Arab Emirates",
+      "phone_code": "+971"
+   }
+]
