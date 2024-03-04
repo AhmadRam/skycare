@@ -12,6 +12,7 @@ use Webkul\Core\Rules\Code;
 use Webkul\Product\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Webkul\Attribute\Repositories\AttributeOptionRepository;
 
 class AttributeController extends Controller
 {
@@ -22,7 +23,8 @@ class AttributeController extends Controller
      */
     public function __construct(
         protected AttributeRepository $attributeRepository,
-        protected ProductRepository $productRepository
+        protected ProductRepository $productRepository,
+        protected AttributeOptionRepository $attributeOptionRepository,
     ) {
     }
 
