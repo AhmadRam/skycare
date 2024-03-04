@@ -15,6 +15,7 @@ use Webkul\Category\Repositories\CategoryRepository;
 use Webkul\Core\Repositories\ChannelRepository;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Webkul\Core\Repositories\LocaleRepository;
 
 class CategoryController extends Controller
 {
@@ -26,7 +27,8 @@ class CategoryController extends Controller
     public function __construct(
         protected ChannelRepository $channelRepository,
         protected CategoryRepository $categoryRepository,
-        protected AttributeRepository $attributeRepository
+        protected AttributeRepository $attributeRepository,
+        protected LocaleRepository $localeRepository
     ) {
     }
 
