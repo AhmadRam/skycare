@@ -69,7 +69,7 @@ class Installer extends Command
      */
     public function handle()
     {
-        $applicationDetails = ! $this->option('skip-env-check')
+        $applicationDetails = !$this->option('skip-env-check')
             ? $this->checkForEnvFile()
             : [];
 
@@ -95,7 +95,7 @@ class Installer extends Command
         $this->warn('Step: Clearing cached bootstrap files...');
         $this->call('optimize:clear');
 
-        if (! $this->option('skip-admin-creation')) {
+        if (!$this->option('skip-admin-creation')) {
             $this->warn('Step: Create admin credentials...');
             $this->createAdminCredentials();
         }
@@ -110,15 +110,14 @@ class Installer extends Command
      */
     protected function checkForEnvFile()
     {
-        if (! file_exists(base_path('.env'))) {
+        if (!file_exists(base_path('.env'))) {
             $this->info('Creating the environment configuration file.');
 
             File::copy('.env.example', '.env');
+            return $this->createEnvFile();
         } else {
             $this->info('Great! your environment configuration file already exists.');
         }
-
-        return $this->createEnvFile();
     }
 
     /**
@@ -164,7 +163,7 @@ class Installer extends Command
             date_default_timezone_get()
         );
 
-        $this->info('Your Default Timezone is '.date_default_timezone_get());
+        $this->info('Your Default Timezone is ' . date_default_timezone_get());
 
         $defaultLocale = $this->updateEnvChoice(
             'APP_LOCALE',
@@ -254,9 +253,9 @@ class Installer extends Command
         ];
 
         if (
-            ! $databaseDetails['DB_DATABASE']
-            || ! $databaseDetails['DB_USERNAME']
-            || ! $databaseDetails['DB_PASSWORD']
+            !$databaseDetails['DB_DATABASE']
+            || !$databaseDetails['DB_USERNAME']
+            || !$databaseDetails['DB_PASSWORD']
         ) {
             return $this->error('Please enter the database credentials.');
         }
@@ -285,7 +284,7 @@ class Installer extends Command
             label: 'Enter the email address of the admin user',
             default: 'admin@skycare.com',
             validate: fn (string $value) => match (true) {
-                ! filter_var($value, FILTER_VALIDATE_EMAIL) => 'The email address you entered is not valid please try again.',
+                !filter_var($value, FILTER_VALIDATE_EMAIL) => 'The email address you entered is not valid please try again.',
                 default                                     => null
             }
         );
@@ -317,9 +316,9 @@ class Installer extends Command
             $this->info('-----------------------------');
             $this->info('Congratulations!');
             $this->info('The installation has been finished and you can now use Bagisto.');
-            $this->info('Go to '.env('APP_URL').'/admin'.' and authenticate with:');
-            $this->info('Email: '.$adminEmail);
-            $this->info('Password: '.$adminPassword);
+            $this->info('Go to ' . env('APP_URL') . '/admin' . ' and authenticate with:');
+            $this->info('Email: ' . $adminEmail);
+            $this->info('Password: ' . $adminPassword);
             $this->info('Cheers!');
 
             Event::dispatch('bagisto.installed');
@@ -436,7 +435,7 @@ class Installer extends Command
 
         // Check if $value contains spaces, and if so, add double quotes
         if (preg_match('/\s/', $value)) {
-            $value = '"'.$value.'"';
+            $value = '"' . $value . '"';
         }
 
         $data = preg_replace("/$key=(.*)/", "$key=$value", $data);
