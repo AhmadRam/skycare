@@ -2,6 +2,7 @@
 
 namespace Webkul\Admin\Http\Controllers\Catalog;
 
+use GuzzleHttp\Client;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Event;
 use Webkul\Admin\DataGrids\Catalog\AttributeDataGrid;
@@ -11,6 +12,7 @@ use Webkul\Attribute\Repositories\AttributeRepository;
 use Webkul\Core\Rules\Code;
 use Webkul\Product\Repositories\ProductRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Webkul\Attribute\Repositories\AttributeOptionRepository;
 
@@ -266,8 +268,17 @@ class AttributeController extends Controller
                 $attribute_option = $this->attributeOptionRepository->update($data, $attribute_option->id);
             }
 
-            if (isset($image) && $image == 1) {
-                $attribute_option->swatch_value = 'attribute_option/' . $attribute_option_data['slug'] . '.png';
+            // if (isset($image) && $image == 1) {
+            //     $attribute_option->swatch_value = 'attribute_option/' . $attribute_option_data['slug'] . '.png';
+            //     $attribute_option->save();
+            // }
+            if (isset($image)) {
+                $client = new Client();
+                $response = $client->get($image);
+                $imageContent = $response->getBody()->getContents();
+                $path = 'attribute_option/' . $attribute_option_data['slug'] . '.png';
+                Storage::disk('public')->put($path, $imageContent);
+                $attribute_option->swatch_value = $path;
                 $attribute_option->save();
             }
         }
