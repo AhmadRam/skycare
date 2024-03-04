@@ -1,6 +1,7 @@
 {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.before') !!}
 
-<div class="w-full flex justify-between min-h-[78px] px-[60px] border border-t-0 border-b border-l-0 border-r-0 max-1180:px-8">
+<div
+    class="w-full flex justify-between min-h-[78px] px-[60px] border border-t-0 border-b border-l-0 border-r-0 max-1180:px-8">
     <!--
         This section will provide categories for the first, second, and third levels. If
         additional levels are required, users can customize them according to their needs.
@@ -9,16 +10,9 @@
     <div class="flex items-center gap-x-10 max-[1180px]:gap-x-5">
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.logo.before') !!}
 
-        <a
-            href="{{ route('shop.home.index') }}"
-            aria-label="@lang('shop::app.components.layouts.header.bagisto')"
-        >
-            <img
-                src="{{ core()->getCurrentChannel()->logo_url ?? bagisto_asset('images/logo.svg') }}"
-                width="131"
-                height="29"
-                alt="{{ config('app.name') }}"
-            >
+        <a href="{{ route('shop.home.index') }}" aria-label="@lang('shop::app.components.layouts.header.bagisto')">
+            <img src="{{ asset('themes/shop/default/build/assets/skycare_' . app()->getLocale() . '.png') }}" width="131" height="29"
+                alt="{{ config('app.name') }}">
         </a>
 
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.logo.after') !!}
@@ -27,18 +21,9 @@
 
         <v-desktop-category>
             <div class="flex gap-5 items-center">
-                <span
-                    class="shimmer w-20 h-6 rounded"
-                    role="presentation"
-                ></span>
-                <span
-                    class="shimmer w-20 h-6 rounded"
-                    role="presentation"
-                ></span>
-                <span
-                    class="shimmer w-20 h-6 rounded"
-                    role="presentation"
-                ></span>
+                <span class="shimmer w-20 h-6 rounded" role="presentation"></span>
+                <span class="shimmer w-20 h-6 rounded" role="presentation"></span>
+                <span class="shimmer w-20 h-6 rounded" role="presentation"></span>
             </div>
         </v-desktop-category>
 
@@ -52,30 +37,18 @@
 
         <!-- Search Bar Container -->
         <div class="relative w-full">
-            <form
-                action="{{ route('shop.search.index') }}"
-                class="flex items-center max-w-[445px]"
-                role="search"
-            >
-                <label
-                    for="organic-search"
-                    class="sr-only"
-                >
+            <form action="{{ route('shop.search.index') }}" class="flex items-center max-w-[445px]" role="search">
+                <label for="organic-search" class="sr-only">
                     @lang('shop::app.components.layouts.header.search')
                 </label>
 
-                <div class="icon-search flex items-center  absolute ltr:left-3 rtl:right-3 top-2.5 text-xl pointer-events-none"></div>
+                <div
+                    class="icon-search flex items-center  absolute ltr:left-3 rtl:right-3 top-2.5 text-xl pointer-events-none">
+                </div>
 
-                <input
-                    type="text"
-                    name="query"
-                    value="{{ request('query') }}"
+                <input type="text" name="query" value="{{ request('query') }}"
                     class="block w-full px-11 py-3 bg-[#F5F5F5] rounded-lg text-gray-900 text-xs font-medium transition-all border border-transparent hover:border-gray-400 focus:border-gray-400"
-                    placeholder="@lang('shop::app.components.layouts.header.search-text')"
-                    aria-label="@lang('shop::app.components.layouts.header.search-text')"
-                    aria-required="true"
-                    required
-                >
+                    placeholder="@lang('shop::app.components.layouts.header.search-text')" aria-label="@lang('shop::app.components.layouts.header.search-text')" aria-required="true" required>
 
                 <button type="submit" class="hidden" aria-label="Submit"></button>
 
@@ -93,15 +66,9 @@
             {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.compare.before') !!}
 
             <!-- Compare -->
-            @if(core()->getConfigData('general.content.shop.compare_option'))
-                <a
-                    href="{{ route('shop.compare.index') }}"
-                    aria-label="@lang('shop::app.components.layouts.header.compare')"
-                >
-                    <span
-                        class="icon-compare inline-block text-2xl cursor-pointer"
-                        role="presentation"
-                    ></span>
+            @if (core()->getConfigData('general.content.shop.compare_option'))
+                <a href="{{ route('shop.compare.index') }}" aria-label="@lang('shop::app.components.layouts.header.compare')">
+                    <span class="icon-compare inline-block text-2xl cursor-pointer" role="presentation"></span>
                 </a>
             @endif
 
@@ -117,14 +84,11 @@
             {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.profile.before') !!}
 
             <!-- user profile -->
-            <x-shop::dropdown position="bottom-{{ core()->getCurrentLocale()->direction === 'ltr' ? 'right' : 'left' }}">
+            <x-shop::dropdown
+                position="bottom-{{ core()->getCurrentLocale()->direction === 'ltr' ? 'right' : 'left' }}">
                 <x-slot:toggle>
-                    <span
-                        class="icon-users inline-block text-2xl cursor-pointer"
-                        role="button"
-                        aria-label="@lang('shop::app.components.layouts.header.profile')"
-                        tabindex="0"
-                    ></span>
+                    <span class="icon-users inline-block text-2xl cursor-pointer" role="button"
+                        aria-label="@lang('shop::app.components.layouts.header.profile')" tabindex="0"></span>
                 </x-slot>
 
                 <!-- Guest Dropdown -->
@@ -145,17 +109,13 @@
                         <div class="flex gap-4 mt-6">
                             {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.sign_in_button.before') !!}
 
-                            <a
-                                href="{{ route('shop.customer.session.create') }}"
-                                class="primary-button block w-max px-7 mx-auto m-0 ltr:ml-0 rtl:mr-0 rounded-2xl text-base text-center"
-                            >
+                            <a href="{{ route('shop.customer.session.create') }}"
+                                class="primary-button block w-max px-7 mx-auto m-0 ltr:ml-0 rtl:mr-0 rounded-2xl text-base text-center">
                                 @lang('shop::app.components.layouts.header.sign-in')
                             </a>
 
-                            <a
-                                href="{{ route('shop.customers.register.index') }}"
-                                class="secondary-button block w-max m-0 ltr:ml-0 rtl:mr-0 mx-auto px-7 border-2 rounded-2xl text-base text-center"
-                            >
+                            <a href="{{ route('shop.customers.register.index') }}"
+                                class="secondary-button block w-max m-0 ltr:ml-0 rtl:mr-0 mx-auto px-7 border-2 rounded-2xl text-base text-center">
                                 @lang('shop::app.components.layouts.header.sign-up')
                             </a>
 
@@ -183,42 +143,31 @@
                         <div class="grid gap-1 mt-2.5 pb-2.5">
                             {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.profile_dropdown.links.before') !!}
 
-                            <a
-                                class="px-5 py-2 text-base hover:bg-gray-100 cursor-pointer"
-                                href="{{ route('shop.customers.account.profile.index') }}"
-                            >
+                            <a class="px-5 py-2 text-base hover:bg-gray-100 cursor-pointer"
+                                href="{{ route('shop.customers.account.profile.index') }}">
                                 @lang('shop::app.components.layouts.header.profile')
                             </a>
 
-                            <a
-                                class="px-5 py-2 text-base hover:bg-gray-100 cursor-pointer"
-                                href="{{ route('shop.customers.account.orders.index') }}"
-                            >
+                            <a class="px-5 py-2 text-base hover:bg-gray-100 cursor-pointer"
+                                href="{{ route('shop.customers.account.orders.index') }}">
                                 @lang('shop::app.components.layouts.header.orders')
                             </a>
 
                             @if (core()->getConfigData('general.content.shop.wishlist_option'))
-                                <a
-                                    class="px-5 py-2 text-base hover:bg-gray-100 cursor-pointer"
-                                    href="{{ route('shop.customers.account.wishlist.index') }}"
-                                >
+                                <a class="px-5 py-2 text-base hover:bg-gray-100 cursor-pointer"
+                                    href="{{ route('shop.customers.account.wishlist.index') }}">
                                     @lang('shop::app.components.layouts.header.wishlist')
                                 </a>
                             @endif
 
                             <!--Customers logout-->
                             @auth('customer')
-                                <x-shop::form
-                                    method="DELETE"
-                                    action="{{ route('shop.customer.session.destroy') }}"
-                                    id="customerLogout"
-                                />
+                                <x-shop::form method="DELETE" action="{{ route('shop.customer.session.destroy') }}"
+                                    id="customerLogout" />
 
-                                <a
-                                    class="px-5 py-2 text-base hover:bg-gray-100 cursor-pointer"
+                                <a class="px-5 py-2 text-base hover:bg-gray-100 cursor-pointer"
                                     href="{{ route('shop.customer.session.destroy') }}"
-                                    onclick="event.preventDefault(); document.getElementById('customerLogout').submit();"
-                                >
+                                    onclick="event.preventDefault(); document.getElementById('customerLogout').submit();">
                                     @lang('shop::app.components.layouts.header.logout')
                                 </a>
                             @endauth
@@ -317,7 +266,7 @@
             template: '#v-desktop-category-template',
 
             data() {
-                return  {
+                return {
                     isLoading: true,
 
                     categories: [],

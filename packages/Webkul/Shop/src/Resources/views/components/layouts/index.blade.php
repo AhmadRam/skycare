@@ -21,7 +21,8 @@
         <link
             rel="icon"
             sizes="16x16"
-            href="{{ core()->getCurrentChannel()->favicon_url ?? bagisto_asset('images/favicon.ico') }}"
+            href="{{ asset('themes/shop/default/build/assets/skycare_' . app()->getLocale() . '.png') }}"
+            {{-- href="{{ core()->getCurrentChannel()->favicon_url ?? bagisto_asset('images/favicon.ico') }}" --}}
         />
 
         @bagistoVite(['src/Resources/assets/css/app.css', 'src/Resources/assets/js/app.js'])
@@ -67,7 +68,7 @@
 
             {!! view_render_event('bagisto.shop.layout.content.after') !!}
 
-            
+
             <!-- Page Services Blade Component -->
             @if ($hasFeature)
                 <x-shop::layouts.services />
