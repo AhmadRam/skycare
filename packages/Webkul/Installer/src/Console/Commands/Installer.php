@@ -78,8 +78,8 @@ class Installer extends Command
         $this->warn('Step: Generating key...');
         $this->call('key:generate');
 
-        // $this->warn('Step: Migrating all tables...');
-        // $this->call('migrate:fresh');
+        $this->warn('Step: Migrating all tables...');
+        $this->call('migrate:fresh');
 
         $this->warn('Step: Seeding basic data for Bagisto kickstart...');
         $this->info(app(BagistoDatabaseSeeder::class)->run([
