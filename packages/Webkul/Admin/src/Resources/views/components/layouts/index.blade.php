@@ -36,7 +36,8 @@
         @else
             <link
                 type="image/x-icon"
-                href="{{ bagisto_asset('images/favicon.ico') }}"
+                {{-- href="{{ bagisto_asset('images/favicon.ico') }}" --}}
+                href="{{ asset('themes/shop/default/build/assets/skycare_' . app()->getLocale() . '.png') }}"
                 rel="shortcut icon"
                 sizes="16x16"
             />
