@@ -1,7 +1,4 @@
-<v-product-card
-    {{ $attributes }}
-    :product="product"
->
+<v-product-card {{ $attributes }} :product="product">
 </v-product-card>
 
 @pushOnce('scripts')
@@ -34,7 +31,7 @@
                 </a>
 
                 {!! view_render_event('bagisto.shop.components.products.card.image.after') !!}
-                
+
                 <div class="action-items bg-black">
                     <p
                         class="inline-block absolute top-5 ltr:left-5 rtl:right-5 px-2.5  bg-[#E51A1A] rounded-[44px] text-white text-sm"
@@ -103,7 +100,7 @@
 
                 {!! view_render_event('bagisto.shop.components.products.card.name.before') !!}
 
-                <p class="text-base" v-text="product.name"></p>
+                <a :href="`{{ route('shop.product_or_category.index', '') }}/${product.url_key}`":aria-label="product.name + ' '"><p class="text-base" v-text="product.name"></p></a>
 
                 {!! view_render_event('bagisto.shop.components.products.card.name.after') !!}
 
@@ -131,7 +128,7 @@
             class="flex gap-4 grid-cols-2 max-w-max relative max-sm:flex-wrap rounded overflow-hidden"
             v-else
         >
-            <div class="relative max-w-[250px] max-h-[258px] overflow-hidden group"> 
+            <div class="relative max-w-[250px] max-h-[258px] overflow-hidden group">
 
                 {!! view_render_event('bagisto.shop.components.products.card.image.before') !!}
 
@@ -148,8 +145,8 @@
                 </a>
 
                 {!! view_render_event('bagisto.shop.components.products.card.image.after') !!}
-            
-                <div class="action-items bg-black"> 
+
+                <div class="action-items bg-black">
                     <p
                         class="inline-block absolute top-5 ltr:left-5 rtl:right-5 px-2.5 bg-[#E51A1A] rounded-[44px] text-white text-sm"
                         v-if="product.on_sale"
@@ -169,7 +166,7 @@
                         {!! view_render_event('bagisto.shop.components.products.card.wishlist_option.before') !!}
 
                         @if (core()->getConfigData('general.content.shop.wishlist_option'))
-                            <span 
+                            <span
                                 class="flex justify-center items-center absolute top-5 ltr:right-5 rtl:left-5 w-[30px] h-[30px] bg-white rounded-md text-2xl cursor-pointer"
                                 role="button"
                                 aria-label="@lang('shop::app.components.products.card.add-to-wishlist')"
@@ -177,15 +174,15 @@
                                 :class="product.is_wishlist ? 'icon-heart-fill' : 'icon-heart'"
                                 @click="addToWishlist()"
                             >
-                            </span> 
+                            </span>
                         @endif
-                        
+
                         {!! view_render_event('bagisto.shop.components.products.card.wishlist_option.after') !!}
 
                         {!! view_render_event('bagisto.shop.components.products.card.compare_option.before') !!}
 
                         @if (core()->getConfigData('general.content.shop.compare_option'))
-                            <span 
+                            <span
                                 class="icon-compare flex justify-center items-center absolute top-16 ltr:right-5 rtl:left-5 w-[30px] h-[30px] bg-white rounded-md text-2xl cursor-pointer"
                                 role="button"
                                 aria-label="@lang('shop::app.components.products.card.add-to-compare')"
@@ -196,51 +193,51 @@
                         @endif
 
                         {!! view_render_event('bagisto.shop.components.products.card.compare_option.after') !!}
-                    </div> 
-                </div> 
-            </div> 
+                    </div>
+                </div>
+            </div>
 
-            <div class="grid gap-4 content-start"> 
+            <div class="grid gap-4 content-start">
 
                 {!! view_render_event('bagisto.shop.components.products.card.name.before') !!}
 
-                <p 
-                    class="text-base" 
+                <p
+                    class="text-base"
                     v-text="product.name"
                 >
-                </p> 
+                </p>
 
                 {!! view_render_event('bagisto.shop.components.products.card.name.after') !!}
 
                 {!! view_render_event('bagisto.shop.components.products.card.price.before') !!}
 
-                <div 
+                <div
                     class="flex gap-2.5 text-lg font-semibold"
                     v-html="product.price_html"
-                >   
-                </div> 
+                >
+                </div>
 
                 {!! view_render_event('bagisto.shop.components.products.card.price.after') !!}
 
                 <!-- Needs to implement that in future -->
-                <div class="hidden flex gap-4"> 
+                <div class="hidden flex gap-4">
                     <span class="block w-[30px] h-[30px] rounded-full bg-[#B5DCB4]">
-                    </span> 
+                    </span>
 
                     <span class="block w-[30px] h-[30px] rounded-full bg-[#5C5C5C]">
-                    </span> 
-                </div> 
-                
+                    </span>
+                </div>
+
                 {!! view_render_event('bagisto.shop.components.products.card.price.after') !!}
 
                 <p class="text-sm text-[#6E6E6E]" v-if="! product.avg_ratings">
                     @lang('shop::app.components.products.card.review-description')
                 </p>
-            
+
                 {!! view_render_event('bagisto.shop.components.products.card.average_ratings.before') !!}
 
                 <p v-else class="text-sm text-[#6E6E6E]">
-                    <x-shop::products.star-rating 
+                    <x-shop::products.star-rating
                         ::value="product && product.avg_ratings ? product.avg_ratings : 0"
                         :is-editable=false
                     />
@@ -260,7 +257,7 @@
                 />
 
                 {!! view_render_event('bagisto.shop.components.products.card.add_to_cart.after') !!}
-            </div> 
+            </div>
         </div>
     </script>
 
@@ -283,14 +280,17 @@
                                 product_id: this.product.id
                             })
                             .then(response => {
-                                this.product.is_wishlist = ! this.product.is_wishlist;
-                                
-                                this.$emitter.emit('add-flash', { type: 'success', message: response.data.data.message });
+                                this.product.is_wishlist = !this.product.is_wishlist;
+
+                                this.$emitter.emit('add-flash', {
+                                    type: 'success',
+                                    message: response.data.data.message
+                                });
                             })
                             .catch(error => {});
-                        } else {
-                            window.location.href = "{{ route('shop.customer.session.index')}}";
-                        }
+                    } else {
+                        window.location.href = "{{ route('shop.customer.session.index') }}";
+                    }
                 },
 
                 addToCompare(productId) {
@@ -298,20 +298,29 @@
                      * This will handle for customers.
                      */
                     if (this.isCustomer) {
-                        this.$axios.post('{{ route("shop.api.compare.store") }}', {
+                        this.$axios.post('{{ route('shop.api.compare.store') }}', {
                                 'product_id': productId
                             })
                             .then(response => {
-                                this.$emitter.emit('add-flash', { type: 'success', message: response.data.data.message });
+                                this.$emitter.emit('add-flash', {
+                                    type: 'success',
+                                    message: response.data.data.message
+                                });
                             })
                             .catch(error => {
                                 if ([400, 422].includes(error.response.status)) {
-                                    this.$emitter.emit('add-flash', { type: 'warning', message: error.response.data.data.message });
+                                    this.$emitter.emit('add-flash', {
+                                        type: 'warning',
+                                        message: error.response.data.data.message
+                                    });
 
                                     return;
                                 }
 
-                                this.$emitter.emit('add-flash', { type: 'error', message: error.response.data.message});
+                                this.$emitter.emit('add-flash', {
+                                    type: 'error',
+                                    message: error.response.data.message
+                                });
                             });
 
                         return;
@@ -323,19 +332,28 @@
                     let items = this.getStorageValue() ?? [];
 
                     if (items.length) {
-                        if (! items.includes(productId)) {
+                        if (!items.includes(productId)) {
                             items.push(productId);
 
                             localStorage.setItem('compare_items', JSON.stringify(items));
 
-                            this.$emitter.emit('add-flash', { type: 'success', message: "@lang('shop::app.components.products.card.add-to-compare-success')" });
+                            this.$emitter.emit('add-flash', {
+                                type: 'success',
+                                message: "@lang('shop::app.components.products.card.add-to-compare-success')"
+                            });
                         } else {
-                            this.$emitter.emit('add-flash', { type: 'warning', message: "@lang('shop::app.components.products.card.already-in-compare')" });
+                            this.$emitter.emit('add-flash', {
+                                type: 'warning',
+                                message: "@lang('shop::app.components.products.card.already-in-compare')"
+                            });
                         }
                     } else {
                         localStorage.setItem('compare_items', JSON.stringify([productId]));
-                            
-                        this.$emitter.emit('add-flash', { type: 'success', message: "@lang('shop::app.components.products.card.add-to-compare-success')" });
+
+                        this.$emitter.emit('add-flash', {
+                            type: 'success',
+                            message: "@lang('shop::app.components.products.card.add-to-compare-success')"
+                        });
 
                     }
                 },
@@ -343,7 +361,7 @@
                 getStorageValue(key) {
                     let value = localStorage.getItem('compare_items');
 
-                    if (! value) {
+                    if (!value) {
                         return [];
                     }
 
@@ -354,7 +372,7 @@
 
                     this.$refs.addToCartButton.isLoading = true;
 
-                    this.$axios.post('{{ route("shop.api.checkout.cart.store") }}', {
+                    this.$axios.post('{{ route('shop.api.checkout.cart.store') }}', {
                             'quantity': 1,
                             'product_id': this.product.id,
                         })
@@ -364,11 +382,17 @@
                             }
 
                             if (response.data.message) {
-                                this.$emitter.emit('update-mini-cart', response.data.data );
+                                this.$emitter.emit('update-mini-cart', response.data.data);
 
-                                this.$emitter.emit('add-flash', { type: 'success', message: response.data.message });
+                                this.$emitter.emit('add-flash', {
+                                    type: 'success',
+                                    message: response.data.message
+                                });
                             } else {
-                                this.$emitter.emit('add-flash', { type: 'warning', message: response.data.data.message });
+                                this.$emitter.emit('add-flash', {
+                                    type: 'warning',
+                                    message: response.data.data.message
+                                });
                             }
 
                             this.$refs.addToCartButton.isLoading = false;
@@ -376,7 +400,10 @@
                         .catch(error => {
                             this.$refs.addToCartButton.isLoading = false;
 
-                            this.$emitter.emit('add-flash', { type: 'error', message: response.data.message });
+                            this.$emitter.emit('add-flash', {
+                                type: 'error',
+                                message: response.data.message
+                            });
                         });
                 },
             },

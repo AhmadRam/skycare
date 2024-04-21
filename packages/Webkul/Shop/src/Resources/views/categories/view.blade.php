@@ -45,7 +45,7 @@
             </div>
         @endif
     @endif
-        
+
     {!! view_render_event('bagisto.shop.categories.view.description.after') !!}
 
     @if (in_array($category->display_mode, [null, 'products_only', 'products_and_description']))
@@ -57,8 +57,8 @@
     @endif
 
     @pushOnce('scripts')
-        <script 
-            type="text/x-template" 
+        <script
+            type="text/x-template"
             id="v-category-template"
         >
             <div class="container px-[60px] max-lg:px-8 max-sm:px-4">
@@ -97,11 +97,11 @@
                                 <!-- Empty Products Container -->
                                 <template v-else>
                                     <div class="grid items-center justify-items-center place-content-center w-full m-auto h-[476px] text-center">
-                                        <img 
+                                        <img
                                             src="{{ bagisto_asset('images/thank-you.png') }}"
                                             alt="@lang('shop::app.categories.view.empty')"
                                         />
-                                  
+
                                         <p
                                             class="text-xl"
                                             role="heading"
@@ -140,11 +140,11 @@
                                 <!-- Empty Products Container -->
                                 <template v-else>
                                     <div class="grid items-center justify-items-center place-content-center w-full m-auto h-[476px] text-center">
-                                        <img 
+                                        <img
                                             src="{{ bagisto_asset('images/thank-you.png') }}"
                                             alt="@lang('shop::app.categories.view.empty')"
                                         />
-                                        
+
                                         <p
                                             class="text-xl"
                                             role="heading"
@@ -199,13 +199,13 @@
 
                         isDrawerActive: {
                             toolbar: false,
-                            
+
                             filter: false,
                         },
 
                         filters: {
                             toolbar: {},
-                            
+
                             filter: {},
                         },
 
@@ -251,14 +251,14 @@
                     getProducts() {
                         this.isDrawerActive = {
                             toolbar: false,
-                            
+
                             filter: false,
                         };
 
                         document.body.style.overflow ='scroll';
 
                         this.$axios.get("{{ route('shop.api.products.index', ['category_id' => $category->id]) }}", {
-                            params: this.queryParams 
+                            params: this.queryParams
                         })
                             .then(response => {
                                 this.isLoading = false;
