@@ -79,7 +79,7 @@
                                     <p class="text-base font-medium">
                                         @{{ address.firstName }} @{{ address.lastName }}
 
-                                        <span v-if="address.companyName">(@{{ address.companyName }})</span>
+                                        {{-- <span v-if="address.companyName">(@{{ address.companyName }})</span> --}}
                                     </p>
                                 </div>
 
@@ -257,7 +257,7 @@
                         />
                     </x-shop::form.control-group>
 
-                    <!-- Company Name -->
+                    {{-- <!-- Company Name -->
                     <x-shop::form.control-group>
                         <x-shop::form.control-group.label>
                             @lang('shop::app.checkout.onepage.addresses.billing.company-name')
@@ -272,7 +272,7 @@
                         />
 
                         <x-shop::form.control-group.error control-name="billing.company_name" />
-                    </x-shop::form.control-group>
+                    </x-shop::form.control-group> --}}
 
                     {!! view_render_event('bagisto.shop.checkout.onepage.addresses.customer.billing.update_or_create.company_name.after') !!}
 

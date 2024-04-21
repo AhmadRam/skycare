@@ -12,7 +12,7 @@
         {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.shipping.form.before') !!}
 
         <!-- Company Name -->
-        <x-shop::form.control-group>
+        {{-- <x-shop::form.control-group>
             <x-shop::form.control-group.label>
                 @lang('shop::app.checkout.onepage.addresses.shipping.company-name')
             </x-shop::form.control-group.label>
@@ -26,7 +26,7 @@
             />
 
             <x-shop::form.control-group.error control-name="shipping.company_name" />
-        </x-shop::form.control-group>
+        </x-shop::form.control-group> --}}
 
         {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.shipping.company_name.after') !!}
 

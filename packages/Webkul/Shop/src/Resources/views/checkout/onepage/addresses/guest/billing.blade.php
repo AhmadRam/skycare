@@ -9,7 +9,7 @@
         {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.form.before') !!}
 
         <!-- Company Name -->
-        <x-shop::form.control-group>
+        {{-- <x-shop::form.control-group>
             <x-shop::form.control-group.label>
                 @lang('shop::app.checkout.onepage.addresses.billing.company-name')
             </x-shop::form.control-group.label>
@@ -23,7 +23,7 @@
             />
 
             <x-shop::form.control-group.error control-name="billing.company_name" />
-        </x-shop::form.control-group>
+        </x-shop::form.control-group> --}}
 
         {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.company_name.after') !!}
 

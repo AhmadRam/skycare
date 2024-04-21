@@ -2,7 +2,7 @@
     <!-- Page Title -->
     <x-slot:title>
         @lang('shop::app.customers.account.addresses.edit')
-        @lang('shop::app.customers.account.addresses.title') 
+        @lang('shop::app.customers.account.addresses.title')
     </x-slot>
 
     <!-- Breadcrumbs -->
@@ -36,7 +36,7 @@
             >
                 {!! view_render_event('bagisto.shop.customers.account.address.edit_form_controls.before', ['address' => $address]) !!}
 
-                <x-shop::form.control-group>
+                {{-- <x-shop::form.control-group>
                     <x-shop::form.control-group.label>
                         @lang('shop::app.customers.account.addresses.company-name')
                     </x-shop::form.control-group.label>
@@ -50,7 +50,7 @@
                     />
 
                     <x-shop::form.control-group.error control-name="company_name" />
-                </x-shop::form.control-group>
+                </x-shop::form.control-group> --}}
 
                 {!! view_render_event('bagisto.shop.customers.account.addresses.edit_form_controls.company_name.after', ['address' => $address]) !!}
 
@@ -159,8 +159,8 @@
                         :label="trans('shop::app.customers.account.addresses.country')"
                     >
                         @foreach (core()->countries() as $country)
-                            <option 
-                                {{ $country->code === config('app.default_country') ? 'selected' : '' }}  
+                            <option
+                                {{ $country->code === config('app.default_country') ? 'selected' : '' }}
                                 value="{{ $country->code }}"
                             >
                                 {{ $country->name }}
@@ -188,7 +188,7 @@
                             :label="trans('shop::app.customers.account.addresses.state')"
                             :placeholder="trans('shop::app.customers.account.addresses.state')"
                         >
-                            <option 
+                            <option
                                 v-for='(state, index) in countryStates[addressData.country]'
                                 :value="state.code"
                                 v-text="state.default_name"
@@ -276,7 +276,7 @@
                 >
                     @lang('shop::app.customers.account.addresses.save')
                 </button>
-                
+
                 {!! view_render_event('bagisto.shop.customers.account.address.edit_form_controls.after', ['address' => $address]) !!}
 
             </x-shop::form>
@@ -297,7 +297,7 @@
                         countryStates: @json(core()->groupedStatesByCountries()),
                     };
                 },
-    
+
                 methods: {
                     haveStates() {
                         return !!this.countryStates[this.addressData.country]?.length;
