@@ -127,7 +127,8 @@ class CategoryController extends Controller
             'display_mode',
             'status',
             'attributes',
-            core()->getCurrentLocale()->code
+            // core()->getCurrentLocale()->code
+            $categoryRequest->locale
         ), $id);
 
         Event::dispatch('catalog.category.update.after', $category);
