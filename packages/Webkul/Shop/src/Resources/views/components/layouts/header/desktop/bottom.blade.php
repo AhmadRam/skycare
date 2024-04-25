@@ -11,8 +11,8 @@
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.logo.before') !!}
 
         <a href="{{ route('shop.home.index') }}" aria-label="@lang('shop::app.components.layouts.header.bagisto')">
-            <img src="{{ asset('themes/shop/default/build/assets/skycare_' . app()->getLocale() . '.png') }}" width="131" height="29"
-                alt="{{ config('app.name') }}">
+            <img src="{{ asset('themes/shop/default/build/assets/skycare_' . app()->getLocale() . '.png') }}"
+                width="131" height="29" alt="{{ config('app.name') }}">
         </a>
 
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.logo.after') !!}
@@ -211,7 +211,7 @@
                 class="flex items-center relative h-[77px] group border-b-[4px] border-transparent hover:border-b-[4px] hover:border-navyBlue"
                 v-for="category in categories"
             >
-                <span>
+                <span class="text-black text-lg">
                     <a
                         :href="category.url"
                         class="inline-block px-5 uppercase"

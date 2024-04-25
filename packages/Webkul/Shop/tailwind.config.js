@@ -36,10 +36,10 @@ module.exports = {
                 darkPink: '#F85156',
             },
 
-            fontFamily: {
-                poppins: ["Poppins"],
-                dmserif: ["DM Serif Display"],
-            },
+            // fontFamily: {
+            //     poppins: ["Poppins"],
+            //     dmserif: ["DM Serif Display"],
+            // },
         }
     },
 

@@ -3,6 +3,7 @@
 namespace Webkul\Shop\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryResource extends JsonResource
 {
@@ -24,15 +25,15 @@ class CategoryResource extends JsonResource
             'display_mode' => $this->display_mode,
             'description'  => $this->description,
             'images'       => [
-                'banner_url' => $this->banner_url,
-                'logo_url'   => $this->logo_url,
+                'banner_url' => Storage::url($this->banner_path),
+                'logo_url'   => Storage::url($this->logo_path),
             ],
             'meta'         => [
                 'title'       => $this->meta_title,
                 'keywords'    => $this->meta_keywords,
                 'description' => $this->meta_description,
             ],
-            'translations' => $this->translations,
+            // 'translations' => $this->translations,
             'additional'   => $this->additional,
         ];
     }
