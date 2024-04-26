@@ -82,14 +82,14 @@
 
                         {!! view_render_event('bagisto.shop.components.products.card.add_to_cart.before') !!}
 
-                        <button
+                        {{-- <button
                             class="absolute bottom-4 left-1/2 py-3 px-11 bg-white rounded-xl text-navyBlue text-xs w-max font-medium cursor-pointer -translate-x-1/2 translate-y-[54px] group-hover:translate-y-0 transition-all duration-300"
                             :disabled="! product.is_saleable"
                             @click="addToCart()"
                             ref="addToCartButton"
                         >
                             @lang('shop::app.components.products.card.add-to-cart')
-                        </button>
+                        </button> --}}
 
                         {!! view_render_event('bagisto.shop.components.products.card.add_to_cart.after') !!}
                     </div>
@@ -111,6 +111,17 @@
                     v-html="product.price_html"
                 >
                 </div>
+
+
+                <button
+                    class="absolute bottom-4 left-1/2 py-3 px-11 bg-gray-200 rounded-xl text-navyBlue text-xs w-max font-medium cursor-pointer -translate-x-1/2 translate-y-[54px] transition-all duration-300"
+                    :disabled="! product.is_saleable"
+                    @click="addToCart()"
+                    ref="addToCartButton"
+                >
+
+                @lang('shop::app.components.products.card.add-to-cart')
+            </button>
 
                 {!! view_render_event('bagisto.shop.components.products.card.price.before') !!}
 
