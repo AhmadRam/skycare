@@ -8,7 +8,7 @@
     >
         <!-- Grid Card -->
         <div
-            class='grid gap-2.5 content-start w-full relative'
+            class='border-2 grid gap-2.5 content-start w-full relative p-2'
             v-if="mode != 'list'"
         >
             <div class="relative overflow-hidden group max-w-[291px] max-h-[300px] rounded">
@@ -113,8 +113,8 @@
                 </div>
 
 
-                <button
-                    class="absolute bottom-4 left-1/2 py-3 px-11 bg-gray-200 rounded-xl text-navyBlue text-xs w-max font-medium cursor-pointer -translate-x-1/2 translate-y-[54px] transition-all duration-300"
+                <button style="margin-inline-start: auto;margin-inline-end: auto;"
+                    class="py-3 px-11 bg-gray-200 rounded-xl text-navyBlue text-xs w-max font-medium"
                     :disabled="! product.is_saleable"
                     @click="addToCart()"
                     ref="addToCartButton"
