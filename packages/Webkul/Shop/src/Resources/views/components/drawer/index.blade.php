@@ -1,15 +1,10 @@
 @props([
     'isActive' => false,
     'position' => 'right',
-    'width'    => '500px',
+    'width' => '500px',
 ])
 
-<v-drawer
-    {{ $attributes }}
-    is-active="{{ $isActive }}"
-    position="{{ $position }}"
-    width="{{ $width }}"
->
+<v-drawer {{ $attributes }} is-active="{{ $isActive }}" position="{{ $position }}" width="{{ $width }}">
     @isset($toggle)
         <template v-slot:toggle>
             {{ $toggle }}
@@ -22,10 +17,7 @@
                 {{ $header }}
 
                 <div class="absolute top-5 ltr:right-5 rtl:left-5">
-                    <span
-                        class="icon-cancel text-3xl cursor-pointer"
-                        @click="close"
-                    >
+                    <span class="icon-cancel text-3xl cursor-pointer" @click="close">
                     </span>
                 </div>
             </div>
@@ -50,6 +42,11 @@
 </v-drawer>
 
 @pushOnce('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script>
+        window.eventBus = new Vue();
+    </script>
+
     <script type="text/x-template" id="v-drawer-template">
         <div>
             <!-- Toggler -->
@@ -145,6 +142,18 @@
                 }
             },
 
+            created() {
+                window.eventBus.$on('toggle-open', () => {
+                    this.isOpen = true;
+
+                    document.body.style.overflow = 'hidden';
+
+                    this.$emit('open', {
+                        isActive: this.isOpen
+                    });
+                });
+            },
+
             computed: {
                 enterFromLeaveToClasses() {
                     if (this.position == 'top') {
@@ -161,15 +170,17 @@
 
             methods: {
                 toggle() {
-                    this.isOpen = ! this.isOpen;
+                    this.isOpen = !this.isOpen;
 
                     if (this.isOpen) {
                         document.body.style.overflow = 'hidden';
                     } else {
-                        document.body.style.overflow ='scroll';
+                        document.body.style.overflow = 'scroll';
                     }
 
-                    this.$emit('toggle', { isActive: this.isOpen });
+                    this.$emit('toggle', {
+                        isActive: this.isOpen
+                    });
                 },
 
                 open() {
@@ -177,7 +188,9 @@
 
                     document.body.style.overflow = 'hidden';
 
-                    this.$emit('open', { isActive: this.isOpen });
+                    this.$emit('open', {
+                        isActive: this.isOpen
+                    });
                 },
 
                 close() {
@@ -185,7 +198,9 @@
 
                     document.body.style.overflow = 'auto';
 
-                    this.$emit('close', { isActive: this.isOpen });
+                    this.$emit('close', {
+                        isActive: this.isOpen
+                    });
                 }
             },
         });

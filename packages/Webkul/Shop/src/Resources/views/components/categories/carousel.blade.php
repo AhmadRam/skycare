@@ -115,7 +115,6 @@
                         .then(response => {
                             this.isLoading = false;
                             this.categories = response.data.data;
-                            console.log(this.categories);
                         }).catch(error => {
                             console.log(error);
                         });

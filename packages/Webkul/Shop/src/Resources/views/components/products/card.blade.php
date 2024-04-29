@@ -112,7 +112,6 @@
                 >
                 </div>
 
-
                 <button style="margin-inline-start: auto;margin-inline-end: auto;"
                     class="py-3 px-11 bg-gray-200 rounded-xl text-navyBlue text-xs w-max font-medium"
                     :disabled="! product.is_saleable"
@@ -399,6 +398,10 @@
                                     type: 'success',
                                     message: response.data.message
                                 });
+                                setTimeout(function() {
+                                    window.eventBus.$emit('toggle-open');
+                                }, 500);
+
                             } else {
                                 this.$emitter.emit('add-flash', {
                                     type: 'warning',
