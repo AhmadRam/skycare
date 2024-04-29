@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Webkul\Core\Models\Channel;
+use Webkul\Core\Models\Country;
 use Webkul\Core\Models\CountryState;
 use Webkul\Core\Models\CountryStateCity;
 use Webkul\Core\Repositories\ChannelRepository;
@@ -756,7 +757,8 @@ class Core
      */
     public function countries()
     {
-        return DB::table('countries')->get();
+        return Country::all();
+        // return DB::table('countries')->get();
     }
 
     /**
