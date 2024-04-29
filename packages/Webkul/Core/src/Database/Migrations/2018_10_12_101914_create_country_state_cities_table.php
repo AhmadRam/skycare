@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('country_code')->nullable();
             $table->string('state_code')->nullable();
             $table->string('default_name')->nullable();
+            $table->string('code')->nullable();
 
             $table->integer('country_state_id')->nullable()->unsigned();
             $table->foreign('country_state_id')->references('id')->on('country_states')->onDelete('cascade');

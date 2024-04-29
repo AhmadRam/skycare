@@ -7,7 +7,7 @@ use Webkul\Core\Contracts\CountryStateCity as CountryStateCityContract;
 
 class CountryStateCity extends TranslatableModel implements CountryStateCityContract
 {
-    protected $fillable = ['default_name', 'country_code', 'state_code', 'country_id', 'country_state_id'];
+    protected $fillable = ['default_name', 'country_code', 'state_code', 'country_id', 'country_state_id', 'code'];
 
     public $timestamps = false;
 
