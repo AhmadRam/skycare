@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Webkul\Core\Models\CountryStateCity;
 
 class Fix extends Command
@@ -30,15 +31,16 @@ class Fix extends Command
     {
         $this->info('start!');
 
-        $cities = CountryStateCity::all();
+        $cities = DB::table('country_state_cities')->get();
         foreach ($cities as $city) {
-            dd($city->state);
             if ($city->state_code == null) {
-                $city->update(['state_code' => $city->state->code]);
+                $db_city = CountryStateCity::find($city->id);
+                $db_city->update(['state_code' => $db_city->state->code]);
             }
 
             if ($city->default_name == null) {
-                $city->update(['default_name' => $city->default_name]);
+                $db_city = CountryStateCity::find($city->id);
+                $db_city->update(['default_name' => $db_city->default_name]);
             }
         }
 
