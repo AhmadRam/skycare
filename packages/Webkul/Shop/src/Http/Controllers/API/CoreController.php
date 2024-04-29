@@ -31,4 +31,16 @@ class CoreController extends APIController
             'data' => core()->groupedStatesByCountries(),
         ]);
     }
+
+    /**
+     * Get cities.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getCities()
+    {
+        return response()->json([
+            'data' => core()->groupedCitiesByState(),
+        ]);
+    }
 }

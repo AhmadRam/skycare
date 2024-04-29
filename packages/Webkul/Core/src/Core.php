@@ -142,7 +142,7 @@ class Core
      */
     public function getCurrentChannel(?string $hostname = null)
     {
-        if (! $hostname) {
+        if (!$hostname) {
             $hostname = request()->getHttpHost();
         }
 
@@ -152,11 +152,11 @@ class Core
 
         $this->currentChannel = $this->channelRepository->findWhereIn('hostname', [
             $hostname,
-            'http://'.$hostname,
-            'https://'.$hostname,
+            'http://' . $hostname,
+            'https://' . $hostname,
         ])->first();
 
-        if (! $this->currentChannel) {
+        if (!$this->currentChannel) {
             $this->currentChannel = $this->channelRepository->first();
         }
 
@@ -251,7 +251,7 @@ class Core
     {
         $channelCode = request()->get('channel');
 
-        if (! $fallback) {
+        if (!$fallback) {
             return $channelCode;
         }
 
@@ -289,7 +289,7 @@ class Core
 
         $this->currentLocale = $this->localeRepository->findOneByField('code', app()->getLocale());
 
-        if (! $this->currentLocale) {
+        if (!$this->currentLocale) {
             $this->currentLocale = $this->localeRepository->findOneByField('code', config('app.fallback_locale'));
         }
 
@@ -324,7 +324,7 @@ class Core
     {
         $localeCode = request()->get($localeKey);
 
-        if (! $fallback) {
+        if (!$fallback) {
             return $localeCode;
         }
 
@@ -373,7 +373,7 @@ class Core
 
         $this->baseCurrency = $this->currencyRepository->findOneByField('code', config('app.currency'));
 
-        if (! $this->baseCurrency) {
+        if (!$this->baseCurrency) {
             $this->baseCurrency = $this->currencyRepository->first();
         }
 
@@ -478,17 +478,17 @@ class Core
      */
     public function convertPrice($amount, $targetCurrencyCode = null)
     {
-        $targetCurrency = ! $targetCurrencyCode
+        $targetCurrency = !$targetCurrencyCode
             ? $this->getCurrentCurrency()
             : $this->currencyRepository->findOneByField('code', $targetCurrencyCode);
 
-        if (! $targetCurrency) {
+        if (!$targetCurrency) {
             return $amount;
         }
 
         $exchangeRate = $this->getExchangeRate($targetCurrency->id);
 
-        if (! $exchangeRate) {
+        if (!$exchangeRate) {
             return $amount;
         }
 
@@ -504,11 +504,11 @@ class Core
      */
     public function convertToBasePrice($amount, $targetCurrencyCode = null)
     {
-        $targetCurrency = ! $targetCurrencyCode
+        $targetCurrency = !$targetCurrencyCode
             ? $this->getCurrentCurrency()
             : $this->currencyRepository->findOneByField('code', $targetCurrencyCode);
 
-        if (! $targetCurrency) {
+        if (!$targetCurrency) {
             return $amount;
         }
 
@@ -518,7 +518,7 @@ class Core
 
         if (
             $exchangeRate === null
-            || ! $exchangeRate->rate
+            || !$exchangeRate->rate
         ) {
             return $amount;
         }
@@ -551,7 +551,7 @@ class Core
     {
         $code = $currency instanceof \Webkul\Core\Contracts\Currency ? $currency->code : $currency;
 
-        $formatter = new \NumberFormatter(app()->getLocale().'@currency='.$code, \NumberFormatter::CURRENCY);
+        $formatter = new \NumberFormatter(app()->getLocale() . '@currency=' . $code, \NumberFormatter::CURRENCY);
 
         return $formatter->getSymbol(\NumberFormatter::CURRENCY_SYMBOL);
     }
@@ -577,7 +577,7 @@ class Core
 
         $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $currency->decimal ?? 2);
 
-        if (! $currency) {
+        if (!$currency) {
             return $formatter->formatCurrency($price, $currencyCode);
         }
 
@@ -622,7 +622,7 @@ class Core
             $content = $formatter->formatCurrency($price, $this->getBaseCurrencyCode());
         }
 
-        return ! $isEncoded ? $content : htmlentities($content);
+        return !$isEncoded ? $content : htmlentities($content);
     }
 
     /**
@@ -648,12 +648,12 @@ class Core
         }
 
         if (
-            ! $this->is_empty_date($dateFrom)
+            !$this->is_empty_date($dateFrom)
             && $channelTimeStamp < $fromTimeStamp
         ) {
             $result = false;
         } elseif (
-            ! $this->is_empty_date($dateTo)
+            !$this->is_empty_date($dateTo)
             && $channelTimeStamp > $toTimeStamp
         ) {
             $result = false;
@@ -740,7 +740,7 @@ class Core
 
         $coreConfig = $this->getCoreConfig($field, $channel, $locale);
 
-        if (! $coreConfig) {
+        if (!$coreConfig) {
             return $this->getDefaultConfig($field);
         }
 
@@ -792,6 +792,22 @@ class Core
 
         foreach (DB::table('country_states')->get() as $state) {
             $collection[$state->country_code][] = $state;
+        }
+
+        return $collection;
+    }
+
+    /**
+     * Retrieve all grouped cities by state code.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function groupedCitiesByState()
+    {
+        $collection = [];
+
+        foreach (DB::table('country_state_cities')->get() as $city) {
+            $collection[$city->state_code][] = $city;
         }
 
         return $collection;
@@ -870,7 +886,7 @@ class Core
     {
         $ts = strtotime($date);
 
-        if (! $day) {
+        if (!$day) {
             $start = (date('D', $ts) == 'Sun') ? $ts : strtotime('last sunday', $ts);
 
             return date('Y-m-d', $start);
@@ -915,12 +931,12 @@ class Core
     public function getConfigField($fieldName)
     {
         foreach (config('core') as $coreData) {
-            if (! isset($coreData['fields'])) {
+            if (!isset($coreData['fields'])) {
                 continue;
             }
 
             foreach ($coreData['fields'] as $field) {
-                $name = $coreData['key'].'.'.$field['name'];
+                $name = $coreData['key'] . '.' . $field['name'];
 
                 if ($name == $fieldName) {
                     return $field;
@@ -942,7 +958,7 @@ class Core
 
             $items[$level1['key']] = $level1;
 
-            if (! count($level1['children'])) {
+            if (!count($level1['children'])) {
                 continue;
             }
 
@@ -955,7 +971,7 @@ class Core
 
                 $items[$level1['key']]['children'][$finalKey2] = $level2;
 
-                if (! count($level2['children'])) {
+                if (!count($level2['children'])) {
                     continue;
                 }
 
@@ -995,8 +1011,8 @@ class Core
             $key = array_shift($keys);
 
             if (
-                ! isset($array[$key])
-                || ! is_array($array[$key])
+                !isset($array[$key])
+                || !is_array($array[$key])
             ) {
                 $array[$key] = [];
             }
@@ -1100,7 +1116,7 @@ class Core
     {
         $adminName = $this->getConfigData('emails.configure.email_settings.admin_name')
             ?: (config('mail.admin.name')
-            ?: config('mail.from.name'));
+                ?: config('mail.from.name'));
 
         $adminEmail = $this->getConfigData('emails.configure.email_settings.admin_email')
             ?: config('mail.admin.address');
@@ -1147,8 +1163,8 @@ class Core
     {
         $fields = $this->getConfigField($field);
 
-        if (! empty($fields['channel_based'])) {
-            if (! empty($fields['locale_based'])) {
+        if (!empty($fields['channel_based'])) {
+            if (!empty($fields['locale_based'])) {
                 $coreConfigValue = $this->coreConfigRepository->findOneWhere([
                     'code'         => $field,
                     'channel_code' => $channel,
@@ -1161,7 +1177,7 @@ class Core
                 ]);
             }
         } else {
-            if (! empty($fields['locale_based'])) {
+            if (!empty($fields['locale_based'])) {
                 $coreConfigValue = $this->coreConfigRepository->findOneWhere([
                     'code'        => $field,
                     'locale_code' => $locale,

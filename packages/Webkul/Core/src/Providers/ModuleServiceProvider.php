@@ -11,6 +11,8 @@ class ModuleServiceProvider extends CoreModuleServiceProvider
         \Webkul\Core\Models\CountryTranslation::class,
         \Webkul\Core\Models\CountryState::class,
         \Webkul\Core\Models\CountryStateTranslation::class,
+        \Webkul\Core\Models\CountryStateCity::class,
+        \Webkul\Core\Models\CountryStateCityTranslation::class,
         \Webkul\Core\Models\Currency::class,
         \Webkul\Core\Models\CurrencyExchangeRate::class,
         \Webkul\Core\Models\Locale::class,

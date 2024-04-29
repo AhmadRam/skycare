@@ -1,7 +1,4 @@
-<v-checkout-addresses
-    :cart="cart"
-    v-if="cart"
->
+<v-checkout-addresses :cart="cart" v-if="cart">
 </v-checkout-addresses>
 
 @pushOnce('scripts')
@@ -176,8 +173,8 @@
                     });
 
                     if (
-                        ! this.isAddressEmpty(this.customer.cart.billingAddress)
-                        && ! this.customer.cart.billingAddress.parentAddressId
+                        !this.isAddressEmpty(this.customer.cart.billingAddress) &&
+                        !this.customer.cart.billingAddress.parentAddressId
                     ) {
                         addresses.unshift(this.customer.cart.billingAddress);
                     }
@@ -203,8 +200,8 @@
                     });
 
                     if (
-                        ! this.isAddressEmpty(this.customer.cart.shippingAddress)
-                        && ! this.customer.cart.shippingAddress.parentAddressId
+                        !this.isAddressEmpty(this.customer.cart.shippingAddress) &&
+                        !this.customer.cart.shippingAddress.parentAddressId
                     ) {
                         addresses.unshift(this.customer.cart.shippingAddress);
                     }
@@ -219,9 +216,11 @@
 
                     this.getStates();
 
+                    this.getCities();
+
                     this.getCartAddresses();
 
-                    if (! this.cart.is_guest) {
+                    if (!this.cart.is_guest) {
                         this.getCustomerAddresses();
                     }
                 },
@@ -246,8 +245,20 @@
                         .catch(() => {});
                 },
 
+                getCities() {
+                    this.$axios.get("{{ route('shop.api.core.cities') }}")
+                        .then(response => {
+                            this.cities = response.data.data;
+                        })
+                        .catch(() => {});
+                },
+
                 haveStates(countryCode) {
                     return !!this.states[countryCode]?.length;
+                },
+
+                haveCities(stateCode) {
+                    return !!this.cities[stateCode]?.length;
                 },
 
                 getCartAddresses() {
@@ -259,11 +270,14 @@
 
                     if (this.cart.billing_address) {
                         if (this.cart.is_guest) {
-                            this.guest.applied.useDifferentAddressForShipping = ! (this.cart.billing_address?.use_for_shipping ?? false);
+                            this.guest.applied.useDifferentAddressForShipping = !(this.cart.billing_address
+                                ?.use_for_shipping ?? false);
                         } else {
-                            this.customer.applied.selectedBillingAddressId = this.cart.billing_address.parent_address_id ?? 0;
+                            this.customer.applied.selectedBillingAddressId = this.cart.billing_address
+                                .parent_address_id ?? 0;
 
-                            this.customer.applied.useDifferentAddressForShipping = ! (this.cart.billing_address?.use_for_shipping ?? false);
+                            this.customer.applied.useDifferentAddressForShipping = !(this.cart.billing_address
+                                ?.use_for_shipping ?? false);
                         }
 
                         cart.billingAddress = {
@@ -283,8 +297,9 @@
                     }
 
                     if (this.cart.shipping_address) {
-                        if (! this.cart.is_guest) {
-                            this.customer.applied.selectedShippingAddressId = this.cart.shipping_address.parent_address_id ?? 0;
+                        if (!this.cart.is_guest) {
+                            this.customer.applied.selectedShippingAddressId = this.cart.shipping_address
+                                .parent_address_id ?? 0;
                         }
 
                         cart.shippingAddress = {
@@ -368,9 +383,12 @@
                     if (params[addressType]['save_address']) {
                         this.storeCustomerAddress(params[addressType], addressType)
                             .then((response) => {
-                                const { id } = response.data.data;
+                                const {
+                                    id
+                                } = response.data.data;
 
-                                this.customer.applied[this.customer.available.types.selectedAddressId[addressType]] = id;
+                                this.customer.applied[this.customer.available.types.selectedAddressId[
+                                    addressType]] = id;
 
                                 if (addressType === 'billing') {
                                     this.$refs.customerBillingAddressForm.setValues({
@@ -389,9 +407,12 @@
                     if (params[addressType]['id']) {
                         this.updateCustomerAddress(params[addressType], addressType)
                             .then((response) => {
-                                const { id } = response.data.data;
+                                const {
+                                    id
+                                } = response.data.data;
 
-                                this.customer.applied[this.customer.available.types.selectedAddressId[addressType]] = id;
+                                this.customer.applied[this.customer.available.types.selectedAddressId[
+                                    addressType]] = id;
 
                                 if (addressType === 'billing') {
                                     this.$refs.customerBillingAddressForm.setValues({
@@ -457,9 +478,10 @@
 
                     this.$emitter.emit('can-place-order', false);
 
-                    let address = this.customerBillingAddresses.find((address) => address.id == params['billing_address_id']);
+                    let address = this.customerBillingAddresses.find((address) => address.id == params[
+                        'billing_address_id']);
 
-                    if (! address) {
+                    if (!address) {
                         this.isLoading = false;
 
                         return;
@@ -528,11 +550,13 @@
 
                             this.$emitter.emit('can-place-order', false);
 
-                            let customerBillingAddressFormValues = this.$refs.customerBillingAddressForm.getValues();
+                            let customerBillingAddressFormValues = this.$refs.customerBillingAddressForm
+                                .getValues();
 
-                            let billingAddress = this.customerBillingAddresses.find((address) => address.id == customerBillingAddressFormValues.billing_address_id);
+                            let billingAddress = this.customerBillingAddresses.find((address) => address
+                                .id == customerBillingAddressFormValues.billing_address_id);
 
-                            if (! billingAddress) {
+                            if (!billingAddress) {
                                 this.isLoading = false;
 
                                 return;
@@ -553,9 +577,10 @@
                                 use_for_shipping: false,
                             };
 
-                            let shippingAddress = this.customerShippingAddresses.find((address) => address.id == params['shipping_address_id']);
+                            let shippingAddress = this.customerShippingAddresses.find((address) => address
+                                .id == params['shipping_address_id']);
 
-                            if (! shippingAddress) {
+                            if (!shippingAddress) {
                                 this.isLoading = false;
 
                                 return;
@@ -580,7 +605,8 @@
                                     this.$emitter.emit('update-cart-summary');
 
                                     if (response.data.data.shippingMethods) {
-                                        this.$emitter.emit('shipping-methods', response.data.data.shippingMethods);
+                                        this.$emitter.emit('shipping-methods', response.data.data
+                                            .shippingMethods);
 
                                         this.$emitter.emit('is-show-shipping-methods', true);
 
@@ -588,7 +614,8 @@
                                     }
 
                                     if (response.data.data.payment_methods) {
-                                        this.$emitter.emit('payment-methods', response.data.data.payment_methods);
+                                        this.$emitter.emit('payment-methods', response.data.data
+                                            .payment_methods);
 
                                         this.$emitter.emit('is-show-payment-methods', true);
 
@@ -621,7 +648,7 @@
 
                     this.$emitter.emit('can-place-order', false);
 
-                    params['billing']['use_for_shipping'] = ! params.billing.use_different_address_for_shipping;
+                    params['billing']['use_for_shipping'] = !params.billing.use_different_address_for_shipping;
 
                     delete params.billing.use_different_address_for_shipping;
 
