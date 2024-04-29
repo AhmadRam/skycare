@@ -26,4 +26,13 @@ class CountryStateCity extends TranslatableModel implements CountryStateCityCont
 
         return $array;
     }
+
+
+    /**
+     * Get the State.
+     */
+    public function state()
+    {
+        return $this->belongsTo(CountryStateProxy::modelClass());
+    }
 }

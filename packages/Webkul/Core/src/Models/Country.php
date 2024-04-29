@@ -20,4 +20,12 @@ class Country extends TranslatableModel implements CountryContract
     {
         return $this->hasMany(CountryStateProxy::modelClass());
     }
+
+    /**
+     * Get the Cities.
+     */
+    public function cities()
+    {
+        return $this->hasMany(CountryStateCityProxy::modelClass());
+    }
 }
