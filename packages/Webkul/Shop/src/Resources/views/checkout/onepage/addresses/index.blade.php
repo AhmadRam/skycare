@@ -146,6 +146,8 @@
 
                     states: [],
 
+                    cities: [],
+
                     isLoading: false,
                 };
             },

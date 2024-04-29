@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Webkul\Core\Models\Channel;
+use Webkul\Core\Models\CountryState;
+use Webkul\Core\Models\CountryStateCity;
 use Webkul\Core\Repositories\ChannelRepository;
 use Webkul\Core\Repositories\CoreConfigRepository;
 use Webkul\Core\Repositories\CountryRepository;
@@ -790,7 +792,9 @@ class Core
     {
         $collection = [];
 
-        foreach (DB::table('country_states')->get() as $state) {
+        // $states = DB::table('country_states')->get();
+        $states = CountryState::all();
+        foreach ($states as $state) {
             $collection[$state->country_code][] = $state;
         }
 
@@ -806,7 +810,9 @@ class Core
     {
         $collection = [];
 
-        foreach (DB::table('country_state_cities')->get() as $city) {
+        // $cities = DB::table('country_state_cities')->get();
+        $cities = CountryStateCity::all();
+        foreach ($cities as $city) {
             $collection[$city->state_code][] = $city;
         }
 

@@ -37,12 +37,16 @@ class Fix extends Command
         foreach ($cities as $city) {
 
             $db_city = CountryStateCity::find($city->id);
+
             if ($city->state_code == null) {
                 $db_city->update(['state_code' => $db_city->state->code]);
             }
 
             if ($city->default_name == null) {
-                $db_city->update(['default_name' => $db_city->translations->first()->default_name]);
+
+                DB::table('country_state_cities')
+                    ->where('id', $city->id)
+                    ->update(['default_name' => $db_city->translations->first()->default_name]);
             }
 
             $db_city->update(['code' => strtolower(str_replace(' ', '_', $db_city->default_name))]);
