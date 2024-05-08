@@ -8,10 +8,11 @@ return [
         'sort'   => 5,
         'fields' => [
             [
+
                 'name'          => 'title',
                 'title'         => 'admin::app.configuration.index.sales.payment-methods.title',
-                'type'          => 'depends',
-                'depend'        => 'active:1',
+                'type'          => 'text',
+                'depends'       => 'active:1',
                 'validation'    => 'required_if:active,1',
                 'channel_based' => true,
                 'locale_based'  => true,
@@ -24,7 +25,7 @@ return [
             ],  [
                 'name'          => 'api_key',
                 'title'         => 'myfatoorah::app.api-key',
-                'type'          => 'depends',
+                'type'          => 'text',
                 'depend'        => 'active:1',
                 'validation'    => 'required_if:active,1',
                 'channel_based' => true,
@@ -32,7 +33,7 @@ return [
             ],  [
                 'name'          => 'api_test_key',
                 'title'         => 'myfatoorah::app.api-test-key',
-                'type'          => 'depends',
+                'type'          => 'text',
                 'depend'        => 'active:1',
                 'validation'    => 'required_if:active,1',
                 'channel_based' => true,
