@@ -71,27 +71,6 @@
 
         {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.email.after') !!}
 
-        <!-- Street Address -->
-        <x-shop::form.control-group>
-            <x-shop::form.control-group.label class="!mt-0 required">
-                @lang('shop::app.checkout.onepage.addresses.billing.street-address')
-            </x-shop::form.control-group.label>
-
-            <x-shop::form.control-group.control type="text" name="billing.address1.[0]" ::value="guest.cart.billingAddress.address1"
-                rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.billing.street-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.street-address')" />
-
-            <x-shop::form.control-group.error class="mb-2" control-name="billing.address1.[0]" />
-
-            @if (core()->getConfigData('customer.address.information.street_lines') > 1)
-                @for ($i = 1; $i < core()->getConfigData('customer.address.information.street_lines'); $i++)
-                    <x-shop::form.control-group.control type="text" name="billing.address1.[{{ $i }}]"
-                        :label="trans('shop::app.checkout.onepage.addresses.billing.street-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.street-address')" />
-                @endfor
-            @endif
-        </x-shop::form.control-group>
-
-        {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.address1.after') !!}
-
         <div class="grid grid-cols-2 gap-x-5">
             <!-- Country -->
             <x-shop::form.control-group class="!mb-4">
@@ -200,6 +179,95 @@
 
             {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.postcode.after') !!}
         </div>
+
+        <div class="grid grid-cols-2 gap-x-5" v-if="values.billing?.country == 'KW'">
+
+            <!-- Block Address -->
+            <x-shop::form.control-group>
+                <x-shop::form.control-group.label class="!mt-0 required">
+                    @lang('shop::app.checkout.onepage.addresses.billing.block-address')
+                </x-shop::form.control-group.label>
+
+                <x-shop::form.control-group.control type="text" name="billing.address1[0]" ::value="guest.cart.billingAddress.address1 && guest.cart.billingAddress.address1.length > 0 ? guest.cart.billingAddress.address1[0] : ''"
+                    rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.billing.block-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.block-address')" />
+
+                <x-shop::form.control-group.error class="mb-2" control-name="billing.address1[0]" />
+
+                {{-- @if (core()->getConfigData('customer.address.information.street_lines') > 1)
+                    @for ($i = 1; $i < core()->getConfigData('customer.address.information.street_lines'); $i++)
+                        <x-shop::form.control-group.control type="text"
+                            name="billing.address1[{{ $i }}]" :label="trans('shop::app.checkout.onepage.addresses.billing.block-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.street-address')" />
+                    @endfor
+                @endif --}}
+            </x-shop::form.control-group>
+
+            {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.block.after') !!}
+
+            <!-- street -->
+            <x-shop::form.control-group>
+                <x-shop::form.control-group.label class="!mt-0 required">
+                    @lang('shop::app.checkout.onepage.addresses.billing.street-address')
+                </x-shop::form.control-group.label>
+
+                <x-shop::form.control-group.control type="text" name="billing.address1[1]" ::value="guest.cart.billingAddress.address1 && guest.cart.billingAddress.address1.length > 1 ? guest.cart.billingAddress.address1[1] : ''"
+                    rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.billing.street-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.street-address')" />
+
+                <x-shop::form.control-group.error class="mb-2" control-name="billing.address1[1]" />
+            </x-shop::form.control-group>
+
+            {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.street.after') !!}
+        </div>
+
+        <div class="grid grid-cols-2 gap-x-5" v-if="values.billing?.country == 'KW'">
+            <!-- Floor -->
+            <x-shop::form.control-group>
+                <x-shop::form.control-group.label class="!mt-0 required">
+                    @lang('shop::app.checkout.onepage.addresses.billing.floor-address')
+                </x-shop::form.control-group.label>
+
+                <x-shop::form.control-group.control type="text" name="billing.address1[2]" ::value="guest.cart.billingAddress.address1 && guest.cart.billingAddress.address1.length > 2 ? guest.cart.billingAddress.address1[2] : ''"
+                    rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.billing.floor-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.floor-address')" />
+
+                <x-shop::form.control-group.error class="mb-2" control-name="billing.address1[2]" />
+            </x-shop::form.control-group>
+
+            {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.floor.after') !!}
+
+            <!-- House -->
+            <x-shop::form.control-group>
+                <x-shop::form.control-group.label class="!mt-0 required">
+                    @lang('shop::app.checkout.onepage.addresses.billing.house-address')
+                </x-shop::form.control-group.label>
+
+                <x-shop::form.control-group.control type="text" name="billing.address1[3]" ::value="guest.cart.billingAddress.address1 && guest.cart.billingAddress.address1.length > 3 ? guest.cart.billingAddress.address1[3] : ''"
+                    rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.billing.house-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.house-address')" />
+
+                <x-shop::form.control-group.error class="mb-2" control-name="billing.address1[3]" />
+            </x-shop::form.control-group>
+
+            {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.house.after') !!}
+        </div>
+
+        <!-- Street Address -->
+        <x-shop::form.control-group v-if="values.billing?.country != 'KW'">
+            <x-shop::form.control-group.label class="!mt-0 required">
+                @lang('shop::app.checkout.onepage.addresses.billing.street-address')
+            </x-shop::form.control-group.label>
+
+            <x-shop::form.control-group.control type="text" name="guest.cart.billingAddress.address1 && guest.cart.billingAddress.address1.length > 0 ? guest.cart.billingAddress.address1[0] : ''" ::value="guest.cart.billingAddress.address1"
+                rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.billing.street-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.street-address')" />
+
+            <x-shop::form.control-group.error class="mb-2" control-name="billing.address1[0]" />
+
+            @if (core()->getConfigData('customer.address.information.street_lines') > 1)
+                @for ($i = 1; $i < core()->getConfigData('customer.address.information.street_lines'); $i++)
+                    <x-shop::form.control-group.control type="text" name="billing.address1[{{ $i }}]"
+                        :label="trans('shop::app.checkout.onepage.addresses.billing.street-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.street-address')" />
+                @endfor
+            @endif
+        </x-shop::form.control-group>
+
+        {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.address1.after') !!}
 
         <!-- Phone Number -->
         <x-shop::form.control-group>

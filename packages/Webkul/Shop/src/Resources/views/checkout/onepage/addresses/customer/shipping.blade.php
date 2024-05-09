@@ -61,8 +61,8 @@
                                     </div>
 
                                     <p class="mt-6 text-sm text-[#6E6E6E]">
-                                        <template v-if="address.address1">
-                                            @{{ address.address1 }},
+                                        <template v-if="address.str_address1">
+                                            @{{ address.str_address1 }},
                                         </template>
 
                                         <template v-if="address.address2">
@@ -226,21 +226,21 @@
 
                         {!! view_render_event('bagisto.shop.checkout.onepage.addresses.customer.shipping.update_or_create.email.after') !!}
 
-                        <!-- Street Address -->
+                        {{-- <!-- Street Address -->
                         <x-shop::form.control-group>
                             <x-shop::form.control-group.label class="!mt-0 required">
                                 @lang('shop::app.checkout.onepage.addresses.shipping.street-address')
                             </x-shop::form.control-group.label>
 
-                            <x-shop::form.control-group.control type="text" name="shipping.address1.[0]"
-                                ::value="customer.updateOrCreateShippingAddress.params?.address1" rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.shipping.street-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.street-address')" />
+                            <x-shop::form.control-group.control type="text" name="shipping.address1[0]"
+                                ::value="customer.updateOrCreateShippingAddress.params?.address1[0]" rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.shipping.street-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.street-address')" />
 
-                            <x-shop::form.control-group.error class="mb-2" control-name="shipping.address1.[0]" />
+                            <x-shop::form.control-group.error class="mb-2" control-name="shipping.address1[0]" />
 
                             @if (core()->getConfigData('customer.address.information.street_lines') > 1)
                                 @for ($i = 1; $i < core()->getConfigData('customer.address.information.street_lines'); $i++)
                                     <x-shop::form.control-group.control type="text"
-                                        name="shipping.address1.[{{ $i }}]" :label="trans(
+                                        name="shipping.address1[{{ $i }}]" :label="trans(
                                             'shop::app.checkout.onepage.addresses.shipping.street-address',
                                         )"
                                         :placeholder="trans(
@@ -252,7 +252,7 @@
 
                         {!! view_render_event(
                             'bagisto.shop.checkout.onepage.addresses.customer.shipping.update_or_create.address1.after',
-                        ) !!}
+                        ) !!} --}}
 
                         <div class="grid grid-cols-2 gap-x-5">
                             <!-- Country -->
@@ -367,6 +367,103 @@
                                 'bagisto.shop.checkout.onepage.addresses.customer.shipping.update_or_create.postcode.after',
                             ) !!}
                         </div>
+
+
+                        <div class="grid grid-cols-2 gap-x-5" v-if="values.shipping?.country == 'KW'">
+
+                            <!-- Block Address -->
+                            <x-shop::form.control-group>
+                                <x-shop::form.control-group.label class="!mt-0 required">
+                                    @lang('shop::app.checkout.onepage.addresses.shipping.block-address')
+                                </x-shop::form.control-group.label>
+
+                                <x-shop::form.control-group.control type="text" name="shipping.address1[0]"
+                                    ::value="customer.updateOrCreateShippingAddress.params.address1 && customer.updateOrCreateShippingAddress.params.address1.length > 0 ? customer.updateOrCreateShippingAddress.params?.address1[0] : ''" rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.shipping.block-address')"
+                                    :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.block-address')" />
+
+                                <x-shop::form.control-group.error class="mb-2"
+                                    control-name="shipping.address1[0]" />
+
+                                {{-- @if (core()->getConfigData('customer.address.information.street_lines') > 1)
+                    @for ($i = 1; $i < core()->getConfigData('customer.address.information.street_lines'); $i++)
+                        <x-shop::form.control-group.control type="text"
+                            name="shipping.address1[{{ $i }}]" :label="trans('shop::app.checkout.onepage.addresses.shipping.block-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.street-address')" />
+                    @endfor
+                @endif --}}
+                            </x-shop::form.control-group>
+
+                            {!! view_render_event('bagisto.shop.checkout.onepage.addresses.customer.shipping.update_or_create.block.after') !!}
+
+                            <!-- street -->
+                            <x-shop::form.control-group>
+                                <x-shop::form.control-group.label class="!mt-0 required">
+                                    @lang('shop::app.checkout.onepage.addresses.shipping.street-address')
+                                </x-shop::form.control-group.label>
+
+                                <x-shop::form.control-group.control type="text" name="shipping.address1[1]"
+                                    ::value="customer.updateOrCreateShippingAddress.params.address1 && customer.updateOrCreateShippingAddress.params.address1.length > 1 ? customer.updateOrCreateShippingAddress.params?.address1[1] : ''" rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.shipping.street-address')"
+                                    :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.street-address')" />
+
+                                <x-shop::form.control-group.error class="mb-2"
+                                    control-name="shipping.address1[1]" />
+                            </x-shop::form.control-group>
+
+                            {!! view_render_event('bagisto.shop.checkout.onepage.addresses.customer.shipping.update_or_create.street.after') !!}
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-x-5" v-if="values.shipping?.country == 'KW'">
+                            <!-- Floor -->
+                            <x-shop::form.control-group>
+                                <x-shop::form.control-group.label class="!mt-0 required">
+                                    @lang('shop::app.checkout.onepage.addresses.shipping.floor-address')
+                                </x-shop::form.control-group.label>
+
+                                <x-shop::form.control-group.control type="text" name="shipping.address1[2]"
+                                    ::value="customer.updateOrCreateShippingAddress.params.address1 && customer.updateOrCreateShippingAddress.params.address1.length > 2 ? customer.updateOrCreateShippingAddress.params?.address1[2] : ''" rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.shipping.floor-address')"
+                                    :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.floor-address')" />
+
+                                <x-shop::form.control-group.error class="mb-2"
+                                    control-name="shipping.address1[2]" />
+                            </x-shop::form.control-group>
+
+                            {!! view_render_event('bagisto.shop.checkout.onepage.addresses.customer.shipping.update_or_create.floor.after') !!}
+
+                            <!-- House -->
+                            <x-shop::form.control-group>
+                                <x-shop::form.control-group.label class="!mt-0 required">
+                                    @lang('shop::app.checkout.onepage.addresses.shipping.house-address')
+                                </x-shop::form.control-group.label>
+
+                                <x-shop::form.control-group.control type="text" name="shipping.address1[3]"
+                                    ::value="customer.updateOrCreateShippingAddress.params.address1 && customer.updateOrCreateShippingAddress.params.address1.length > 3 ? customer.updateOrCreateShippingAddress.params?.address1[3] : ''" rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.shipping.house-address')"
+                                    :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.house-address')" />
+
+                                <x-shop::form.control-group.error class="mb-2"
+                                    control-name="shipping.address1[3]" />
+                            </x-shop::form.control-group>
+
+                            {!! view_render_event('bagisto.shop.checkout.onepage.addresses.customer.shipping.update_or_create.house.after') !!}
+                        </div>
+
+                        <!-- Street Address -->
+                        <x-shop::form.control-group v-if="values.shipping?.country != 'KW'">
+                            <x-shop::form.control-group.label class="!mt-0 required">
+                                @lang('shop::app.checkout.onepage.addresses.billing.street-address')
+                            </x-shop::form.control-group.label>
+
+                            <x-shop::form.control-group.control type="text" name="billing.address1[0]"
+                                ::value="customer.updateOrCreateShippingAddress.params.address1 && customer.updateOrCreateShippingAddress.params.address1.length > 0 ? customer.updateOrCreateShippingAddress.params?.address1[0] : ''" rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.billing.street-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.street-address')" />
+
+                            <x-shop::form.control-group.error class="mb-2" control-name="billing.address1[0]" />
+
+                            @if (core()->getConfigData('customer.address.information.street_lines') > 1)
+                                @for ($i = 1; $i < core()->getConfigData('customer.address.information.street_lines'); $i++)
+                                    <x-shop::form.control-group.control type="text"
+                                        name="billing.address1[{{ $i }}]" :label="trans('shop::app.checkout.onepage.addresses.billing.street-address')"
+                                        :placeholder="trans('shop::app.checkout.onepage.addresses.billing.street-address')" />
+                                @endfor
+                            @endif
+                        </x-shop::form.control-group>
 
                         <!-- Phone Number -->
                         <x-shop::form.control-group>
