@@ -579,22 +579,49 @@ class Core
         $formatter = new \NumberFormatter(app()->getLocale(), \NumberFormatter::CURRENCY);
 
         $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $currency->decimal ?? 2);
-
         if (!$currency) {
             return $formatter->formatCurrency($price, $currencyCode);
         }
 
-        if ($symbol = $currency->symbol) {
+        // $symbol = $currency->symbol;
+        $arr = [
+            'KWD' => ['en' => 'KD', 'ar' => 'د.ك'],
+            'OMR' => ['en' => 'OR', 'ar' => 'ر.ع'],
+            'BHD' => ['en' => 'BD', 'ar' => 'د.ب'],
+            'AED' => ['en' => 'AD', 'ar' => 'د.إ'],
+            'QAR' => ['en' => 'QR', 'ar' => 'ر.ق'],
+            'SAR' => ['en' => 'SR', 'ar' => 'ر.س'],
+        ];
+
+        $symbol = isset($arr[$currency->code]) ? $arr[$currency->code][app()->getLocale()] : null;
+
+        if ($symbol) {
             if ($this->currencySymbol($currency) == $symbol) {
                 return $formatter->formatCurrency($price, $currency->code);
             }
 
             $formatter->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, $symbol);
 
-            return $formatter->format($price);
+            return $formatter->format($this->convertPrice($price));
         }
 
         return $formatter->formatCurrency($price, $currency->code);
+
+        // if (!$currency) {
+        //     return $formatter->formatCurrency($price, $currencyCode);
+        // }
+
+        // if ($symbol = $currency->symbol) {
+        //     if ($this->currencySymbol($currency) == $symbol) {
+        //         return $formatter->formatCurrency($price, $currency->code);
+        //     }
+
+        //     $formatter->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, $symbol);
+
+        //     return $formatter->format($price);
+        // }
+
+        // return $formatter->formatCurrency($price, $currency->code);
     }
 
     /**
