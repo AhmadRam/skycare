@@ -57,7 +57,10 @@ class ProductMediaRepository extends Repository
                     if (Str::contains($file->getMimeType(), 'image')) {
                         $manager = new ImageManager();
 
-                        $image = $manager->make($file)->encode('webp');
+                        // $image = $manager->make($file)->encode('webp');
+                        $image = $manager->make($file)->resize((1024 * 10), null, function ($constraint) {
+                            $constraint->aspectRatio();
+                        })->encode('webp');
 
                         $path = $this->getProductDirectory($product) . '/' . Str::random(40) . '.webp';
 
