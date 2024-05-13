@@ -33,7 +33,7 @@ class ProductMediaRepository extends Repository
      */
     public function getProductDirectory($product): string
     {
-        return 'product/'.$product->id;
+        return 'product/' . $product->id;
     }
 
     /**
@@ -51,17 +51,18 @@ class ProductMediaRepository extends Repository
 
         $position = 0;
 
-        if (! empty($data[$uploadFileType]['files'])) {
+        if (!empty($data[$uploadFileType]['files'])) {
             foreach ($data[$uploadFileType]['files'] as $indexOrModelId => $file) {
                 if ($file instanceof UploadedFile) {
                     if (Str::contains($file->getMimeType(), 'image')) {
-                        $manager = new ImageManager();
+                        // $manager = new ImageManager();
 
-                        $image = $manager->make($file)->encode('webp');
+                        // $image = $manager->make($file)->encode('webp');
 
-                        $path = $this->getProductDirectory($product).'/'.Str::random(40).'.webp';
+                        $path = $this->getProductDirectory($product) . '/' . Str::random(40) . '.webp';
+                        Storage::put($path, \Image::make($file)->encode('webp'));
 
-                        Storage::put($path, $image);
+                        // Storage::put($path, $image);
                     } else {
                         $path = $file->store($this->getProductDirectory($product));
                     }
@@ -85,7 +86,7 @@ class ProductMediaRepository extends Repository
         }
 
         foreach ($previousIds as $indexOrModelId) {
-            if (! $model = $this->find($indexOrModelId)) {
+            if (!$model = $this->find($indexOrModelId)) {
                 continue;
             }
 
