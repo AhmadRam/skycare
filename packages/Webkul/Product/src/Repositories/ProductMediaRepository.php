@@ -58,7 +58,7 @@ class ProductMediaRepository extends Repository
                         $manager = new ImageManager();
 
                         // $image = $manager->make($file)->encode('webp');
-                        $image = $manager->make($file)->resize((1024 * 6), null, function ($constraint) {
+                        $image = $manager->make($file)->resize(560, 609, function ($constraint) {
                             $constraint->aspectRatio();
                         })->encode('webp');
 
