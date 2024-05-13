@@ -13,7 +13,7 @@ class VisitorServiceProvider extends BaseVisitorServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->registerMacroHelpers();
     }
