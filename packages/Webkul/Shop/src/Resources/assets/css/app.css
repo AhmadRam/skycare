@@ -10,6 +10,70 @@
     font-display: block;
 }
 
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 200;
+    src: url(https://fonts.gstatic.com/s/tajawal/v3/IurF6YBj_oCad4k1l_6gLrZd9qwxWdyo.woff2) format('woff2'),
+        url(https://fonts.gstatic.com/s/tajawal/v3/IurF6YBj_oCad4k1l_6gLrZd9qwxWd4.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 300;
+    src: url(https://fonts.gstatic.com/s/tajawal/v3/IurF6YBj_oCad4k1l_6gLrZd9qwxWdyo.woff2) format('woff2'),
+        url(https://fonts.gstatic.com/s/tajawal/v3/IurF6YBj_oCad4k1l_6gLrZd9qwxWd4.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/tajawal/v3/IurF6YBj_oCad4k1l_6gLrZd9qwxWdyo.woff2) format('woff2'),
+        url(https://fonts.gstatic.com/s/tajawal/v3/IurF6YBj_oCad4k1l_6gLrZd9qwxWd4.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 500;
+    src: url(https://fonts.gstatic.com/s/tajawal/v3/IurF6YBj_oCad4k1l_6gLrZd9qwxWdyo.woff2) format('woff2'),
+        url(https://fonts.gstatic.com/s/tajawal/v3/IurF6YBj_oCad4k1l_6gLrZd9qwxWd4.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 600;
+    src: url(https://fonts.gstatic.com/s/tajawal/v3/IurF6YBj_oCad4k1l_6gLrZd9qwxWdyo.woff2) format('woff2'),
+        url(https://fonts.gstatic.com/s/tajawal/v3/IurF6YBj_oCad4k1l_6gLrZd9qwxWd4.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 700;
+    src: url(https://fonts.gstatic.com/s/tajawal/v3/IurF6YBj_oCad4k1l_6gLrZd9qwxWdyo.woff2) format('woff2'),
+        url(https://fonts.gstatic.com/s/tajawal/v3/IurF6YBj_oCad4k1l_6gLrZd9qwxWd4.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 800;
+    src: url(https://fonts.gstatic.com/s/tajawal/v3/IurF6YBj_oCad4k1l_6gLrZd9qwxWdyo.woff2) format('woff2'),
+        url(https://fonts.gstatic.com/s/tajawal/v3/IurF6YBj_oCad4k1l_6gLrZd9qwxWd4.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 900;
+    src: url(https://fonts.gstatic.com/s/tajawal/v3/IurF6YBj_oCad4k1l_6gLrZd9qwxWdyo.woff2) format('woff2'),
+        url(https://fonts.gstatic.com/s/tajawal/v3/IurF6YBj_oCad4k1l_6gLrZd9qwxWd4.woff) format('woff');
+}
+
 @layer components {
     ::selection {
         background-color: rgba(6, 12, 59, .2);
@@ -469,7 +533,7 @@
         inset: 0;
         display: grid;
         place-content: center;
-        font-family: 'DM Serif Display';
+        /* font-family: 'DM Serif Display'; */
         overflow: hidden;
         letter-spacing: 24px;
     }

@@ -884,7 +884,7 @@ button:disabled:hover {
     left: 0;
     display: grid;
     place-content: center;
-    font-family: "DM Serif Display";
+    /* font-family: "DM Serif Display"; */
     overflow: hidden;
     letter-spacing: 24px
 }
@@ -3334,7 +3334,7 @@ html {
 }
 
 .font-dmserif {
-    font-family: DM Serif Display
+    /* font-family: DM Serif Display */
 }
 
 .text-2xl {
