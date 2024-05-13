@@ -23,7 +23,7 @@ class VisitorServiceProvider extends BaseVisitorServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         /**
          * Bind to service container.
