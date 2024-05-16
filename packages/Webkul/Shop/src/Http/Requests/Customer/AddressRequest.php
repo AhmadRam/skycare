@@ -29,8 +29,10 @@ class AddressRequest extends FormRequest
     {
         return [
             'company_name' => [new AlphaNumericSpace],
-            'first_name'   => ['required', new AlphaNumericSpace],
-            'last_name'    => ['required', new AlphaNumericSpace],
+            // 'first_name'   => ['required', new AlphaNumericSpace],
+            // 'last_name'    => ['required', new AlphaNumericSpace],
+            'first_name'   => ['required'],
+            'last_name'    => ['required'],
             'address1'     => ['required', 'array'],
             'address1.*'   => ['required', new Address],
             'country'      => core()->isCountryRequired() ? ['required', new AlphaNumericSpace] : [new AlphaNumericSpace],
