@@ -42,9 +42,9 @@ class InvoiceRepository extends Repository
      */
     public function create(array $data, $invoiceState = null, $orderState = null)
     {
-        DB::beginTransaction();
+        // DB::beginTransaction();
 
-        try {
+        // try {
             Event::dispatch('sales.invoice.save.before', $data);
 
             $order = $this->orderRepository->find($data['order_id']);
@@ -173,13 +173,13 @@ class InvoiceRepository extends Repository
             $invoice->can_create_transaction = request()->has('can_create_transaction') && request()->input('can_create_transaction') == '1';
 
             Event::dispatch('sales.invoice.save.after', $invoice);
-        } catch (\Exception $e) {
-            DB::rollBack();
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
 
-            throw $e;
-        }
+        //     throw $e;
+        // }
 
-        DB::commit();
+        // DB::commit();
 
         return $invoice;
     }

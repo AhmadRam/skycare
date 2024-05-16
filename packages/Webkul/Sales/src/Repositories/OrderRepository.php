@@ -40,9 +40,9 @@ class OrderRepository extends Repository
      */
     public function createOrderIfNotThenRetry(array $data, $retryAttempts = 3)
     {
-        DB::beginTransaction();
+        // DB::beginTransaction();
 
-        try {
+        // try {
             Event::dispatch('checkout.order.save.before', [$data]);
 
             if (!empty($data['customer'])) {
@@ -95,27 +95,27 @@ class OrderRepository extends Repository
             }
 
             Event::dispatch('checkout.order.save.after', $order);
-        } catch (\Exception $e) {
-            /* rolling back first */
-            DB::rollBack();
+        // } catch (\Exception $e) {
+        //     /* rolling back first */
+        //     DB::rollBack();
 
-            /* storing log for errors */
-            Log::error(
-                'OrderRepository:createOrderIfNotThenRetry: ' . $e->getMessage(),
-                ['data' => $data]
-            );
+        //     /* storing log for errors */
+        //     Log::error(
+        //         'OrderRepository:createOrderIfNotThenRetry: ' . $e->getMessage(),
+        //         ['data' => $data]
+        //     );
 
-            /* recalling */
-            // $this->createOrderIfNotThenRetry($data);
-            if ($retryAttempts > 0) {
-                usleep(1000000);
+        //     /* recalling */
+        //     // $this->createOrderIfNotThenRetry($data);
+        //     if ($retryAttempts > 0) {
+        //         usleep(1000000);
 
-                return $this->createOrderIfNotThenRetry($data, $retryAttempts - 1);
-            }
-        } finally {
-            /* commit in each case */
-            DB::commit();
-        }
+        //         return $this->createOrderIfNotThenRetry($data, $retryAttempts - 1);
+        //     }
+        // } finally {
+        //     /* commit in each case */
+        //     DB::commit();
+        // }
 
         return $order;
     }

@@ -41,9 +41,9 @@ class ShipmentRepository extends Repository
      */
     public function create(array $data, $orderState = null)
     {
-        DB::beginTransaction();
+        // DB::beginTransaction();
 
-        try {
+        // try {
             Event::dispatch('sales.shipment.save.before', $data);
 
             $order = $this->orderRepository->find($data['order_id']);
@@ -134,13 +134,13 @@ class ShipmentRepository extends Repository
             }
 
             Event::dispatch('sales.shipment.save.after', $shipment);
-        } catch (\Exception $e) {
-            DB::rollBack();
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
 
-            throw $e;
-        }
+        //     throw $e;
+        // }
 
-        DB::commit();
+        // DB::commit();
 
         return $shipment;
     }

@@ -37,9 +37,9 @@ class RefundRepository extends Repository
      */
     public function create(array $data)
     {
-        DB::beginTransaction();
+        // DB::beginTransaction();
 
-        try {
+        // try {
             Event::dispatch('sales.refund.save.before', $data);
 
             $order = $this->orderRepository->find($data['order_id']);
@@ -151,12 +151,12 @@ class RefundRepository extends Repository
 
             Event::dispatch('sales.refund.save.after', $refund);
 
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollBack();
+        //     DB::commit();
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
 
-            throw $e;
-        }
+        //     throw $e;
+        // }
 
         return $refund;
     }
