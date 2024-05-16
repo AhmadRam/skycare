@@ -38,21 +38,21 @@ class OrderRepository extends Repository
      *
      * @return \Webkul\Sales\Contracts\Order
      */
-    public function createOrderIfNotThenRetry(array $data)
+    public function createOrderIfNotThenRetry(array $data, $retryAttempts = 3)
     {
-        DB::beginTransaction();
+        // DB::beginTransaction();
 
-        try {
+        // try {
             Event::dispatch('checkout.order.save.before', [$data]);
 
-            if (! empty($data['customer'])) {
+            if (!empty($data['customer'])) {
                 $data['customer_id'] = $data['customer']->id;
                 $data['customer_type'] = get_class($data['customer']);
             } else {
                 unset($data['customer']);
             }
 
-            if (! empty($data['channel'])) {
+            if (!empty($data['channel'])) {
                 $data['channel_id'] = $data['channel']->id;
                 $data['channel_type'] = get_class($data['channel']);
                 $data['channel_name'] = $data['channel']->name;
@@ -81,7 +81,7 @@ class OrderRepository extends Repository
 
                 $orderItem = $this->orderItemRepository->create(array_merge($item, ['order_id' => $order->id]));
 
-                if (! empty($item['children'])) {
+                if (!empty($item['children'])) {
                     foreach ($item['children'] as $child) {
                         $this->orderItemRepository->create(array_merge($child, ['order_id' => $order->id, 'parent_id' => $orderItem->id]));
                     }
@@ -95,22 +95,27 @@ class OrderRepository extends Repository
             }
 
             Event::dispatch('checkout.order.save.after', $order);
-        } catch (\Exception $e) {
-            /* rolling back first */
-            DB::rollBack();
+        // } catch (\Exception $e) {
+        //     /* rolling back first */
+        //     DB::rollBack();
 
-            /* storing log for errors */
-            Log::error(
-                'OrderRepository:createOrderIfNotThenRetry: '.$e->getMessage(),
-                ['data' => $data]
-            );
+        //     /* storing log for errors */
+        //     Log::error(
+        //         'OrderRepository:createOrderIfNotThenRetry: ' . $e->getMessage(),
+        //         ['data' => $data]
+        //     );
 
-            /* recalling */
-            $this->createOrderIfNotThenRetry($data);
-        } finally {
-            /* commit in each case */
-            DB::commit();
-        }
+        //     /* recalling */
+        //     // $this->createOrderIfNotThenRetry($data);
+        //     if ($retryAttempts > 0) {
+        //         usleep(1000000);
+
+        //         return $this->createOrderIfNotThenRetry($data, $retryAttempts - 1);
+        //     }
+        // } finally {
+        //     /* commit in each case */
+        //     DB::commit();
+        // }
 
         return $order;
     }
@@ -137,14 +142,14 @@ class OrderRepository extends Repository
         $order = $this->resolveOrderInstance($orderOrId);
 
         /* check wether order can be cancelled or not */
-        if (! $order->canCancel()) {
+        if (!$order->canCancel()) {
             return false;
         }
 
         Event::dispatch('sales.order.cancel.before', $order);
 
         foreach ($order->items as $item) {
-            if (! $item->qty_to_cancel) {
+            if (!$item->qty_to_cancel) {
                 continue;
             }
 
@@ -212,7 +217,7 @@ class OrderRepository extends Repository
             $totalQtyOrdered += $item->qty_ordered;
             $totalQtyInvoiced += $item->qty_invoiced;
 
-            if (! $item->isStockable()) {
+            if (!$item->isStockable()) {
                 $totalQtyShipped += $item->qty_invoiced;
             } else {
                 $totalQtyShipped += $item->qty_shipped;
@@ -292,7 +297,7 @@ class OrderRepository extends Repository
     {
         Event::dispatch('sales.order.update-status.before', $order);
 
-        if (! empty($orderState)) {
+        if (!empty($orderState)) {
             $status = $orderState;
         } else {
             $status = 'processing';

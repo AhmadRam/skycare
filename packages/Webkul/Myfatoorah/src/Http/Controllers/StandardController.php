@@ -155,9 +155,9 @@ class StandardController extends Controller
             // } else {
             // }
 
-            session()->flash('order_id', $order->id);
+            session()->flash('order', $order);
 
-            return redirect()->route('shop.checkout.success');
+            return redirect()->route('shop.checkout.onepage.success');
         }
 
         session()->flash('error', 'Something went wrong in payment processing, Please try again.');

@@ -1,7 +1,8 @@
 <div>
     <div class="flex justify-between items-center">
         <h2 class="text-xl font-medium max-sm:text-xl">
-            @lang('shop::app.checkout.onepage.addresses.billing.billing-address')
+            {{-- @lang('shop::app.checkout.onepage.addresses.billing.billing-address') --}}
+            @lang('shop::app.checkout.onepage.addresses.shipping.shipping-address')
         </h2>
     </div>
 
@@ -284,7 +285,7 @@
         {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.phone.after') !!}
 
         <!-- Checkbox For Different Address -->
-        <div class="flex gap-x-1.5 items-center mt-5 text-sm text-[#6E6E6E] select-none">
+        {{-- <div class="flex gap-x-1.5 items-center mt-5 text-sm text-[#6E6E6E] select-none">
             <div v-if="guest.applied.useDifferentAddressForShipping">
                 <x-shop::form.control-group.control type="hidden" name="billing.use_different_address_for_shipping"
                     ::value="!!guest.applied.useDifferentAddressForShipping" />
@@ -306,7 +307,7 @@
             <label for="billing.use_different_address_for_shipping" class="cursor-pointer">
                 @lang('shop::app.checkout.onepage.addresses.billing.use-different-address-for-shipping')
             </label>
-        </div>
+        </div> --}}
 
         <!-- Proceed Button -->
         <div class="flex justify-end mt-4" v-if="! guest.applied.useDifferentAddressForShipping">
