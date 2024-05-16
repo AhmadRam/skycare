@@ -31,18 +31,18 @@ class Base
      */
     protected function prepareMail($entity, $notification)
     {
-        $customerLocale = $this->getLocale($entity);
+        // $customerLocale = $this->getLocale($entity);
 
-        $previousLocale = core()->getCurrentLocale()->code;
+        // $previousLocale = core()->getCurrentLocale()->code;
 
-        app()->setLocale($customerLocale);
+        // app()->setLocale($customerLocale);
 
-        try {
-            Mail::queue($notification);
-        } catch (\Exception $e) {
-            \Log::error('Error in Sending Email'.$e->getMessage());
-        }
+        // try {
+        //     Mail::queue($notification);
+        // } catch (\Exception $e) {
+        //     \Log::error('Error in Sending Email'.$e->getMessage());
+        // }
 
-        app()->setLocale($previousLocale);
+        // app()->setLocale($previousLocale);
     }
 }
