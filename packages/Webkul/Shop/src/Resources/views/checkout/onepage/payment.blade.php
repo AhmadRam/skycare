@@ -98,7 +98,7 @@
                                     {!! view_render_event('bagisto.shop.checkout.onepage.summary.place_order_button.before') !!}
 
                                     <x-shop::button
-                                        v-if="!isLoading"
+                                        v-if="!isShowPlaceOrderLoading"
                                         type="button"
                                         class="primary-button w-max py-3 px-11 bg-navyBlue rounded-2xl max-sm:text-sm max-sm:px-6 max-sm:mb-10"
                                         :title="trans('shop::app.checkout.onepage.summary.place-order')"
@@ -141,6 +141,8 @@
                     isPaymentMethodLoading: false,
 
                     isShowPlaceOrder: false,
+
+                    isShowPlaceOrderLoading: false,
                 }
             },
 
@@ -166,6 +168,22 @@
                             }
                         })
                         .catch(error => console.log(error));
+                },
+
+                placeOrder() {
+                    this.isShowPlaceOrderLoading = true;
+
+                    this.$axios.post('{{ route('shop.checkout.onepage.orders.store') }}')
+                        .then(response => {
+                            if (response.data.data.redirect) {
+                                window.location.href = response.data.data.redirect_url;
+                            } else {
+                                window.location.href = '{{ route('shop.checkout.onepage.success') }}';
+                            }
+
+                            this.isLoisShowPlaceOrderLoadingading = false;
+                        })
+                        .catch();
                 },
             },
         });
