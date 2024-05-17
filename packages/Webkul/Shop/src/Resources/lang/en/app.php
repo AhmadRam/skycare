@@ -669,7 +669,7 @@ return [
             'mini-cart' => [
                 'continue-to-checkout' => 'Continue to Checkout',
                 'empty-cart'           => 'Your cart is empty',
-                'offer-on-orders'      => 'Get Up To 30% OFF on your 1st order',
+                'offer-on-orders'      => 'Create an account and Get Up To 30% OFF on your 1st order',
                 'remove'               => 'Remove',
                 'see-details'          => 'See Details',
                 'shopping-cart'        => 'Shopping Cart',

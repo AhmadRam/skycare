@@ -91,7 +91,7 @@
                     </v-error-message>
 
                     <!-- Checkbox For Different Address -->
-                    <div class="flex gap-x-1.5 items-center mt-5 text-sm text-[#6E6E6E] select-none"
+                    {{-- <div class="flex gap-x-1.5 items-center mt-5 text-sm text-[#6E6E6E] select-none"
                         v-if="cart.have_stockable_items">
                         <div v-if="customer.applied.useDifferentAddressForShipping">
                             <x-shop::form.control-group.control type="hidden" name="use_different_address_for_shipping"
@@ -114,7 +114,7 @@
                         <label for="use_different_address_for_shipping" class="cursor-pointer">
                             @lang('shop::app.checkout.onepage.addresses.billing.use-different-address-for-shipping')
                         </label>
-                    </div>
+                    </div> --}}
 
                     <!-- Proceed Button -->
                     <div class="flex justify-end mt-4"

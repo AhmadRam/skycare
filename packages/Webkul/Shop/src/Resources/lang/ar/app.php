@@ -669,7 +669,7 @@ return [
             'mini-cart' => [
                 'continue-to-checkout' => 'متابعة للسداد',
                 'empty-cart'           => 'سلة التسوق الخاصة بك فارغة',
-                'offer-on-orders'      => 'احصل على خصم يصل إلى 30٪ على طلبك الأول',
+                'offer-on-orders'      => 'قم بإنشاء حساب واحصل على خصم يصل إلى 30٪ على طلبك الأول',
                 'remove'               => 'إزالة',
                 'see-details'          => 'رؤية التفاصيل',
                 'shopping-cart'        => 'عربة التسوق',
