@@ -16,7 +16,7 @@
     </div>
 
     <x-admin::datagrid :src="route('admin.sales.orders.index')" :isMultiRow="true">
-        <!-- Datagrid Header -->
+        {{-- <!-- Datagrid Header -->
         <template #header="{ columns, records, sortPage, selectAllRecords, applied, isLoading}">
              <template v-if="! isLoading">
                 <div class="row grid grid-cols-[0.5fr_0.5fr_1fr] grid-rows-1 items-center px-4 py-2.5 border-b dark:border-gray-800">
@@ -167,6 +167,6 @@
             <template v-else>
                 <x-admin::shimmer.datagrid.table.body :isMultiRow="true" />
             </template>
-        </template>
+        </template> --}}
     </x-admin::datagrid>
 </x-admin::layouts>
