@@ -255,7 +255,7 @@
                 @lang('shop::app.checkout.onepage.addresses.billing.street-address')
             </x-shop::form.control-group.label>
 
-            <x-shop::form.control-group.control type="text" name="guest.cart.billingAddress.address1 && guest.cart.billingAddress.address1.length > 0 ? guest.cart.billingAddress.address1[0] : ''" ::value="guest.cart.billingAddress.address1"
+            <x-shop::form.control-group.control type="text" ::value="guest.cart.billingAddress.address1 && guest.cart.billingAddress.address1.length > 0 ? guest.cart.billingAddress.address1[0] : ''" name="billing.address1[0]"
                 rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.billing.street-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.street-address')" />
 
             <x-shop::form.control-group.error class="mb-2" control-name="billing.address1[0]" />

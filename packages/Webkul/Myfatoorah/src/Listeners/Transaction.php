@@ -27,15 +27,17 @@ class Transaction
     {
         $data = request()->all();
 
-        $this->orderTransactionRepository->create([
-            'transaction_id' => $data['paymentId'] ?? 0,
-            'status'         => $invoice->state,
-            'type'           => $data['payment_type'] ?? "myfatoorah",
-            'payment_method' => $invoice->order->payment->method,
-            'order_id'       => $invoice->order->id,
-            'invoice_id'     => $invoice->id,
-            'amount'         => $invoice->grand_total,
-            'data'           => json_encode($data),
-        ]);
+        if (isset($data['paymentId'])) {
+            $this->orderTransactionRepository->create([
+                'transaction_id' => $data['paymentId'],
+                'status'         => $invoice->state,
+                'type'           => $data['payment_type'] ?? "myfatoorah",
+                'payment_method' => $invoice->order->payment->method,
+                'order_id'       => $invoice->order->id,
+                'invoice_id'     => $invoice->id,
+                'amount'         => $invoice->grand_total,
+                'data'           => json_encode($data),
+            ]);
+        }
     }
 }
