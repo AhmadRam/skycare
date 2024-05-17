@@ -19,7 +19,7 @@ class Transaction
 
     /**
      * Save the transaction data for online payment.
-     * 
+     *
      * @param  \Webkul\Sales\Models\Invoice $invoice
      * @return void
      */
@@ -28,7 +28,7 @@ class Transaction
         $data = request()->all();
 
         $this->orderTransactionRepository->create([
-            'transaction_id' => $data['paymentId'],
+            'transaction_id' => $data['paymentId'] ?? null,
             'status'         => $invoice->state,
             'type'           => $data['payment_type'] ?? "myfatoorah",
             'payment_method' => $invoice->order->payment->method,
