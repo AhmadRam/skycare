@@ -12,6 +12,10 @@
     "file": "assets/cash-on-delivery-73061c49.png",
     "src": "src/Resources/assets/images/cash-on-delivery.png"
   },
+  "src/Resources/assets/images/myfatoorah.png": {
+    "file": "assets/myfatoorah.png",
+    "src": "src/Resources/assets/images/myfatoorah.png"
+  },
   "src/Resources/assets/images/default-language.svg": {
     "file": "assets/default-language-6ef0ef70.svg",
     "src": "src/Resources/assets/images/default-language.svg"
