@@ -16,7 +16,7 @@
                 <!-- Payment Method shimmer Effect -->
                 <x-shop::shimmer.checkout.onepage.payment-method />
             </template>
-    
+
             <template v-if="isShowPaymentMethods">
                 <div>
                     {!! view_render_event('bagisto.shop.checkout.onepage.payment_method.accordion.before') !!}
@@ -29,32 +29,32 @@
                                 </h2>
                             </div>
                         </x-slot>
-        
+
                         <x-slot:content class="!p-0 mt-8">
                             <div class="flex flex-wrap gap-7">
-                                <div 
+                                <div
                                     class="relative max-sm:max-w-full max-sm:flex-auto cursor-pointer"
                                     v-for="(payment, index) in paymentMethods"
                                 >
                                     {!! view_render_event('bagisto.shop.checkout.payment-method.before') !!}
 
-                                    <input 
-                                        type="radio" 
-                                        name="payment[method]" 
+                                    <input
+                                        type="radio"
+                                        name="payment[method]"
                                         :value="payment.payment"
                                         :id="payment.method"
-                                        class="hidden peer"    
+                                        class="hidden peer"
                                         @change="store(payment)"
                                     >
-        
-                                    <label 
-                                        :for="payment.method" 
+
+                                    <label
+                                        :for="payment.method"
                                         class="absolute ltr:right-5 rtl:left-5 top-5 icon-radio-unselect text-2xl text-navyBlue peer-checked:icon-radio-select cursor-pointer"
                                     >
                                     </label>
 
-                                    <label 
-                                        :for="payment.method" 
+                                    <label
+                                        :for="payment.method"
                                         class="w-[190px] p-5 block border border-[#E9E9E9] rounded-xl max-sm:w-full cursor-pointer"
                                     >
 
@@ -76,14 +76,14 @@
                                         <p class="text-sm font-semibold mt-1.5">
                                             @{{ payment.method_title }}
                                         </p>
-                                        
+
                                         {!! view_render_event('bagisto.shop.checkout.onepage.payment-method.title.after') !!}
 
                                         {!! view_render_event('bagisto.shop.checkout.onepage.payment-method.description.before') !!}
 
                                         <p class="text-xs font-medium mt-2.5">
                                             @{{ payment.description }}
-                                        </p> 
+                                        </p>
 
                                         {!! view_render_event('bagisto.shop.checkout.onepage.payment-method.description.after') !!}
                                     </label>
@@ -93,6 +93,30 @@
                                     <!-- Todo implement the additionalDetails -->
                                     {{-- \Webkul\Payment\Payment::getAdditionalDetails($payment['method'] --}}
                                 </div>
+
+                                <div class="flex justify-end" v-if="isShowPlaceOrder" style="max-height: 50px;margin:auto;">
+                                    {!! view_render_event('bagisto.shop.checkout.onepage.summary.place_order_button.before') !!}
+
+                                    <x-shop::button
+                                        v-if="!isLoading"
+                                        type="button"
+                                        class="primary-button w-max py-3 px-11 bg-navyBlue rounded-2xl max-sm:text-sm max-sm:px-6 max-sm:mb-10"
+                                        :title="trans('shop::app.checkout.onepage.summary.place-order')"
+                                        :loading="false"
+                                        @click="placeOrder"
+                                    />
+
+                                    <x-shop::button
+                                        type="button"
+                                        class="primary-button w-max py-3 px-11 bg-navyBlue rounded-2xl max-sm:text-sm max-sm:px-6 max-sm:mb-10"
+                                        v-else
+                                        :title="trans('shop::app.checkout.onepage.summary.place-order')"
+                                        :loading="true"
+                                        :disabled="true"
+                                    />
+
+                                    {!! view_render_event('bagisto.shop.checkout.onepage.summary.place_order_button.after') !!}
+                                </div>
                             </div>
                         </x-slot>
                     </x-shop::accordion>
@@ -100,6 +124,7 @@
                     {!! view_render_event('bagisto.shop.checkout.onepage.index.payment_method.accordion.before') !!}
                 </div>
             </template>
+
         </div>
     </script>
 
@@ -114,6 +139,8 @@
                     isShowPaymentMethods: false,
 
                     isPaymentMethodLoading: false,
+
+                    isShowPlaceOrder: false,
                 }
             },
 
@@ -121,7 +148,7 @@
                 this.$emitter.on('is-payment-loading', (value) => this.isPaymentMethodLoading = value);
 
                 this.$emitter.on('is-show-payment-methods', (value) => this.isShowPaymentMethods = value);
-                
+
                 this.$emitter.on('payment-methods', (methods) => this.paymentMethods = methods);
             },
 
@@ -135,6 +162,7 @@
 
                             if (response.data.cart) {
                                 this.$emitter.emit('can-place-order', true);
+                                this.isShowPlaceOrder = true;
                             }
                         })
                         .catch(error => console.log(error));
