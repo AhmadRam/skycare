@@ -28,7 +28,7 @@ class Transaction
         $data = request()->all();
 
         $this->orderTransactionRepository->create([
-            'transaction_id' => $data['paymentId'] ?? null,
+            'transaction_id' => $data['paymentId'] ?? 0,
             'status'         => $invoice->state,
             'type'           => $data['payment_type'] ?? "myfatoorah",
             'payment_method' => $invoice->order->payment->method,
