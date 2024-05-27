@@ -208,6 +208,9 @@
                             @endif
 
                             <p class="text-base text-gray-800 dark:text-white font-semibold !leading-5">
+                                @if ($order->coupon_code)
+                                    ({{ $order->coupon_code }})
+                                @endif
                                 @lang('admin::app.sales.orders.view.summary-discount')
                             </p>
 
