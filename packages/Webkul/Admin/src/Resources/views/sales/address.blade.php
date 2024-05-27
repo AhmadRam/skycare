@@ -9,11 +9,19 @@
 
     <p class="text-gray-600 dark:text-gray-300 !leading-6">
         <?php $address1 = explode(PHP_EOL, $address->address1); ?>
+        @if (isset($address1[0]))
+            {{ trans('shop::app.checkout.onepage.addresses.billing.block-address') }} : {{ $address1[0] }}<br>
+        @endif
+        @if (isset($address1[1]))
+            {{ trans('shop::app.checkout.onepage.addresses.billing.street-address') }} : {{ $address1[1] }}<br>
+        @endif
+        @if (isset($address1[2]))
+            {{ trans('shop::app.checkout.onepage.addresses.billing.floor-address') }} : {{ $address1[2] }}<br>
+        @endif
+        @if (isset($address1[3]))
+            {{ trans('shop::app.checkout.onepage.addresses.billing.house-address') }} : {{ $address1[3] }}<br>
+        @endif
 
-        {{ trans('shop::app.checkout.onepage.addresses.billing.block-address') }} : {{ $address1[0] }}<br>
-        {{ trans('shop::app.checkout.onepage.addresses.billing.street-address') }} : {{ $address1[1] }}<br>
-        {{ trans('shop::app.checkout.onepage.addresses.billing.floor-address') }} : {{ $address1[2] }}<br>
-        {{ trans('shop::app.checkout.onepage.addresses.billing.house-address') }} : {{ $address1[3] }}<br>
 
         @if ($address->address2)
             {{ $address->address2 }}<br>
