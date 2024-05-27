@@ -25,10 +25,8 @@
 
             <div class="flex gap-x-2.5 items-center">
                 <!-- Back Button -->
-                <a
-                    href="{{ route('admin.sales.invoices.index') }}"
-                    class="transparent-button hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-white"
-                >
+                <a href="{{ route('admin.sales.invoices.index') }}"
+                    class="transparent-button hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-white">
                     @lang('admin::app.account.edit.back-btn')
                 </a>
             </div>
@@ -40,22 +38,28 @@
         <div class="flex gap-x-1 gap-y-2 items-center flex-wrap">
             {!! view_render_event('sales.invoice.page_action.before', ['order' => $order]) !!}
 
-            <a
-                href="{{ route('admin.sales.invoices.print', $invoice->id) }}"
-                class="inline-flex gap-x-2 items-center justify-between w-full max-w-max px-1 py-1.5 text-gray-600 dark:text-gray-300 font-semibold text-center cursor-pointer transition-all hover:bg-gray-200 dark:hover:bg-gray-800 hover:rounded-md"
-            >
-                <span class="icon-printer text-2xl"></span> 
+            <a href="{{ route('admin.sales.invoices.print', $invoice->id) }}" onclick="openSmallWindow(event)"
+                class="inline-flex gap-x-2 items-center justify-between w-full max-w-max px-1 py-1.5 text-gray-600 dark:text-gray-300 font-semibold text-center cursor-pointer transition-all hover:bg-gray-200 dark:hover:bg-gray-800 hover:rounded-md">
+                <span class="icon-printer text-2xl"></span>
 
                 @lang('admin::app.sales.invoices.view.print')
             </a>
 
+            <script>
+                function openSmallWindow(event) {
+                    event.preventDefault();
+                    var url = event.target.href;
+                    var windowName = 'Print_Window';
+                    var windowFeatures = 'width=800,height=800';
+                    window.open(url, windowName, windowFeatures);
+                }
+            </script>
+
             <!-- Send Duplicate Invoice Modal -->
             <div>
-                <button
-                    type="button"
+                <button type="button"
                     class="inline-flex gap-x-2 items-center justify-between w-full max-w-max px-1 py-1.5 text-gray-600 dark:text-gray-300 font-semibold text-center cursor-pointer transition-all hover:bg-gray-200 dark:hover:bg-gray-800 hover:rounded-md"
-                    @click="$refs.groupCreateModal.open()"
-                >
+                    @click="$refs.groupCreateModal.open()">
                     <span class="icon-mail text-2xl"></span>
 
                     @lang('admin::app.sales.invoices.view.send-duplicate-invoice')
@@ -77,27 +81,18 @@
                                 <x-admin::form.control-group.label class="required">
                                     @lang('admin::app.sales.invoices.view.email')
                                 </x-admin::form.control-group.label>
-    
-                                <x-admin::form.control-group.control
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    rules="required|email"
-                                    :value="$invoice->order->customer_email"
-                                    :label="trans('admin::app.sales.invoices.view.email')"
-                                />
-    
+
+                                <x-admin::form.control-group.control type="email" id="email" name="email"
+                                    rules="required|email" :value="$invoice->order->customer_email" :label="trans('admin::app.sales.invoices.view.email')" />
+
                                 <x-admin::form.control-group.error control-name="email" />
                             </x-admin::form.control-group>
                         </x-slot>
-        
+
                         <!-- Modal Footer -->
                         <x-slot:footer>
                             <div class="flex gap-x-2.5 items-center">
-                                <button 
-                                    type="submit"
-                                    class="primary-button"
-                                >
+                                <button type="submit" class="primary-button">
                                     @lang('admin::app.sales.invoices.view.send')
                                 </button>
                             </div>
@@ -123,25 +118,26 @@
 
                 <div class="grid">
                     <!-- Invoice Item Details-->
-                    @foreach($invoice->items as $item)
-                        <div class="flex gap-2.5 justify-between px-4 py-6 border-b border-slate-300 dark:border-gray-800">
+                    @foreach ($invoice->items as $item)
+                        <div
+                            class="flex gap-2.5 justify-between px-4 py-6 border-b border-slate-300 dark:border-gray-800">
                             <div class="flex gap-2.5">
                                 <!-- Product Image -->
                                 @if ($item->product?->base_image_url)
-                                    <img
-                                        class="w-full h-[60px] max-w-[60px] max-h-[60px] relative rounded"
-                                        src="{{ $item->product->base_image_url }}"
-                                    >
+                                    <img class="w-full h-[60px] max-w-[60px] max-h-[60px] relative rounded"
+                                        src="{{ $item->product->base_image_url }}">
                                 @else
-                                    <div class="w-full h-[60px] max-w-[60px] max-h-[60px] relative border border-dashed border-gray-300 dark:border-gray-800 rounded dark:invert dark:mix-blend-exclusion">
+                                    <div
+                                        class="w-full h-[60px] max-w-[60px] max-h-[60px] relative border border-dashed border-gray-300 dark:border-gray-800 rounded dark:invert dark:mix-blend-exclusion">
                                         <img src="{{ bagisto_asset('images/product-placeholders/front.svg') }}">
-                                        
-                                        <p class="absolute w-full bottom-1.5 text-[6px] text-gray-400 text-center font-semibold"> 
-                                            @lang('admin::app.sales.invoices.view.product-image') 
+
+                                        <p
+                                            class="absolute w-full bottom-1.5 text-[6px] text-gray-400 text-center font-semibold">
+                                            @lang('admin::app.sales.invoices.view.product-image')
                                         </p>
                                     </div>
                                 @endif
-                                
+
                                 <div class="grid gap-1.5 place-content-start">
                                     <!-- Item Name -->
                                     <p class="text-base text-gray-800 dark:text-white font-semibold">
@@ -151,8 +147,8 @@
                                     <p class="text-gray-600 dark:text-gray-300">
                                         @lang('admin::app.sales.invoices.view.amount-per-unit', [
                                             'amount' => core()->formatBasePrice($item->base_price),
-                                            'qty'    => $item->qty,
-                                            ])
+                                            'qty' => $item->qty,
+                                        ])
                                     </p>
 
                                     <div class="flex flex-col gap-1.5 place-items-start">
@@ -160,14 +156,15 @@
                                             <!-- Item Additional Details -->
                                             <p class="text-gray-600 dark:text-gray-300">
                                                 @foreach ($item->additional['attributes'] as $attribute)
-                                                    {{ $attribute['attribute_name'] }} : {{ $attribute['option_label'] }}
+                                                    {{ $attribute['attribute_name'] }} :
+                                                    {{ $attribute['option_label'] }}
                                                 @endforeach
                                             </p>
                                         @endif
 
                                         <!--SKU -->
                                         <p class="text-gray-600 dark:text-gray-300">
-                                             @lang('admin::app.sales.invoices.view.sku', ['sku' => $item->getTypeInstance()->getOrderedItem($item)->sku])
+                                            @lang('admin::app.sales.invoices.view.sku', ['sku' => $item->getTypeInstance()->getOrderedItem($item)->sku])
                                         </p>
 
                                         <!-- Quantity -->
@@ -180,7 +177,8 @@
 
                             <div class="grid gap-1 place-content-start">
                                 <!-- Item Grand Total -->
-                                <p class="flex items-center gap-x-1 justify-end text-base text-gray-800 dark:text-white font-semibold">
+                                <p
+                                    class="flex items-center gap-x-1 justify-end text-base text-gray-800 dark:text-white font-semibold">
                                     {{ core()->formatBasePrice($item->base_total + $item->base_tax_amount - $item->base_discount_amount) }}
                                 </p>
 
@@ -220,21 +218,21 @@
                         </p>
 
                         <p class="text-gray-600 dark:text-gray-300 !leading-5">
-                            @lang('admin::app.sales.invoices.view.shipping-and-handling')                    
+                            @lang('admin::app.sales.invoices.view.shipping-and-handling')
                         </p>
 
                         <p class="text-gray-600 dark:text-gray-300 !leading-5">
-                            @lang('admin::app.sales.invoices.view.summary-tax')    
+                            @lang('admin::app.sales.invoices.view.summary-tax')
                         </p>
 
                         @if ($invoice->base_discount_amount > 0)
                             <p class="text-gray-600 dark:text-gray-300 !leading-5">
-                                @lang('admin::app.sales.invoices.view.summary-discount')    
+                                @lang('admin::app.sales.invoices.view.summary-discount')
                             </p>
                         @endif
 
                         <p class="text-base text-gray-800 dark:text-white font-semibold !leading-5">
-                            @lang('admin::app.sales.invoices.view.grand-total')   
+                            @lang('admin::app.sales.invoices.view.grand-total')
                         </p>
                     </div>
 
@@ -260,7 +258,7 @@
                                 {{ core()->formatBasePrice($invoice->base_discount_amount) }}
                             </p>
                         @endif
-                        
+
                         <!-- Grand Total -->
                         <p class="text-base text-gray-800 dark:text-white font-semibold !leading-5">
                             {{ core()->formatBasePrice($invoice->base_grand_total) }}
@@ -281,7 +279,7 @@
                 </x-slot>
 
                 <x-slot:content>
-                    <div class="flex flex-col {{ $order->billing_address ? 'pb-4' : ''}}">
+                    <div class="flex flex-col {{ $order->billing_address ? 'pb-4' : '' }}">
                         <p class="text-gray-800 font-semibold dark:text-white">
                             {{ $invoice->order->customer_full_name }}
                         </p>
@@ -329,13 +327,13 @@
                         @endif
                     @endif
                 </x-slot>
-            </x-admin::accordion> 
-            
+            </x-admin::accordion>
+
             <!-- component 2 -->
             <x-admin::accordion>
                 <x-slot:header>
                     <p class="text-gray-600 dark:text-gray-300 text-base  p-2.5 font-semibold">
-                        @lang('admin::app.sales.invoices.view.order-information') 
+                        @lang('admin::app.sales.invoices.view.order-information')
                     </p>
                 </x-slot>
 
@@ -344,15 +342,16 @@
                         <div class="flex flex-col gap-y-1.5">
                             @foreach (['order-id', 'order-date', 'order-status', 'invoice-status', 'channel'] as $item)
                                 <p class="text-gray-600 dark:text-gray-300">
-                                    @lang('admin::app.sales.invoices.view.' . $item) 
-                                </p>    
+                                    @lang('admin::app.sales.invoices.view.' . $item)
+                                </p>
                             @endforeach
                         </div>
 
                         <div class="flex  flex-col gap-y-1.5">
                             <!-- Order Id -->
                             <p class="text-blue-600 font-semibold transition-all hover:underline">
-                                <a href="{{ route('admin.sales.orders.view', $order->id) }}">#{{ $order->increment_id }}</a>
+                                <a
+                                    href="{{ route('admin.sales.orders.view', $order->id) }}">#{{ $order->increment_id }}</a>
                             </p>
 
                             {!! view_render_event('sales.invoice.increment_id.after', ['order' => $order]) !!}
