@@ -174,6 +174,9 @@
 
                                         @if ($order->base_discount_amount > 0)
                                             <p class="text-gray-600 dark:text-gray-300">
+                                                @if ($order->coupon_code)
+                                                    ({{ $order->coupon_code }})
+                                                @endif
                                                 @lang('admin::app.sales.orders.view.discount', ['discount' => core()->formatBasePrice($item->base_discount_amount)])
                                             </p>
                                         @endif
