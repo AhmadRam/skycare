@@ -207,7 +207,7 @@
                                     @lang('admin::app.sales.orders.view.shipping-and-handling')</p>
                             @endif
 
-                            <p class="text-base text-gray-800 dark:text-white font-semibold !leading-5">
+                            <p class="text-gray-600 dark:text-gray-300 !leading-5">
                                 @if ($order->coupon_code)
                                     ({{ $order->coupon_code }})
                                 @endif
@@ -246,7 +246,7 @@
                                 </p>
                             @endif
 
-                            <p class="text-base text-gray-800 dark:text-white font-semibold !leading-5">
+                            <p class="text-gray-600 dark:text-gray-300 !leading-5">
                                 {{ core()->formatBasePrice($order->base_discount_amount) }}
                             </p>
 
