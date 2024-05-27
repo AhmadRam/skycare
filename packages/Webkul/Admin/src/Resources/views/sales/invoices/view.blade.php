@@ -51,7 +51,10 @@
                     var url = event.target.href;
                     var windowName = 'Print_Window';
                     var windowFeatures = 'width=800,height=800';
-                    window.open(url, windowName, windowFeatures);
+                    var newWindow = window.open(url, windowName, windowFeatures);
+                    newWindow.onload = function() {
+                        newWindow.print();
+                    };
                 }
             </script>
 
