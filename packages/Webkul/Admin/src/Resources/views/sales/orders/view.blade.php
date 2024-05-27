@@ -557,23 +557,10 @@
                                     </a>
 
                                     <a href="{{ route('admin.sales.invoices.print', $invoice->id) }}"
-                                        onclick="openSmallWindow(event)"
-                                        class="text-sm text-blue-600 transition-all hover:underline">
+                                        class="text-sm text-blue-600 transition-all hover:underline"
+                                        onclick="openSmallWindow(event)">
                                         @lang('admin::app.sales.orders.view.download-pdf')
                                     </a>
-
-                                    <script>
-                                        function openSmallWindow(event) {
-                                            event.preventDefault();
-                                            var url = event.target.href;
-                                            var windowName = 'Print_Window';
-                                            var windowFeatures = 'width=800,height=800';
-                                            var newWindow = window.open(url, windowName, windowFeatures);
-                                            newWindow.onload = function() {
-                                                newWindow.print();
-                                            };
-                                        }
-                                    </script>
 
                                 </div>
                             </div>
@@ -588,7 +575,18 @@
                         @endforelse
                     </x-slot>
                 </x-admin::accordion>
-
+                <script>
+                    function openSmallWindow(event) {
+                        event.preventDefault();
+                        var url = event.target.href;
+                        var windowName = 'Print_Window';
+                        var windowFeatures = 'width=800,height=800';
+                        var newWindow = window.open(url, windowName, windowFeatures);
+                        newWindow.onload = function() {
+                            newWindow.print();
+                        };
+                    }
+                </script>
                 <!-- Shipment Information-->
                 <x-admin::accordion>
                     <x-slot:header>
