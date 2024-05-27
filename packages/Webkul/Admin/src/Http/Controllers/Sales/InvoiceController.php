@@ -138,6 +138,7 @@ class InvoiceController extends Controller
     public function printInvoice(int $id)
     {
         $invoice = $this->invoiceRepository->findOrFail($id);
+        return view('admin::sales.invoices.pdf', compact('invoice'));
 
         return $this->downloadPDF(
             view('admin::sales.invoices.pdf', compact('invoice'))->render(),
