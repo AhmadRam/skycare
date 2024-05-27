@@ -225,6 +225,7 @@ return [
                 'summary-grand-total'   => 'Grand Total',
                 'summary-sub-total'     => 'Sub Total',
                 'summary-tax'           => 'Tax',
+                'summary-discount'      => 'Discount',
                 'tax'                   => 'Tax - :tax',
                 'title'                 => 'Order #:order_id',
                 'total-due'             => 'Total Due',

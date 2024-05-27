@@ -225,6 +225,7 @@ return [
                 'summary-grand-total'   => 'الإجمالي الكبير',
                 'summary-sub-total'     => 'الإجمالي الفرعي',
                 'summary-tax'           => 'الضريبة',
+                'summary-discount'      => 'الحسم',
                 'tax'                   => 'الضريبة - :tax',
                 'title'                 => 'الطلب #:order_id',
                 'total-due'             => 'المجموع المستحق',

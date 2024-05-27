@@ -208,6 +208,10 @@
                             @endif
 
                             <p class="text-base text-gray-800 dark:text-white font-semibold !leading-5">
+                                @lang('admin::app.sales.orders.view.summary-discount')
+                            </p>
+
+                            <p class="text-base text-gray-800 dark:text-white font-semibold !leading-5">
                                 @lang('admin::app.sales.orders.view.summary-grand-total')
                             </p>
 
@@ -238,6 +242,10 @@
                                     {{ core()->formatBasePrice($order->base_shipping_amount) }}
                                 </p>
                             @endif
+
+                            <p class="text-base text-gray-800 dark:text-white font-semibold !leading-5">
+                                {{ core()->formatBasePrice($order->base_discount_amount) }}
+                            </p>
 
                             <p class="text-base text-gray-800 dark:text-white font-semibold !leading-5">
                                 {{ core()->formatBasePrice($order->base_grand_total) }}
