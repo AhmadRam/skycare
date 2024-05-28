@@ -36,12 +36,13 @@ class OrderDataGrid extends DataGrid
                 'channel_name',
                 'status',
                 'customer_email',
-                'orders.cart_id as image',
-                DB::raw('CONCAT('.DB::getTablePrefix().'orders.customer_first_name, " ", '.DB::getTablePrefix().'orders.customer_last_name) as full_name'),
-                DB::raw('CONCAT('.DB::getTablePrefix().'order_address_billing.city, ", ", '.DB::getTablePrefix().'order_address_billing.state,", ", '.DB::getTablePrefix().'order_address_billing.country) as location')
+                // 'orders.cart_id as image',
+                DB::raw('CONCAT(' . DB::getTablePrefix() . 'orders.customer_first_name, " ", ' . DB::getTablePrefix() . 'orders.customer_last_name) as full_name'),
+                DB::raw('CONCAT(' . DB::getTablePrefix() . 'order_address_billing.city, ", ", ' . DB::getTablePrefix() . 'order_address_billing.state,", ", ' . DB::getTablePrefix() . 'order_address_billing.country) as location'),
+                DB::raw('CASE WHEN ' . DB::getTablePrefix() . 'order_address_shipping.phone_code IS NOT NULL THEN CONCAT(' . DB::getTablePrefix() . 'order_address_shipping.phone_code, " ", ' . DB::getTablePrefix() . 'order_address_shipping.phone) ELSE ' . DB::getTablePrefix() . 'order_address_shipping.phone END as phone')
             );
 
-        $this->addFilter('full_name', DB::raw('CONCAT('.DB::getTablePrefix().'orders.customer_first_name, " ", '.DB::getTablePrefix().'orders.customer_last_name)'));
+        $this->addFilter('full_name', DB::raw('CONCAT(' . DB::getTablePrefix() . 'orders.customer_first_name, " ", ' . DB::getTablePrefix() . 'orders.customer_last_name)'));
         $this->addFilter('created_at', 'orders.created_at');
 
         return $queryBuilder;
@@ -109,25 +110,25 @@ class OrderDataGrid extends DataGrid
             'closure'    => function ($row) {
                 switch ($row->status) {
                     case Order::STATUS_PROCESSING:
-                        return '<p class="label-processing">'.trans('admin::app.sales.orders.index.datagrid.processing').'</p>';
+                        return '<p class="label-processing">' . trans('admin::app.sales.orders.index.datagrid.processing') . '</p>';
 
                     case Order::STATUS_COMPLETED:
-                        return '<p class="label-active">'.trans('admin::app.sales.orders.index.datagrid.completed').'</p>';
+                        return '<p class="label-active">' . trans('admin::app.sales.orders.index.datagrid.completed') . '</p>';
 
                     case Order::STATUS_CANCELED:
-                        return '<p class="label-canceled">'.trans('admin::app.sales.orders.index.datagrid.canceled').'</p>';
+                        return '<p class="label-canceled">' . trans('admin::app.sales.orders.index.datagrid.canceled') . '</p>';
 
                     case Order::STATUS_CLOSED:
-                        return '<p class="label-closed">'.trans('admin::app.sales.orders.index.datagrid.closed').'</p>';
+                        return '<p class="label-closed">' . trans('admin::app.sales.orders.index.datagrid.closed') . '</p>';
 
                     case Order::STATUS_PENDING:
-                        return '<p class="label-pending">'.trans('admin::app.sales.orders.index.datagrid.pending').'</p>';
+                        return '<p class="label-pending">' . trans('admin::app.sales.orders.index.datagrid.pending') . '</p>';
 
                     case Order::STATUS_PENDING_PAYMENT:
-                        return '<p class="label-pending">'.trans('admin::app.sales.orders.index.datagrid.pending-payment').'</p>';
+                        return '<p class="label-pending">' . trans('admin::app.sales.orders.index.datagrid.pending-payment') . '</p>';
 
                     case Order::STATUS_FRAUD:
-                        return '<p class="label-canceled">'.trans('admin::app.sales.orders.index.datagrid.fraud').'</p>';
+                        return '<p class="label-canceled">' . trans('admin::app.sales.orders.index.datagrid.fraud') . '</p>';
                 }
             },
         ]);
@@ -149,7 +150,7 @@ class OrderDataGrid extends DataGrid
             'filterable' => false,
             'sortable'   => false,
             'closure'    => function ($row) {
-                return core()->getConfigData('sales.payment_methods.'.$row->method.'.title');
+                return core()->getConfigData('sales.payment_methods.' . $row->method . '.title');
             },
         ]);
 
@@ -202,19 +203,30 @@ class OrderDataGrid extends DataGrid
             'sortable'   => false,
         ]);
 
-        $this->addColumn([
-            'index'      => 'image',
-            'label'      => trans('admin::app.sales.orders.index.datagrid.images'),
-            'type'       => 'string',
-            'searchable' => false,
-            'filterable' => false,
-            'sortable'   => false,
-            'closure'    => function ($value) {
-                $order = app(OrderRepository::class)->with('items')->find($value->id);
+        // $this->addColumn([
+        //     'index'      => 'image',
+        //     'label'      => trans('admin::app.sales.orders.index.datagrid.images'),
+        //     'type'       => 'string',
+        //     'searchable' => false,
+        //     'filterable' => false,
+        //     'sortable'   => false,
+        //     'closure'    => function ($value) {
+        //         $order = app(OrderRepository::class)->with('items')->find($value->id);
 
-                return view('admin::sales.orders.images', compact('order'))->render();
-            },
+        //         return view('admin::sales.orders.images', compact('order'))->render();
+        //     },
+        // ]);
+
+
+        $this->addColumn([
+            'index'      => 'phone',
+            'label'      => trans('admin::app.sales.orders.index.datagrid.phone'),
+            'type'       => 'string',
+            'searchable' => true,
+            'sortable'   => true,
+            'filterable' => true,
         ]);
+
 
         $this->addColumn([
             'index'      => 'created_at',

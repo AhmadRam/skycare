@@ -148,6 +148,7 @@ return [
                     'grand-total'     => 'Grand Total',
                     'id'              => '#:id',
                     'images'          => 'Images',
+                    'phone'           => 'Phone',
                     'location'        => 'Location',
                     'order-id'        => 'Order ID',
                     'pay-by'          => 'Pay By - :method',

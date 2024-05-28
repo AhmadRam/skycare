@@ -148,6 +148,7 @@ return [
                     'grand-total'     => 'الإجمالي الكبير',
                     'id'              => '#:id',
                     'images'          => 'الصور',
+                    'phone'           => 'الهاتف',
                     'location'        => 'الموقع',
                     'order-id'        => 'رقم الطلب',
                     'pay-by'          => 'الدفع بواسطة - :method',
