@@ -14,17 +14,24 @@ class CouponCodesDataGrid extends DataGrid
      */
     public function prepareQueryBuilder()
     {
-        // $start_date = request()->startDate ?? '1999-01-01';
-        // $end_date = request()->endDate != '?v=1' ? request()->endDate : '2999-01-01';
-        // $end_date = str_replace('?v=1', ' ', $end_date);
+        $data = request()->all();
+        $start_date = $data['filters']['created_at'][0] ?? '1999-01-01';
+        $end_date = $data['filters']['created_at'][1] ?? '2999-01-01';
+
+        // if (isset($data['filters']['created_at'])) {
+        //     unset($data['filters']['created_at']);
+        //     request()->merge($data);
+        // }
 
         $queryBuilder = DB::table('cart_rules')
             ->leftJoin('cart_rule_coupons', function ($leftJoin) {
                 $leftJoin->on('cart_rule_coupons.cart_rule_id', '=', 'cart_rules.id')
                     ->where('cart_rule_coupons.is_primary', 1);
             })
-            ->leftJoin('orders', 'cart_rules.id', '=', 'orders.applied_cart_rule_ids');
-
+            ->leftJoin('orders', function ($leftJoin) use ($start_date, $end_date) {
+                $leftJoin->on('cart_rules.id', '=', 'orders.applied_cart_rule_ids')
+                    ->whereBetween('orders.created_at', [$start_date, $end_date]);
+            });
 
         $queryBuilder->addSelect(
             'cart_rules.id',
@@ -33,7 +40,7 @@ class CouponCodesDataGrid extends DataGrid
             'cart_rule_coupons.times_used',
             DB::raw('SUM(orders.base_discount_amount) as total_base_discount_amount'),
             DB::raw('COUNT(orders.id) as orders_count'),
-            'orders.created_at as created_at'
+            'orders.created_at'
         );
 
         $queryBuilder->groupBy('cart_rules.id');
