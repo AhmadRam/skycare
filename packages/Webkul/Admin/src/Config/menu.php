@@ -246,6 +246,12 @@ return [
         'route'      => 'admin.reporting.products.index',
         'sort'       => 3,
         'icon'       => '',
+    ], [
+        'key'        => 'reporting.coupon_codes_report',
+        'name'       => 'admin::app.marketing.promotions.cart-rules.edit.coupon-code',
+        'route'      => 'admin.reporting.coupon_codes_report.index',
+        'sort'       => 4,
+        'icon'       => '',
     ],
 
     /**

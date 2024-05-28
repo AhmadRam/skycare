@@ -2,6 +2,8 @@
 
 namespace Webkul\Admin\Http\Controllers\Reporting;
 
+use Webkul\Admin\DataGrids\Sales\CouponCodesDataGrid;
+
 class SaleController extends Controller
 {
     /**
@@ -32,6 +34,20 @@ class SaleController extends Controller
             'startDate' => $this->reportingHelper->getStartDate(),
             'endDate'   => $this->reportingHelper->getEndDate(),
         ]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function couponCodes()
+    {
+        if (request()->ajax()) {
+            return app(CouponCodesDataGrid::class)->toJson();
+        }
+
+        return view('admin::reporting.sales.coupon-codes');
     }
 
     /**
