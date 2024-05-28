@@ -1,91 +1,99 @@
 @props([
-    'hasHeader'  => true,
+    'hasHeader' => true,
     'hasFeature' => true,
-    'hasFooter'  => true,
+    'hasFooter' => true,
 ])
 
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" dir="{{ core()->getCurrentLocale()->direction }}">
-    <head>
-        <title>{{ $title ?? '' }}</title>
 
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="base-url" content="{{ url()->to('/') }}">
-        <meta name="currency-code" content="{{ core()->getCurrentCurrencyCode() }}">
-        <meta http-equiv="content-language" content="{{ app()->getLocale() }}">
+<head>
+    <title>{{ $title ?? '' }}</title>
 
-        @stack('meta')
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="base-url" content="{{ url()->to('/') }}">
+    <meta name="currency-code" content="{{ core()->getCurrentCurrencyCode() }}">
+    <meta http-equiv="content-language" content="{{ app()->getLocale() }}">
 
-        <link
-            rel="icon"
-            sizes="16x16"
-            href="{{ asset('themes/shop/default/build/assets/skycare_' . app()->getLocale() . '.png') }}"
-            {{-- href="{{ core()->getCurrentChannel()->favicon_url ?? bagisto_asset('images/favicon.ico') }}" --}}
-        />
+    @stack('meta')
 
-        @bagistoVite(['src/Resources/assets/css/app.css', 'src/Resources/assets/js/app.js'])
+    <link rel="icon" sizes="16x16"
+        href="{{ asset('themes/shop/default/build/assets/skycare_' . app()->getLocale() . '.png') }}"
+        {{-- href="{{ core()->getCurrentChannel()->favicon_url ?? bagisto_asset('images/favicon.ico') }}" --}} />
 
-        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" as="style">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
+    @bagistoVite(['src/Resources/assets/css/app.css', 'src/Resources/assets/js/app.js'])
 
-        <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" as="style">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        as="style">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
 
-        @stack('styles')
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" as="style">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap">
 
-        <style>
-            {!! core()->getConfigData('general.content.custom_scripts.custom_css') !!}
-        </style>
+    @stack('styles')
 
-        {!! view_render_event('bagisto.shop.layout.head') !!}
-    </head>
+    <style>
+        {!! core()->getConfigData('general.content.custom_scripts.custom_css') !!}
+    </style>
 
-    <body>
-        {!! view_render_event('bagisto.shop.layout.body.before') !!}
+    {!! view_render_event('bagisto.shop.layout.head') !!}
 
-        <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+</head>
 
-        <div id="app">
-            <!-- Flash Message Blade Component -->
-            <x-shop::flash-group />
+<body>
+    {!! view_render_event('bagisto.shop.layout.body.before') !!}
 
-            <!-- Confirm Modal Blade Component -->
-            <x-shop::modal.confirm />
+    <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
 
-            <!-- Page Header Blade Component -->
-            @if ($hasHeader)
-                <x-shop::layouts.header />
-            @endif
+    <div id="app">
+        <!-- Flash Message Blade Component -->
+        <x-shop::flash-group />
 
-            {!! view_render_event('bagisto.shop.layout.content.before') !!}
+        <!-- Confirm Modal Blade Component -->
+        <x-shop::modal.confirm />
 
-            <!-- Page Content Blade Component -->
-            <main id="main" class="bg-white">
-                {{ $slot }}
-            </main>
+        <!-- Page Header Blade Component -->
+        @if ($hasHeader)
+            <x-shop::layouts.header />
+        @endif
 
-            {!! view_render_event('bagisto.shop.layout.content.after') !!}
+        {!! view_render_event('bagisto.shop.layout.content.before') !!}
+
+        <!-- Page Content Blade Component -->
+        <main id="main" class="bg-white">
+            {{ $slot }}
+        </main>
+
+        {!! view_render_event('bagisto.shop.layout.content.after') !!}
 
 
-            <!-- Page Services Blade Component -->
-            @if ($hasFeature)
-                <x-shop::layouts.services />
-            @endif
+        <!-- Page Services Blade Component -->
+        @if ($hasFeature)
+            <x-shop::layouts.services />
+        @endif
 
-            <!-- Page Footer Blade Component -->
-            @if ($hasFooter)
-                <x-shop::layouts.footer />
-            @endif
-        </div>
+        <!-- Page Footer Blade Component -->
+        @if ($hasFooter)
+            <x-shop::layouts.footer />
+        @endif
+    </div>
 
-        {!! view_render_event('bagisto.shop.layout.body.after') !!}
+    {!! view_render_event('bagisto.shop.layout.body.after') !!}
 
-        @stack('scripts')
+    <a href="https://api.whatsapp.com/send?phone=96590001035"
+        class="float" target="_blank">
+        <i class="fa fa-whatsapp my-float"></i>
+    </a>
 
-        <script type="text/javascript">
-            {!! core()->getConfigData('general.content.custom_scripts.custom_javascript') !!}
-        </script>
-    </body>
+    @stack('scripts')
+
+    <script type="text/javascript">
+        {!! core()->getConfigData('general.content.custom_scripts.custom_javascript') !!}
+    </script>
+</body>
+
 </html>
