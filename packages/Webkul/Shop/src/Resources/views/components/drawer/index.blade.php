@@ -144,13 +144,9 @@
 
             created() {
                 window.eventBus.$on('toggle-open', () => {
-                    this.isOpen = true;
-
-                    document.body.style.overflow = 'hidden';
-
-                    this.$emit('open', {
-                        isActive: this.isOpen
-                    });
+                    if (window.innerWidth > 768) {
+                        this.toggle();
+                    }
                 });
             },
 

@@ -398,6 +398,7 @@
                                     type: 'success',
                                     message: response.data.message
                                 });
+
                                 setTimeout(function() {
                                     window.eventBus.$emit('toggle-open');
                                 }, 500);
