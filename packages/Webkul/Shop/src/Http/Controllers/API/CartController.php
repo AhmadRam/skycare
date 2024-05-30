@@ -186,6 +186,7 @@ class CartController extends APIController
             if (strlen($validatedData['code'])) {
                 // $coupon = $this->cartRuleCouponRepository->findOneByField('code', $validatedData['code']);
                 $coupon = $this->cartRuleCouponRepository->whereRaw('LOWER(code) = ?', [strtolower($validatedData['code'])])->first();
+                $validatedData['code'] = $coupon->code;
 
                 if (!$coupon) {
                     return (new JsonResource([
