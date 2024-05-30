@@ -184,9 +184,10 @@ class CartController extends APIController
 
         try {
             if (strlen($validatedData['code'])) {
-                $coupon = $this->cartRuleCouponRepository->findOneByField('code', $validatedData['code']);
+                // $coupon = $this->cartRuleCouponRepository->findOneByField('code', $validatedData['code']);
+                $coupon = $this->cartRuleCouponRepository->whereRaw('LOWER(code) = ?', [strtolower($validatedData['code'])])->first();
 
-                if (! $coupon) {
+                if (!$coupon) {
                     return (new JsonResource([
                         'data'     => new CartResource(Cart::getCart()),
                         'message'  => trans('Coupon not found.'),
@@ -246,7 +247,7 @@ class CartController extends APIController
     {
         $cart = Cart::getCart();
 
-        if (! $cart) {
+        if (!$cart) {
             return new JsonResource([
                 'data' => [],
             ]);
