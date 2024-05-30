@@ -16,6 +16,18 @@
     "file": "assets/myfatoorah.png",
     "src": "src/Resources/assets/images/myfatoorah.png"
   },
+  "src/Resources/assets/images/applepay.png": {
+    "file": "assets/applepay.png",
+    "src": "src/Resources/assets/images/applepay.png"
+  },
+  "src/Resources/assets/images/googlepay.png": {
+    "file": "assets/googlepay.png",
+    "src": "src/Resources/assets/images/googlepay.png"
+  },
+  "src/Resources/assets/images/visa-master.png": {
+    "file": "assets/visa-master.png",
+    "src": "src/Resources/assets/images/visa-master.png"
+  },
   "src/Resources/assets/images/default-language.svg": {
     "file": "assets/default-language-6ef0ef70.svg",
     "src": "src/Resources/assets/images/default-language.svg"

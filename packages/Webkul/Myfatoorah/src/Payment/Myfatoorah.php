@@ -32,16 +32,4 @@ abstract class Myfatoorah extends Payment
         return preg_replace('/[^0-9]/', '', (string) $phone);
     }
 
-
-    /**
-     * Get payment method image.
-     *
-     * @return array
-     */
-    public function getImage()
-    {
-        $url = $this->getConfigData('image');
-
-        return $url ? Storage::url($url) : bagisto_asset('images/myfatoorah.png', 'shop');
-    }
 }

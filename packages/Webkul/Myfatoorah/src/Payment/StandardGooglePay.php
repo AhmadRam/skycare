@@ -4,14 +4,14 @@ namespace Webkul\Myfatoorah\Payment;
 
 use Illuminate\Support\Facades\Storage;
 
-class Standard extends Myfatoorah
+class StandardGooglePay extends Myfatoorah
 {
     /**
      * Payment method code.
      *
      * @var string
      */
-    protected $code  = 'myfatoorah';
+    protected $code  = 'googlepay';
 
     /**
      * Line items fields mapping.
@@ -32,8 +32,9 @@ class Standard extends Myfatoorah
      */
     public function getRedirectUrl()
     {
-        return route('myfatoorah.standard.redirect') . '?paymentMethodId=1';
+        return route('myfatoorah.standard.redirect') . '?paymentMethodId=9';
     }
+
 
     /**
      * Get payment method image.
@@ -44,6 +45,6 @@ class Standard extends Myfatoorah
     {
         $url = $this->getConfigData('image');
 
-        return $url ? Storage::url($url) : bagisto_asset('images/myfatoorah.png', 'shop');
+        return $url ? Storage::url($url) : bagisto_asset('images/googlepay.png', 'shop');
     }
 }

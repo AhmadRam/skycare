@@ -33,23 +33,44 @@ class StandardController extends Controller
      */
     public function redirect()
     {
-        $cart = Cart::getCart();
+        $cart_id = request()->cart_id ?? null;
+        $cart = Cart::getCart($cart_id);
 
         $billingAddress = $cart->getBillingAddressAttribute();
+        $prepareDataForOrder = Cart::prepareDataForOrder($cart->id);
+
+        $register_device_id = request()->register_device_id ?? null;
+        if ($register_device_id) {
+            $register_device = RegisterDevice::find($register_device_id);
+
+            if ($register_device) {
+                $prepareDataForOrder['register_device_id'] = $register_device_id;
+                $prepareDataForOrder['customer_id'] = $prepareDataForOrder['customer_id'] ?? $register_device->customer_id ?? null;
+            }
+        }
+
+        $order = $this->orderRepository->where('cart_id', $cart->id)->first();
+
+        if ($order) {
+            $this->orderRepository->delete($order->id);
+        }
+
+        $prepareDataForOrder['status'] = 'no_status';
+        $order = $this->orderRepository->create($prepareDataForOrder);
 
         $data = [
-            'paymentMethodId'    => 1,
+            'paymentMethodId'    => request()->paymentMethodId,
             'CustomerName'       => "$billingAddress->first_name $billingAddress->last_name",
             'InvoiceValue'       => $cart->grand_total,
             'DisplayCurrencyIso' => $cart->cart_currency_code,
             'CustomerEmail'      => $billingAddress->email,
-            'CallBackUrl'        => route('myfatoorah.standard.callback') . "?register_device_id=" . request()->register_device_id,
-            'ErrorUrl'           => route('myfatoorah.standard.cancel'),
+            'CallBackUrl'        => route('myfatoorah.standard.callback') . "?register_device_id=" . $register_device_id . '&order_id=' . $order->id . '&cart_id=' . $cart->id,
+            'ErrorUrl'           => route('myfatoorah.standard.cancel') . "?register_device_id=" . $register_device_id . '&order_id=' . $order->id,
             'MobileCountryCode'  => '',
             'CustomerMobile'     => $billingAddress->phone,
             'Language'           => app()->getLocale(),
             'CustomerReference'  => $cart->id,
-            'SourceInfo'         => 'Spirit'
+            'SourceInfo'         => 'SkyCare'
         ];
 
         ini_set('precision', 14);
@@ -132,28 +153,30 @@ class StandardController extends Controller
             //     $prepareDataForOrder['customer_id'] = $prepareDataForOrder['customer_id'] ?? $register_device->customer_id;
             // }
 
-            $order = $this->orderRepository->create($prepareDataForOrder);
+            // $order = $this->orderRepository->create($prepareDataForOrder);
+            $order = $this->orderRepository->find(request()->order_id);
+            if ($order->status == 'no_status') {
+                $this->orderRepository->update(['status' => 'processing'], $order->id);
 
-            $this->orderRepository->update(['status' => 'processing'], $order->id);
+                if ($order->canInvoice()) {
+                    $this->invoiceRepository->create($this->prepareInvoiceData($order));
+                }
 
-            if ($order->canInvoice()) {
-                $this->invoiceRepository->create($this->prepareInvoiceData($order));
+                Cart::deActivateCart();
+
+                Cart::activateCartIfSessionHasDeactivatedCartId();
+
+                // app(CustomerActivityRepository::class)->create([
+                //     'note' => 'قام بإنشاء طلب جديد رقم  ' . $order->id,
+                //     'ip' => request()->ip(),
+                //     'customer_name' =>  $order->customer_first_name . ' ' .  $order->customer_last_name,
+                //     'customer_id' =>  $order->customer_id ?? null,
+                // ]);
+
+                // if (isset($register_device) && $register_device->os != 'web') {
+                // } else {
+                // }
             }
-
-            Cart::deActivateCart();
-
-            Cart::activateCartIfSessionHasDeactivatedCartId();
-
-            // app(CustomerActivityRepository::class)->create([
-            //     'note' => 'قام بإنشاء طلب جديد رقم  ' . $order->id,
-            //     'ip' => request()->ip(),
-            //     'customer_name' =>  $order->customer_first_name . ' ' .  $order->customer_last_name,
-            //     'customer_id' =>  $order->customer_id ?? null,
-            // ]);
-
-            // if (isset($register_device) && $register_device->os != 'web') {
-            // } else {
-            // }
 
             session()->flash('order', $order);
 

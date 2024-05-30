@@ -4,14 +4,14 @@ namespace Webkul\Myfatoorah\Payment;
 
 use Illuminate\Support\Facades\Storage;
 
-class Standard extends Myfatoorah
+class StandardVisaMaster extends Myfatoorah
 {
     /**
      * Payment method code.
      *
      * @var string
      */
-    protected $code  = 'myfatoorah';
+    protected $code  = 'visa/master';
 
     /**
      * Line items fields mapping.
@@ -32,7 +32,7 @@ class Standard extends Myfatoorah
      */
     public function getRedirectUrl()
     {
-        return route('myfatoorah.standard.redirect') . '?paymentMethodId=1';
+        return route('myfatoorah.standard.redirect') . '?paymentMethodId=2';
     }
 
     /**
@@ -44,6 +44,6 @@ class Standard extends Myfatoorah
     {
         $url = $this->getConfigData('image');
 
-        return $url ? Storage::url($url) : bagisto_asset('images/myfatoorah.png', 'shop');
+        return $url ? Storage::url($url) : bagisto_asset('images/visa-master.png', 'shop');
     }
 }
