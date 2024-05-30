@@ -3610,6 +3610,7 @@ return [
                 'mode'                     => 'وضع الظلام',
                 'newsletter-subscriptions' => 'اشتراكات النشرة الإخبارية',
                 'orders'                   => 'الطلبات',
+                'abandoned-orders'         => 'الطلبات المفقودة',
                 'products'                 => 'المنتجات',
                 'promotions'               => 'العروض',
                 'refunds'                  => 'المستردات',

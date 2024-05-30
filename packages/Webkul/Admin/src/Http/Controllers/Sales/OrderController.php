@@ -37,6 +37,20 @@ class OrderController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function abandonedOrders()
+    {
+        if (request()->ajax()) {
+            return app(OrderDataGrid::class)->toJson();
+        }
+
+        return view('admin::sales.orders.abandoned');
+    }
+
+    /**
      * Show the view for the specified resource.
      *
      * @return \Illuminate\View\View

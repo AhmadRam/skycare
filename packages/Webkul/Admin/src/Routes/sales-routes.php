@@ -33,6 +33,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
         Route::controller(OrderController::class)->prefix('orders')->group(function () {
             Route::get('', 'index')->name('admin.sales.orders.index');
 
+            Route::get('abandoned-orders', 'abandonedOrders')->name('admin.sales.abandoned-orders.index');
+
             Route::get('view/{id}', 'view')->name('admin.sales.orders.view');
 
             Route::post('cancel/{id}', 'cancel')->name('admin.sales.orders.cancel');

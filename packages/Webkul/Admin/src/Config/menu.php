@@ -28,28 +28,34 @@ return [
         'sort'       => 1,
         'icon'       => '',
     ], [
+        'key'        => 'sales.abandoned-orders',
+        'name'       => 'admin::app.components.layouts.sidebar.abandoned-orders',
+        'route'      => 'admin.sales.abandoned-orders.index',
+        'sort'       => 2,
+        'icon'       => '',
+    ], [
         'key'        => 'sales.shipments',
         'name'       => 'admin::app.components.layouts.sidebar.shipments',
         'route'      => 'admin.sales.shipments.index',
-        'sort'       => 2,
+        'sort'       => 3,
         'icon'       => '',
     ], [
         'key'        => 'sales.invoices',
         'name'       => 'admin::app.components.layouts.sidebar.invoices',
         'route'      => 'admin.sales.invoices.index',
-        'sort'       => 3,
+        'sort'       => 4,
         'icon'       => '',
     ], [
         'key'        => 'sales.refunds',
         'name'       => 'admin::app.components.layouts.sidebar.refunds',
         'route'      => 'admin.sales.refunds.index',
-        'sort'       => 4,
+        'sort'       => 5,
         'icon'       => '',
     ], [
         'key'        => 'sales.transactions',
         'name'       => 'admin::app.components.layouts.sidebar.transactions',
         'route'      => 'admin.sales.transactions.index',
-        'sort'       => 5,
+        'sort'       => 6,
         'icon'       => '',
     ],
 

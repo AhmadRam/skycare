@@ -42,6 +42,12 @@ class OrderDataGrid extends DataGrid
                 DB::raw('CASE WHEN ' . DB::getTablePrefix() . 'order_address_shipping.phone_code IS NOT NULL THEN CONCAT(' . DB::getTablePrefix() . 'order_address_shipping.phone_code, " ", ' . DB::getTablePrefix() . 'order_address_shipping.phone) ELSE ' . DB::getTablePrefix() . 'order_address_shipping.phone END as phone')
             );
 
+        if (request()->route()->getName() == 'admin.sales.abandoned-orders.index') {
+            $queryBuilder->where('orders.status', 'no_status');
+        } else {
+            $queryBuilder->where('orders.status', '!=', 'no_status');
+        }
+
         $this->addFilter('full_name', DB::raw('CONCAT(' . DB::getTablePrefix() . 'orders.customer_first_name, " ", ' . DB::getTablePrefix() . 'orders.customer_last_name)'));
         $this->addFilter('created_at', 'orders.created_at');
 

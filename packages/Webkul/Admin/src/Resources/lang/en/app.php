@@ -3611,6 +3611,7 @@ return [
                 'mode'                     => 'Dark Mode',
                 'newsletter-subscriptions' => 'Newsletter Subscriptions',
                 'orders'                   => 'Orders',
+                'abandoned-orders'         => 'Abandoned Orders',
                 'products'                 => 'Products',
                 'promotions'               => 'Promotions',
                 'refunds'                  => 'Refunds',
