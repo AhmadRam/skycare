@@ -226,6 +226,7 @@ return [
         Webkul\Theme\Providers\ThemeServiceProvider::class,
         Webkul\User\Providers\UserServiceProvider::class,
         Webkul\Myfatoorah\Providers\MyfatoorahServiceProvider::class,
+        Jenssegers\Agent\AgentServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -251,5 +252,6 @@ return [
         'ProductImage' => Webkul\Product\Facades\ProductImage::class,
         'ProductVideo' => Webkul\Product\Facades\ProductVideo::class,
         'Redis'        => Illuminate\Support\Facades\Redis::class,
+        'Agent'        => Jenssegers\Agent\Facades\Agent::class,
     ])->toArray(),
 ];
