@@ -42,20 +42,20 @@ class Payment
             }
         }
 
-        $agent = new Agent();
+        // $agent = new Agent();
 
-        if ($agent->browser()) {
-            if ($agent->isDesktop()) {
-                unset($paymentMethods['applepay']);
-                unset($paymentMethods['googlepay']);
-            } else if ($agent->is('iPhone') || $agent->is('iPad') || $agent->is('iPod') || $agent->is('Macintosh') || $agent->is('Mac OS')) {
-                unset($paymentMethods['googlepay']);
-            } else {
-                unset($paymentMethods['applepay']);
-            }
-        }
+        // if ($agent->browser()) {
+        //     if ($agent->isDesktop()) {
+        //         unset($paymentMethods['applepay']);
+        //         unset($paymentMethods['googlepay']);
+        //     } else if ($agent->is('iPhone') || $agent->is('iPad') || $agent->is('iPod') || $agent->is('Macintosh') || $agent->is('Mac OS')) {
+        //         unset($paymentMethods['googlepay']);
+        //     } else {
+        //         unset($paymentMethods['applepay']);
+        //     }
+        // }
 
-        $paymentMethods = array_values($paymentMethods);
+        // $paymentMethods = array_values($paymentMethods);
 
         usort($paymentMethods, function ($a, $b) {
             if ($a['sort'] == $b['sort']) {
