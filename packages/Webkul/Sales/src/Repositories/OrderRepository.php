@@ -60,7 +60,7 @@ class OrderRepository extends Repository
                 unset($data['channel']);
             }
 
-            $data['status'] = 'pending';
+            $data['status'] = isset($data['status']) ? $data['status'] : 'pending';
 
             $order = $this->model->create(array_merge($data, ['increment_id' => $this->generateIncrementId()]));
 

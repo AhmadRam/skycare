@@ -145,7 +145,7 @@ class StandardController extends Controller
     public function callback(Request $request)
     {
         if (!empty($request->input('paymentId')) && !empty($request->input('Id'))) {
-            $prepareDataForOrder = Cart::prepareDataForOrder();
+            // $prepareDataForOrder = Cart::prepareDataForOrder();
 
             // if ($register_device_id = request()->register_device_id) {
             //     $prepareDataForOrder['register_device_id'] = $register_device_id;
