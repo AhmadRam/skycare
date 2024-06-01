@@ -56,6 +56,8 @@ class Order extends Model implements OrderContract
      */
     public const STATUS_FRAUD = 'fraud';
 
+    public const NO_STATUS = 'no_status';
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -81,6 +83,7 @@ class Order extends Model implements OrderContract
         self::STATUS_CANCELED        => 'Canceled',
         self::STATUS_CLOSED          => 'Closed',
         self::STATUS_FRAUD           => 'Fraud',
+        self::NO_STATUS              => 'No Status',
     ];
 
     /**
@@ -88,7 +91,7 @@ class Order extends Model implements OrderContract
      */
     public function getCustomerFullNameAttribute(): string
     {
-        return $this->customer_first_name.' '.$this->customer_last_name;
+        return $this->customer_first_name . ' ' . $this->customer_last_name;
     }
 
     /**
@@ -286,7 +289,7 @@ class Order extends Model implements OrderContract
         foreach ($this->items as $item) {
             if (
                 $item->canShip()
-                && ! in_array($item->order->status, [
+                && !in_array($item->order->status, [
                     self::STATUS_CLOSED,
                     self::STATUS_FRAUD,
                 ])
@@ -306,7 +309,7 @@ class Order extends Model implements OrderContract
         foreach ($this->items as $item) {
             if (
                 $item->canInvoice()
-                && ! in_array($item->order->status, [
+                && !in_array($item->order->status, [
                     self::STATUS_CLOSED,
                     self::STATUS_FRAUD,
                 ])
@@ -348,7 +351,7 @@ class Order extends Model implements OrderContract
         foreach ($this->items as $item) {
             if (
                 $item->canCancel()
-                && ! in_array($item->order->status, [
+                && !in_array($item->order->status, [
                     self::STATUS_CLOSED,
                     self::STATUS_FRAUD,
                 ])
@@ -368,7 +371,7 @@ class Order extends Model implements OrderContract
         foreach ($this->items as $item) {
             if (
                 $item->qty_to_refund > 0
-                && ! in_array($item->order->status, [
+                && !in_array($item->order->status, [
                     self::STATUS_CLOSED,
                     self::STATUS_FRAUD,
                 ])

@@ -48,7 +48,7 @@
                                 v-text="data.status_count ?? '0'"
                             >
                             </span>
-                        </div>    
+                        </div>
 
                     </div>
 
@@ -69,14 +69,14 @@
                             </span>
 
                             <div class="grid">
-                                <p  
+                                <p
                                     class="text-gray-800 dark:text-white"
                                     :class="notification.read ? 'font-normal' : 'font-semibold'"
                                 >
                                     #@{{ notification.order.id }}
                                     @{{ orderType[notification.order.status].message }}
                                 </p>
-    
+
                                 <p class="text-xs text-gray-600 dark:text-gray-300">
                                     @{{ notification.order.datetime }}
                                 </p>
@@ -137,7 +137,7 @@
         </script>
 
         <script type="module">
-            app.component('v-notification-list',{
+            app.component('v-notification-list', {
                 template: '#v-notification-list-template',
 
                 data() {
@@ -149,57 +149,65 @@
                         status: 'all',
 
                         orderStatusMessages: {
-                            pending:    "@lang('admin::app.notifications.order-status-messages.pending')",
-                            canceled:   "@lang('admin::app.notifications.order-status-messages.canceled')",
-                            closed:     "@lang('admin::app.notifications.order-status-messages.closed')",
-                            completed:  "@lang('admin::app.notifications.order-status-messages.completed')",
-                            processing: "@lang('admin::app.notifications.order-status-messages.processing')" 
+                            pending: "@lang('admin::app.notifications.order-status-messages.pending')",
+                            canceled: "@lang('admin::app.notifications.order-status-messages.canceled')",
+                            closed: "@lang('admin::app.notifications.order-status-messages.closed')",
+                            completed: "@lang('admin::app.notifications.order-status-messages.completed')",
+                            processing: "@lang('admin::app.notifications.order-status-messages.processing')",
+                            no_status: "No status",
                         },
 
                         orderStatus: {
-                            all:        "@lang('admin::app.notifications.status.all')",
-                            pending:    "@lang('admin::app.notifications.status.pending')",
-                            canceled:   "@lang('admin::app.notifications.status.canceled')",
-                            closed:     "@lang('admin::app.notifications.status.closed')",
-                            completed:  "@lang('admin::app.notifications.status.completed')",
-                            processing: "@lang('admin::app.notifications.status.processing')" 
+                            all: "@lang('admin::app.notifications.status.all')",
+                            pending: "@lang('admin::app.notifications.status.pending')",
+                            canceled: "@lang('admin::app.notifications.status.canceled')",
+                            closed: "@lang('admin::app.notifications.status.closed')",
+                            completed: "@lang('admin::app.notifications.status.completed')",
+                            processing: "@lang('admin::app.notifications.status.processing')",
+                            no_status: "No status",
                         },
-                        
+
                         orderType: {
-                            all : {
+                            all: {
                                 icon: 'icon',
                                 message: 'All',
                                 status: 'all'
                             },
 
-                            pending : {
+                            pending: {
                                 icon: 'icon-information text-amber-600 bg-amber-100',
                                 message: "@lang('admin::app.notifications.order-status-messages.pending')",
                                 status: 'pending'
                             },
 
-                            processing : {
+                            processing: {
                                 icon: 'icon-sort-right text-green-600 bg-green-100',
                                 message: "@lang('admin::app.notifications.order-status-messages.processing')",
                                 status: 'processing'
                             },
 
-                            canceled : {
+                            canceled: {
                                 icon: 'icon-cancel-1 text-red-600 bg-red-100',
                                 message: "@lang('admin::app.notifications.order-status-messages.canceled')",
                                 status: 'canceled'
                             },
 
-                            completed : {
+                            completed: {
                                 icon: 'icon-done text-blue-600 bg-blue-100',
                                 message: "@lang('admin::app.notifications.order-status-messages.completed')",
                                 status: 'completed'
                             },
 
-                            closed : {
+                            closed: {
                                 icon: 'icon-repeat text-red-600 bg-red-100',
                                 message: "@lang('admin::app.notifications.order-status-messages.closed')",
                                 status: 'closed'
+                            },
+
+                            no_status: {
+                                icon: 'icon-repeat text-red-600 bg-red-100',
+                                message: "No status",
+                                status: 'no_status'
                             },
                         },
                     }
@@ -218,24 +226,24 @@
                         }
 
                         this.$axios.get("{{ route('admin.notification.get_notification') }}", {
-                            params: params
-                        })
-                        .then((response) => {
-                            this.notifications = response.data.search_results.data;
+                                params: params
+                            })
+                            .then((response) => {
+                                this.notifications = response.data.search_results.data;
 
-                            let total = 0;
+                                let total = 0;
 
-                            response.data.status_count.forEach((item) => {
-                                this.orderType[item.status].status_count = item.status_count;
+                                response.data.status_count.forEach((item) => {
+                                    this.orderType[item.status].status_count = item.status_count;
 
-                                total += item.status_count;
-                            });
+                                    total += item.status_count;
+                                });
 
-                            this.orderType['all'].status_count = total;
+                                this.orderType['all'].status_count = total;
 
-                            this.pagination = response.data.search_results;
-                        })
-                        .catch(error => console.log(error));
+                                this.pagination = response.data.search_results;
+                            })
+                            .catch(error => console.log(error));
                     },
 
                     getResults(url) {
@@ -243,9 +251,9 @@
                             axios.get(url)
                                 .then(response => {
                                     this.notifications = [];
-    
+
                                     this.notifications = response.data.search_results.data;
-    
+
                                     this.pagination = response.data.search_results;
                                 });
                         }
