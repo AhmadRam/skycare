@@ -26,14 +26,14 @@ class ProductImage
      */
     public function getGalleryImages($product)
     {
-        if (! $product) {
+        if (!$product) {
             return [];
         }
 
         $images = [];
 
         foreach ($product->images as $image) {
-            if (! Storage::has($image->path)) {
+            if (!Storage::has($image->path)) {
                 continue;
             }
 
@@ -41,9 +41,9 @@ class ProductImage
         }
 
         if (
-            ! $product->parent_id
-            && ! count($images)
-            && ! count($product->videos ?? [])
+            !$product->parent_id
+            && !count($images)
+            && !count($product->videos ?? [])
         ) {
             $images[] = $this->getFallbackImageUrls();
         }
@@ -91,7 +91,7 @@ class ProductImage
      */
     public function getProductBaseImage($product, ?array $galleryImages = null)
     {
-        if (! $product) {
+        if (!$product) {
             return;
         }
 
@@ -122,7 +122,7 @@ class ProductImage
      */
     private function getCachedImageUrls($path): array
     {
-        if (! $this->isDriverLocal()) {
+        if (!$this->isDriverLocal()) {
             return [
                 'small_image_url'    => Storage::url($path),
                 'medium_image_url'   => Storage::url($path),
@@ -132,10 +132,14 @@ class ProductImage
         }
 
         return [
-            'small_image_url'    => url('cache/small/'.$path),
-            'medium_image_url'   => url('cache/medium/'.$path),
-            'large_image_url'    => url('cache/large/'.$path),
-            'original_image_url' => url('cache/original/'.$path),
+            'small_image_url'    => Storage::url($path),
+            'medium_image_url'   => Storage::url($path),
+            'large_image_url'    => Storage::url($path),
+            'original_image_url' => Storage::url($path),
+            // 'small_image_url'    => url('cache/small/'.$path),
+            // 'medium_image_url'   => url('cache/medium/'.$path),
+            // 'large_image_url'    => url('cache/large/'.$path),
+            // 'original_image_url' => url('cache/original/'.$path),
         ];
     }
 
