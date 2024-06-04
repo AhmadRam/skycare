@@ -19,7 +19,7 @@ return [
         'class'            => 'Webkul\Myfatoorah\Payment\StandardVisaMaster',
         'sandbox'          => false,
         'active'           => true,
-        'sort'             => 2,
+        'sort'             => 6,
     ],
 
     'applepay' => [
@@ -29,7 +29,7 @@ return [
         'class'            => 'Webkul\Myfatoorah\Payment\StandardApplePay',
         'sandbox'          => false,
         'active'           => true,
-        'sort'             => 3,
+        'sort'             => 7,
     ],
 
     'googlepay' => [
@@ -39,6 +39,6 @@ return [
         'class'            => 'Webkul\Myfatoorah\Payment\StandardGooglePay',
         'sandbox'          => false,
         'active'           => true,
-        'sort'             => 4,
+        'sort'             => 8,
     ],
 ];
