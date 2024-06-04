@@ -76,7 +76,7 @@ return [
         ]
     ],
     [
-        'key'    => 'sales.paymentmethods.myfatoorah-visa-master',
+        'key'    => 'sales.payment_methods.myfatoorah-visa-master',
         'name'   => 'myfatoorah::app.myfatoorah-standard-visa-master',
         'sort'   => 1,
         'fields' => [
@@ -133,7 +133,7 @@ return [
         ]
     ],
     [
-        'key'    => 'sales.paymentmethods.myfatoorah-apple-pay',
+        'key'    => 'sales.payment_methods.myfatoorah-apple-pay',
         'name'   => 'myfatoorah::app.myfatoorah-standard-apple-pay',
         'sort'   => 1,
         'fields' => [
@@ -190,7 +190,7 @@ return [
         ]
     ],
     [
-        'key'    => 'sales.paymentmethods.myfatoorah-google-pay',
+        'key'    => 'sales.payment_methods.myfatoorah-google-pay',
         'name'   => 'myfatoorah::app.myfatoorah-standard-google-pay',
         'sort'   => 1,
         'fields' => [
