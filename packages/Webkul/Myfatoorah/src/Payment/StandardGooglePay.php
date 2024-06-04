@@ -32,7 +32,7 @@ class StandardGooglePay extends Myfatoorah
      */
     public function getRedirectUrl()
     {
-        return route('myfatoorah.standard.redirect') . '?paymentMethodId=9';
+        return route('myfatoorah.standard.redirect') . '?paymentMethodId=26';
     }
 
 

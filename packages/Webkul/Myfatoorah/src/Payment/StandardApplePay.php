@@ -32,7 +32,7 @@ class StandardApplePay extends Myfatoorah
      */
     public function getRedirectUrl()
     {
-        return route('myfatoorah.standard.redirect') . '?paymentMethodId=8';
+        return route('myfatoorah.standard.redirect') . '?paymentMethodId=24';
     }
 
     /**
