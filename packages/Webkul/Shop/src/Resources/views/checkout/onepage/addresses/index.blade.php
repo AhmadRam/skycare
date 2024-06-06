@@ -170,6 +170,7 @@
                             country: address.country,
                             state: address.state,
                             city: address.city,
+                            note: address.note,
                             postcode: address.postcode,
                             phone: address.phone,
                         };
@@ -198,6 +199,7 @@
                             country: address.country,
                             state: address.state,
                             city: address.city,
+                            note: address.note,
                             postcode: address.postcode,
                             phone: address.phone,
                         };
@@ -295,6 +297,7 @@
                             country: this.cart.billing_address?.country,
                             state: this.cart.billing_address?.state,
                             city: this.cart.billing_address?.city,
+                            note: this.cart.billing_address?.note,
                             postcode: this.cart.billing_address?.postcode,
                             phone: this.cart.billing_address?.phone,
                         };
@@ -317,6 +320,7 @@
                             country: this.cart.shipping_address?.country,
                             state: this.cart.shipping_address?.state,
                             city: this.cart.shipping_address?.city,
+                            note: this.cart.shipping_address?.note,
                             postcode: this.cart.shipping_address?.postcode,
                             phone: this.cart.shipping_address?.phone,
                         };
@@ -442,6 +446,7 @@
                         country: params[addressType].country,
                         state: params[addressType].state,
                         city: params[addressType].city,
+                        note: params[addressType].note,
                         postcode: params[addressType].postcode,
                         phone: params[addressType].phone,
                     };
@@ -502,6 +507,7 @@
                                 country: address.country,
                                 state: address.state,
                                 city: address.city,
+                                note: address.note,
                                 postcode: address.postcode,
                                 phone: address.phone,
                                 use_for_shipping: true,
@@ -576,6 +582,7 @@
                                 country: billingAddress.country,
                                 state: billingAddress.state,
                                 city: billingAddress.city,
+                                note: billingAddress.note,
                                 postcode: billingAddress.postcode,
                                 phone: billingAddress.phone,
                                 use_for_shipping: false,
@@ -600,6 +607,7 @@
                                 country: shippingAddress.country,
                                 state: shippingAddress.state,
                                 city: shippingAddress.city,
+                                note: shippingAddress.note,
                                 postcode: shippingAddress.postcode,
                                 phone: shippingAddress.phone,
                             };

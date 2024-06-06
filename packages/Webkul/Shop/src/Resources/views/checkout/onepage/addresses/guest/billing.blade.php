@@ -220,33 +220,63 @@
         </div>
 
         <div class="grid grid-cols-2 gap-x-5" v-if="values.billing?.country == 'KW'">
-            <!-- Floor -->
-            <x-shop::form.control-group>
-                <x-shop::form.control-group.label class="!mt-0 required">
-                    @lang('shop::app.checkout.onepage.addresses.billing.floor-address')
-                </x-shop::form.control-group.label>
-
-                <x-shop::form.control-group.control type="text" name="billing.address1[2]" ::value="guest.cart.billingAddress.address1 && guest.cart.billingAddress.address1.length > 2 ? guest.cart.billingAddress.address1[2] : ''"
-                    rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.billing.floor-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.floor-address')" />
-
-                <x-shop::form.control-group.error class="mb-2" control-name="billing.address1[2]" />
-            </x-shop::form.control-group>
-
-            {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.floor.after') !!}
-
-            <!-- House -->
-            <x-shop::form.control-group>
+             <!-- House -->
+             <x-shop::form.control-group>
                 <x-shop::form.control-group.label class="!mt-0 required">
                     @lang('shop::app.checkout.onepage.addresses.billing.house-address')
                 </x-shop::form.control-group.label>
 
-                <x-shop::form.control-group.control type="text" name="billing.address1[3]" ::value="guest.cart.billingAddress.address1 && guest.cart.billingAddress.address1.length > 3 ? guest.cart.billingAddress.address1[3] : ''"
+                <x-shop::form.control-group.control type="text" name="billing.address1[2]" ::value="guest.cart.billingAddress.address1 && guest.cart.billingAddress.address1.length > 2 ? guest.cart.billingAddress.address1[2] : ''"
                     rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.billing.house-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.house-address')" />
+
+                <x-shop::form.control-group.error class="mb-2" control-name="billing.address1[2]" />
+            </x-shop::form.control-group>
+
+            {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.house.after') !!}
+
+            <!-- Floor -->
+            <x-shop::form.control-group>
+                <x-shop::form.control-group.label class="!mt-0">
+                    @lang('shop::app.checkout.onepage.addresses.billing.floor-address')
+                </x-shop::form.control-group.label>
+
+                <x-shop::form.control-group.control type="text" name="billing.address1[3]" ::value="guest.cart.billingAddress.address1 && guest.cart.billingAddress.address1.length > 3 ? guest.cart.billingAddress.address1[3] : ''"
+                    rules="address" :label="trans('shop::app.checkout.onepage.addresses.billing.floor-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.floor-address')" />
 
                 <x-shop::form.control-group.error class="mb-2" control-name="billing.address1[3]" />
             </x-shop::form.control-group>
 
-            {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.house.after') !!}
+            {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.floor.after') !!}
+        </div>
+
+        <div class="grid grid-cols-2 gap-x-5" v-if="values.billing?.country == 'KW'">
+             <!-- Flat -->
+             <x-shop::form.control-group>
+                <x-shop::form.control-group.label class="!mt-0">
+                    @lang('shop::app.checkout.onepage.addresses.billing.flat-address')
+                </x-shop::form.control-group.label>
+
+                <x-shop::form.control-group.control type="text" name="billing.address1[4]" ::value="guest.cart.billingAddress.address1 && guest.cart.billingAddress.address1.length > 4 ? guest.cart.billingAddress.address1[4] : ''"
+                    rules="address" :label="trans('shop::app.checkout.onepage.addresses.billing.flat-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.flat-address')" />
+
+                <x-shop::form.control-group.error class="mb-2" control-name="billing.address1[4]" />
+            </x-shop::form.control-group>
+
+            {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.flat.after') !!}
+
+            <!-- Avenue -->
+            <x-shop::form.control-group>
+                <x-shop::form.control-group.label class="!mt-0">
+                    @lang('shop::app.checkout.onepage.addresses.billing.avenue-address')
+                </x-shop::form.control-group.label>
+
+                <x-shop::form.control-group.control type="text" name="billing.address1[5]" ::value="guest.cart.billingAddress.address1 && guest.cart.billingAddress.address1.length > 5 ? guest.cart.billingAddress.address1[5] : ''"
+                    rules="address" :label="trans('shop::app.checkout.onepage.addresses.billing.avenue-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.avenue-address')" />
+
+                <x-shop::form.control-group.error class="mb-2" control-name="billing.address1[5]" />
+            </x-shop::form.control-group>
+
+            {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.avenue.after') !!}
         </div>
 
         <!-- Street Address -->
@@ -266,6 +296,19 @@
                         :label="trans('shop::app.checkout.onepage.addresses.billing.street-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.street-address')" />
                 @endfor
             @endif
+        </x-shop::form.control-group>
+
+        <!-- Note Address -->
+        <x-shop::form.control-group>
+            <x-shop::form.control-group.label class="!mt-0">
+                @lang('shop::app.checkout.onepage.addresses.billing.note-address')
+            </x-shop::form.control-group.label>
+
+            <x-shop::form.control-group.control type="text" ::value="guest.cart.billingAddress.note" name="billing.note"
+                rules="address" :label="trans('shop::app.checkout.onepage.addresses.billing.note-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.note-address')" />
+
+            <x-shop::form.control-group.error class="mb-2" control-name="billing.note" />
+
         </x-shop::form.control-group>
 
         {!! view_render_event('bagisto.shop.checkout.onepage.addresses.guest.billing.address1.after') !!}
