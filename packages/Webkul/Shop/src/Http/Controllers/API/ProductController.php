@@ -28,7 +28,7 @@ class ProductController extends APIController
     {
         $products = $this->productRepository->getAll();
 
-        if (! empty(request()->query('query'))) {
+        if (!empty(request()->query('query'))) {
             /**
              * Update or create search term only if
              * there is only one filter that is query param

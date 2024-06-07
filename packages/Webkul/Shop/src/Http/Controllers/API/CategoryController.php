@@ -3,6 +3,7 @@
 namespace Webkul\Shop\Http\Controllers\API;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use stdClass;
 use Webkul\Attribute\Repositories\AttributeRepository;
 use Webkul\Category\Repositories\CategoryRepository;
 use Webkul\Product\Repositories\ProductRepository;
@@ -50,6 +51,36 @@ class CategoryController extends APIController
     {
         $categories = $this->categoryRepository->getVisibleCategoryTree(core()->getCurrentChannel()->root_category_id);
 
+        $attribute = $this->attributeRepository->getAttributeByCode('brand');
+
+        // Create the parent object
+        $parentObject = new stdClass;
+        $parentObject->id = 1000;
+        $parentObject->parent_id = 1;
+        $parentObject->name = __('admin::app.components.layouts.sidebar.brands');
+        $parentObject->slug = '';
+        $parentObject->url = '';
+        $parentObject->status = true;
+        $parentObject->children = [];
+
+        // Iterate through options and create child objects
+        foreach ($attribute->options as $brand) {
+            // Create a new child object
+            $childObject = new stdClass;
+            $childObject->id = $brand->id;
+            $childObject->parent_id = 1;
+            $childObject->name = $brand->label;
+            $childObject->slug = strtolower($brand->label) . '?' . 'brand=' . $brand->id;
+            $childObject->url = strtolower($brand->label) . '?' . 'brand=' . $brand->id;
+            $childObject->status = true;
+            $childObject->children = [];
+            // Add the child object to the parent's children array
+            $parentObject->children[] = $childObject;
+        }
+
+        // Wrap $parentObject in an array and merge it into the collection
+        $categories->push($parentObject);
+
         return CategoryTreeResource::collection($categories);
     }
 
@@ -58,7 +89,7 @@ class CategoryController extends APIController
      */
     public function getAttributes(): JsonResource
     {
-        if (! request('category_id')) {
+        if (!request('category_id')) {
             $filterableAttributes = $this->attributeRepository->getFilterableAttributes();
 
             return AttributeResource::collection($filterableAttributes);

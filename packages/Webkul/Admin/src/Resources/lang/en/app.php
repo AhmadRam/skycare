@@ -3589,6 +3589,7 @@ return [
                 'campaigns'                => 'Campaigns',
                 'catalog'                  => 'Catalog',
                 'categories'               => 'Categories',
+                'brands'                   => 'Brands',
                 'channels'                 => 'Channels',
                 'cms'                      => 'CMS',
                 'collapse'                 => 'Collapse',

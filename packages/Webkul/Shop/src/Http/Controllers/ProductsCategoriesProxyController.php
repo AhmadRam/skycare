@@ -3,6 +3,7 @@
 namespace Webkul\Shop\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Webkul\Attribute\Repositories\AttributeOptionRepository;
 use Webkul\Category\Repositories\CategoryRepository;
 use Webkul\Marketing\Repositories\URLRewriteRepository;
 use Webkul\Product\Repositories\ProductRepository;
@@ -26,7 +27,8 @@ class ProductsCategoriesProxyController extends Controller
         protected CategoryRepository $categoryRepository,
         protected ProductRepository $productRepository,
         protected ThemeCustomizationRepository $themeCustomizationRepository,
-        protected URLRewriteRepository $urlRewriteRepository
+        protected URLRewriteRepository $urlRewriteRepository,
+        protected AttributeOptionRepository $attributeOptionsRepository,
     ) {
     }
 
@@ -42,7 +44,7 @@ class ProductsCategoriesProxyController extends Controller
         /**
          * Support url for chinese, japanese, arabic and english with numbers.
          */
-        if (! preg_match('/^([\x{0621}-\x{064A}\x{4e00}-\x{9fa5}\x{3402}-\x{FA6D}\x{3041}-\x{30A0}\x{30A0}-\x{31FF}_a-z0-9-]+\/?)+$/u', $slugOrURLKey)) {
+        if (!preg_match('/^([\x{0621}-\x{064A}\x{4e00}-\x{9fa5}\x{3402}-\x{FA6D}\x{3041}-\x{30A0}\x{30A0}-\x{31FF}_a-z0-9-]+\/?)+$/u', $slugOrURLKey)) {
             visitor()->visit();
 
             $customizations = $this->themeCustomizationRepository->orderBy('sort_order')->findWhere([
@@ -72,9 +74,9 @@ class ProductsCategoriesProxyController extends Controller
 
         if ($product) {
             if (
-                ! $product->url_key
-                || ! $product->visible_individually
-                || ! $product->status
+                !$product->url_key
+                || !$product->visible_individually
+                || !$product->status
             ) {
                 abort(404);
             }
@@ -121,6 +123,40 @@ class ProductsCategoriesProxyController extends Controller
 
         if ($productURLRewrite) {
             return redirect()->to($productURLRewrite->target_path, $productURLRewrite->redirect_type);
+        }
+
+        $brand = $this->attributeOptionsRepository->where('admin_name', $slugOrURLKey)->first();
+
+        if ($brand) {
+
+            $brand->id = 2;
+            $brand->position = 1;
+            $brand->logo_path = "";
+            $brand->status = 1;
+            $brand->display_mode = "products_and_description";
+            $brand->_lft = 0;
+            $brand->_rgt = 0;
+            $brand->parent_id = 1;
+            $brand->additional = null;
+            $brand->banner_path = null;
+            $brand->name = $brand->label;
+            $brand->description = '';
+            $brand->slug = strtolower($brand->label);
+            $brand->meta_title = $brand->label;
+            $brand->meta_description = $brand->label;
+            $brand->meta_keywords = '';
+            $brand->is_brand = true;
+
+            visitor()->visit($brand);
+
+            return view('shop::categories.view', [
+                'category' => $brand,
+                'params'   => [
+                    'sort'  => request()->query('sort'),
+                    'limit' => request()->query('limit'),
+                    'mode'  => request()->query('mode'),
+                ],
+            ]);
         }
 
         abort(404);

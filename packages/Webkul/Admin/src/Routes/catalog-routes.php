@@ -31,11 +31,9 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
 
             Route::post('mass-delete', 'massDestroy')->name('admin.catalog.attributes.mass_delete');
 
-            Route::post('attribute/import', [AttributeController::class, 'import'])->name('admin.catalog.attributes.import');
+            Route::post('attribute/import', 'import')->name('admin.catalog.attributes.import');
 
-            Route::get('brands', [AttributeController::class, 'brandIndex'])->name('admin.catalog.brand.index');
-
-            Route::get('options', [AttributeController::class, 'optionIndex'])->name('admin.catalog.option.index');
+            Route::get('brands', 'brandIndex')->name('admin.catalog.brands.index');
         });
 
         /**

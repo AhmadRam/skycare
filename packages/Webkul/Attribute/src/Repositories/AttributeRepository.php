@@ -71,11 +71,11 @@ class AttributeRepository extends Repository
 
         $attribute->update($data);
 
-        if (! in_array($attribute->type, ['select', 'multiselect', 'checkbox'])) {
+        if (!in_array($attribute->type, ['select', 'multiselect', 'checkbox'])) {
             return $attribute;
         }
 
-        if (! isset($data['options'])) {
+        if (!isset($data['options'])) {
             return $attribute;
         }
 
@@ -112,7 +112,7 @@ class AttributeRepository extends Repository
             $data['value_per_channel'] = $data['value_per_locale'] = 0;
         }
 
-        if (! in_array($data['type'], ['select', 'multiselect', 'price', 'checkbox'])) {
+        if (!in_array($data['type'], ['select', 'multiselect', 'price', 'checkbox'])) {
             $data['is_filterable'] = 0;
         }
 
@@ -152,8 +152,8 @@ class AttributeRepository extends Repository
         ];
 
         if (
-            ! is_array($codes)
-            && ! $codes
+            !is_array($codes)
+            && !$codes
         ) {
             return $this->findWhereIn('code', [
                 'name',
@@ -220,5 +220,22 @@ class AttributeRepository extends Repository
         }
 
         return $trimmed;
+    }
+
+    /**
+     * Get attribute by code.
+     *
+     * @param  string  $code
+     * @return \Webkul\Attribute\Contracts\Attribute
+     */
+    public function getAttributeByCode($code)
+    {
+        static $attributes = [];
+
+        if (array_key_exists($code, $attributes)) {
+            return $attributes[$code];
+        }
+
+        return $attributes[$code] = $this->findOneByField('code', $code);
     }
 }

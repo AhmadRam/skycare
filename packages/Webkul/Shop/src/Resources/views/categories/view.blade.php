@@ -1,8 +1,9 @@
 <!-- SEO Meta Content -->
 @push('meta')
-    <meta name="description" content="{{ trim($category->meta_description) != "" ? $category->meta_description : \Illuminate\Support\Str::limit(strip_tags($category->description), 120, '') }}"/>
+    <meta name="description"
+        content="{{ trim($category->meta_description) != '' ? $category->meta_description : \Illuminate\Support\Str::limit(strip_tags($category->description), 120, '') }}" />
 
-    <meta name="keywords" content="{{ $category->meta_keywords }}"/>
+    <meta name="keywords" content="{{ $category->meta_keywords }}" />
 
     @if (core()->getConfigData('catalog.rich_snippets.categories.enable'))
         <script type="application/ld+json">
@@ -14,7 +15,7 @@
 <x-shop::layouts>
     <!-- Page Title -->
     <x-slot:title>
-        {{ trim($category->meta_title) != "" ? $category->meta_title : $category->name }}
+        {{ trim($category->meta_title) != '' ? $category->meta_title : $category->name }}
     </x-slot>
 
     {!! view_render_event('bagisto.shop.categories.view.banner_path.before') !!}
@@ -23,13 +24,8 @@
     @if ($category->banner_path)
         <div class="container mt-8 px-[60px] max-lg:px-8 max-sm:px-4">
             <div>
-                <img
-                    class="rounded-xl"
-                    src="{{ $category->banner_url }}"
-                    alt="{{ $category->name }}"
-                    width="1320"
-                    height="300"
-                >
+                <img class="rounded-xl" src="{{ $category->banner_url }}" alt="{{ $category->name }}" width="1320"
+                    height="300">
             </div>
         </div>
     @endif
@@ -255,11 +251,16 @@
                             filter: false,
                         };
 
-                        document.body.style.overflow ='scroll';
+                        document.body.style.overflow = 'scroll';
+                        const categoryId = "{{ !$category->is_brand ? $category->id : '' }}";
+                        const apiUrl =
+                            `{{ route('shop.api.products.index') }}?category_id=${categoryId}`;
 
-                        this.$axios.get("{{ route('shop.api.products.index', ['category_id' => $category->id]) }}", {
-                            params: this.queryParams
-                        })
+
+                        this.$axios.get(
+                                apiUrl, {
+                                    params: this.queryParams
+                                })
                             .then(response => {
                                 this.isLoading = false;
 
@@ -272,7 +273,7 @@
                     },
 
                     loadMoreProducts() {
-                        if (! this.links.next) {
+                        if (!this.links.next) {
                             return;
                         }
 
@@ -291,8 +292,8 @@
                     },
 
                     removeJsonEmptyValues(params) {
-                        Object.keys(params).forEach(function (key) {
-                            if ((! params[key] && params[key] !== undefined)) {
+                        Object.keys(params).forEach(function(key) {
+                            if ((!params[key] && params[key] !== undefined)) {
                                 delete params[key];
                             }
 

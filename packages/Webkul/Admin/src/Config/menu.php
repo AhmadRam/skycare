@@ -81,6 +81,12 @@ return [
         'sort'       => 2,
         'icon'       => '',
     ], [
+        'key'        => 'catalog.brands',
+        'name'       => 'admin::app.components.layouts.sidebar.brands',
+        'route'      => 'admin.catalog.brands.index',
+        'sort'       => 2,
+        'icon'       => '',
+    ], [
         'key'        => 'catalog.attributes',
         'name'       => 'admin::app.components.layouts.sidebar.attributes',
         'route'      => 'admin.catalog.attributes.index',

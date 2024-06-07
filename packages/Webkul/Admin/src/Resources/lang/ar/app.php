@@ -3588,6 +3588,7 @@ return [
                 'campaigns'                => 'الحملات',
                 'catalog'                  => 'الكتالوج',
                 'categories'               => 'الفئات',
+                'brands'                   => 'الماركات',
                 'channels'                 => 'القنوات',
                 'cms'                      => 'نظام إدارة المحتوى',
                 'collapse'                 => 'طي',
