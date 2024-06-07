@@ -70,8 +70,8 @@ class CategoryController extends APIController
             $childObject->id = $brand->id;
             $childObject->parent_id = 1;
             $childObject->name = $brand->label;
-            $childObject->slug = strtolower($brand->label) . '?' . 'brand=' . $brand->id;
-            $childObject->url = strtolower($brand->label) . '?' . 'brand=' . $brand->id;
+            $childObject->slug = $brand->admin_name . '?' . 'brand=' . $brand->id;
+            $childObject->url = $brand->admin_name . '?' . 'brand=' . $brand->id;
             $childObject->status = true;
             $childObject->children = [];
             // Add the child object to the parent's children array
