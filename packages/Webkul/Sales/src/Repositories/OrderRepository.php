@@ -94,7 +94,6 @@ class OrderRepository extends Repository
                 Event::dispatch('checkout.order.orderitem.save.after', $orderItem);
             }
 
-            Event::dispatch('checkout.order.save.after', $order);
         // } catch (\Exception $e) {
         //     /* rolling back first */
         //     DB::rollBack();

@@ -4,6 +4,7 @@ namespace Webkul\Shop\Http\Controllers\API;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Event;
 use Webkul\Checkout\Facades\Cart;
 use Webkul\Customer\Repositories\CustomerRepository;
 use Webkul\Payment\Facades\Payment;
@@ -173,6 +174,8 @@ class OnepageController extends APIController
         }
 
         $order = $this->orderRepository->create(Cart::prepareDataForOrder());
+
+        Event::dispatch('checkout.order.save.after', $order);
 
         Cart::deActivateCart();
 

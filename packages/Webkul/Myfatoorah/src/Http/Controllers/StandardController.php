@@ -178,6 +178,8 @@ class StandardController extends Controller
                 // }
             }
 
+            Event::dispatch('checkout.order.save.after', $order);
+
             session()->flash('order', $order);
 
             return redirect()->route('shop.checkout.onepage.success');

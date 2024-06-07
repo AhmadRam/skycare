@@ -2,6 +2,7 @@
 
 namespace Webkul\Paypal\Http\Controllers;
 
+use Illuminate\Support\Facades\Event;
 use Webkul\Checkout\Facades\Cart;
 use Webkul\Paypal\Helpers\Ipn;
 use Webkul\Sales\Repositories\OrderRepository;
@@ -50,6 +51,8 @@ class StandardController extends Controller
     public function success()
     {
         $order = $this->orderRepository->create(Cart::prepareDataForOrder());
+
+        Event::dispatch('checkout.order.save.after', $order);
 
         Cart::deActivateCart();
 
