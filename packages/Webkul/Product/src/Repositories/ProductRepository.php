@@ -345,6 +345,18 @@ class ProductRepository extends Repository
                     }
                 });
 
+                // Join the product_attribute_values table for the specified attribute ID
+                $qb->leftJoin('product_attribute_values', function ($join)  {
+                    $join->on('products.id', '=', 'product_attribute_values.product_id')
+                        ->where('product_attribute_values.attribute_id', 25);
+                });
+
+                // Conditionally order the results to bring "prohair" first
+                $qb->orderByRaw("CASE WHEN attribute_options.admin_name = ? THEN 0 ELSE 1 END", ['prohair']);
+
+                // Join the attribute_options table to get the admin name of the attribute option
+                $qb->leftJoin('attribute_options', 'product_attribute_values.text_value', '=', 'attribute_options.admin_name');
+
                 $qb->groupBy('products.id');
             }
 
@@ -375,15 +387,15 @@ class ProductRepository extends Repository
                     $qb->orderBy('products.created_at', $sortOptions['order']);
                 }
 
-                $attribute = $this->attributeRepository->findOneByField('code', 'brand');
-                $alias = 'sort_product_attribute_values';
-                $qb->leftJoin('product_attribute_values as ' . $alias, function ($join) use ($alias, $attribute) {
-                    $join->on('products.id', '=', $alias . '.product_id')
-                        ->where($alias . '.attribute_id', $attribute->id)
-                        ->where($alias . '.channel', core()->getRequestedChannelCode())
-                        ->where($alias . '.locale', core()->getRequestedLocaleCode());
-                })
-                    ->orderBy($alias . '.' . $attribute->column_name, 'ASC');
+                // $attribute = $this->attributeRepository->findOneByField('code', 'brand');
+                // $alias = 'sort_product_attribute_values';
+                // $qb->leftJoin('product_attribute_values as ' . $alias, function ($join) use ($alias, $attribute) {
+                //     $join->on('products.id', '=', $alias . '.product_id')
+                //         ->where($alias . '.attribute_id', $attribute->id)
+                //         ->where($alias . '.channel', core()->getRequestedChannelCode())
+                //         ->where($alias . '.locale', core()->getRequestedLocaleCode());
+                // })
+                //     ->orderBy($alias . '.' . $attribute->column_name, 'ASC');
             } else {
                 return $qb->inRandomOrder();
             }
