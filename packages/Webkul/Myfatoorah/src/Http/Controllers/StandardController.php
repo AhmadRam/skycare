@@ -57,9 +57,9 @@ class StandardController extends Controller
 
         $prepareDataForOrder['status'] = 'no_status';
         $order = $this->orderRepository->create($prepareDataForOrder);
-
+        $payment_method_id = request()->paymentMethodId;
         $data = [
-            'paymentMethodId'    => request()->paymentMethodId,
+            'paymentMethodId'    => (int) $payment_method_id,
             'CustomerName'       => "$billingAddress->first_name $billingAddress->last_name",
             'InvoiceValue'       => $cart->grand_total,
             'DisplayCurrencyIso' => $cart->cart_currency_code,
