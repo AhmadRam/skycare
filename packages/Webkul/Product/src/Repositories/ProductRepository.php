@@ -354,36 +354,26 @@ class ProductRepository extends Repository
             $sortOptions = $this->getSortOptions($params);
 
             if ($sortOptions['order'] != 'rand') {
-                // $attribute = $this->attributeRepository->findOneByField('code', $sortOptions['sort']);
+                $attribute = $this->attributeRepository->findOneByField('code', $sortOptions['sort']);
 
-                // if ($attribute) {
-                //     if ($attribute->code === 'price') {
-                //         $qb->orderBy('product_price_indices.min_price', $sortOptions['order']);
-                //     } else {
-                //         $alias = 'sort_product_attribute_values';
+                if ($attribute) {
+                    if ($attribute->code === 'price') {
+                        $qb->orderBy('product_price_indices.min_price', $sortOptions['order']);
+                    } else {
+                        $alias = 'sort_product_attribute_values';
 
-                //         $qb->leftJoin('product_attribute_values as ' . $alias, function ($join) use ($alias, $attribute) {
-                //             $join->on('products.id', '=', $alias . '.product_id')
-                //                 ->where($alias . '.attribute_id', $attribute->id)
-                //                 ->where($alias . '.channel', core()->getRequestedChannelCode())
-                //                 ->where($alias . '.locale', core()->getRequestedLocaleCode());
-                //         })
-                //             ->orderBy($alias . '.' . $attribute->column_name, $sortOptions['order']);
-                //     }
-                // } else {
-                //     /* `created_at` is not an attribute so it will be in else case */
-                //     $qb->orderBy('products.created_at', $sortOptions['order']);
-                // }
-
-                $attribute = $this->attributeRepository->findOneByField('code', 'brand');
-                $alias = 'sort_product_attribute_values';
-                $qb->leftJoin('product_attribute_values as ' . $alias, function ($join) use ($alias, $attribute) {
-                    $join->on('products.id', '=', $alias . '.product_id')
-                        ->where($alias . '.attribute_id', $attribute->id)
-                        ->where($alias . '.channel', core()->getRequestedChannelCode())
-                        ->where($alias . '.locale', core()->getRequestedLocaleCode());
-                })
-                    ->orderBy($alias . '.' . $attribute->column_name, 'ASC');
+                        $qb->leftJoin('product_attribute_values as ' . $alias, function ($join) use ($alias, $attribute) {
+                            $join->on('products.id', '=', $alias . '.product_id')
+                                ->where($alias . '.attribute_id', $attribute->id)
+                                ->where($alias . '.channel', core()->getRequestedChannelCode())
+                                ->where($alias . '.locale', core()->getRequestedLocaleCode());
+                        })
+                            ->orderBy($alias . '.' . $attribute->column_name, $sortOptions['order']);
+                    }
+                } else {
+                    /* `created_at` is not an attribute so it will be in else case */
+                    $qb->orderBy('products.created_at', $sortOptions['order']);
+                }
 
             } else {
                 return $qb->inRandomOrder();
