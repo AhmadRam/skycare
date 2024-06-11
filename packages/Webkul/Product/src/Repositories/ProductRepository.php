@@ -383,7 +383,7 @@ class ProductRepository extends Repository
                         ->where($alias . '.channel', core()->getRequestedChannelCode())
                         ->where($alias . '.locale', core()->getRequestedLocaleCode());
                 })
-                    ->orderBy($alias . '.' . $attribute->column_name, $sortOptions['order']);
+                    ->orderBy($alias . '.' . $attribute->column_name, 'ASC');
             } else {
                 return $qb->inRandomOrder();
             }
