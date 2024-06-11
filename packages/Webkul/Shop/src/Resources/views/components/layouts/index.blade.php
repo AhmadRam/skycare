@@ -84,8 +84,7 @@
 
     {!! view_render_event('bagisto.shop.layout.body.after') !!}
 
-    <a href="https://api.whatsapp.com/send?phone=96590001035"
-        class="float" target="_blank">
+    <a href="https://api.whatsapp.com/send?phone=96590001035" class="float" target="_blank">
         <i class="fa fa-whatsapp my-float"></i>
     </a>
 
@@ -94,6 +93,8 @@
     <script type="text/javascript">
         {!! core()->getConfigData('general.content.custom_scripts.custom_javascript') !!}
     </script>
+    <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+
 </body>
 
 </html>

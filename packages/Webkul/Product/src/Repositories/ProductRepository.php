@@ -377,6 +377,17 @@ class ProductRepository extends Repository
                 return $qb->inRandomOrder();
             }
 
+            $alias = 'sort_product_attribute_values';
+
+            $qb->leftJoin('product_attribute_values as '.$alias, function ($join) use ($alias) {
+                $join->on('products.id', '=', $alias.'.product_id')
+                    ->where($alias.'.attribute_id', 25)
+                    ->where($alias.'.integer_value', 10)
+                    ->where($alias.'.channel', core()->getRequestedChannelCode())
+                    ->where($alias.'.locale', core()->getRequestedLocaleCode());
+            })
+                ->orderBy($alias.'.integer_value', 'ASC');
+
             return $qb->groupBy('products.id');
         });
 
