@@ -386,7 +386,7 @@ class ProductRepository extends Repository
                     ->where($alias.'.channel', core()->getRequestedChannelCode())
                     ->where($alias.'.locale', core()->getRequestedLocaleCode());
             })
-                ->orderBy($alias.'.integer_value', 'ASC');
+                ->orderBy($alias.'.integer_value', 'DESC');
 
             return $qb->groupBy('products.id');
         });
