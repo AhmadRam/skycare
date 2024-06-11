@@ -345,18 +345,6 @@ class ProductRepository extends Repository
                     }
                 });
 
-                // Join the product_attribute_values table for the specified attribute ID
-                $qb->leftJoin('product_attribute_values', function ($join)  {
-                    $join->on('products.id', '=', 'product_attribute_values.product_id')
-                        ->where('product_attribute_values.attribute_id', 25);
-                });
-
-                // Conditionally order the results to bring "prohair" first
-                $qb->orderByRaw("CASE WHEN attribute_options.admin_name = ? THEN 0 ELSE 1 END", ['prohair']);
-
-                // Join the attribute_options table to get the admin name of the attribute option
-                $qb->leftJoin('attribute_options', 'product_attribute_values.text_value', '=', 'attribute_options.admin_name');
-
                 $qb->groupBy('products.id');
             }
 
@@ -396,6 +384,18 @@ class ProductRepository extends Repository
                 //         ->where($alias . '.locale', core()->getRequestedLocaleCode());
                 // })
                 //     ->orderBy($alias . '.' . $attribute->column_name, 'ASC');
+
+                // Join the product_attribute_values table for the specified attribute ID
+                $qb->leftJoin('product_attribute_values', function ($join) {
+                    $join->on('products.id', '=', 'product_attribute_values.product_id')
+                        ->where('product_attribute_values.attribute_id', 25);
+                });
+
+                // Conditionally order the results to bring "prohair" first
+                $qb->orderByRaw("CASE WHEN attribute_options.admin_name = ? THEN 0 ELSE 1 END", ['prohair']);
+
+                // Join the attribute_options table to get the admin name of the attribute option
+                $qb->leftJoin('attribute_options', 'product_attribute_values.text_value', '=', 'attribute_options.admin_name');
             } else {
                 return $qb->inRandomOrder();
             }
