@@ -276,7 +276,7 @@ class Themes
          * detect the theme and provide Vite assets based on the current theme.
          */
         if (empty($namespace)) {
-            return $this->current()->setBagistoVite($entryPoints);
+            return $this->current()?->setBagistoVite($entryPoints);
         }
 
         /**
