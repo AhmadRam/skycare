@@ -35,7 +35,7 @@ class Payment
             $paymentMethod = app($paymentMethodConfig['class']);
 
             if ($paymentMethod->isAvailable()) {
-                $paymentMethods[] = [
+                $paymentMethods[$paymentMethod->getCode()] = [
                     'method'       => $paymentMethod->getCode(),
                     'method_title' => $paymentMethod->getTitle(),
                     'description'  => $paymentMethod->getDescription(),
@@ -63,7 +63,7 @@ class Payment
         //     }
         // }
 
-        // $paymentMethods = array_values($paymentMethods);
+        $paymentMethods = array_values($paymentMethods);
 
         usort($paymentMethods, function ($a, $b) {
             if ($a['sort'] == $b['sort']) {
