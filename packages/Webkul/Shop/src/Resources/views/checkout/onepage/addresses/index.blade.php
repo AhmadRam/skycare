@@ -442,7 +442,7 @@
                         firstName: params[addressType].first_name,
                         lastName: params[addressType].last_name,
                         email: params[addressType].email,
-                        address1: params[addressType].address1.join('\n'),
+                        address1: params[addressType].address1,
                         country: params[addressType].country,
                         state: params[addressType].state,
                         city: params[addressType].city,
