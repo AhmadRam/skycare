@@ -21,7 +21,7 @@ class Shipping
      */
     public function collectRates()
     {
-        if (! Cart::getCart()) {
+        if (!$cart = Cart::getCart()) {
             return false;
         }
 
@@ -29,7 +29,24 @@ class Shipping
 
         $ratesList = [];
 
-        foreach (Config::get('carriers') as $shippingMethod) {
+        $shippingCarriers = Config::get('carriers');
+
+        if ($cart->billing_address) {
+            if ($cart->billing_address->country == "KW") {
+                // if ($cart->base_grand_total > 3) {
+                //     unset($shippingCarriers['flatrate']);
+                //     // unset($shippingCarriers['internal']);
+                // } else {
+                //     unset($shippingCarriers['free']);
+                // }
+                unset($shippingCarriers['flatrate']);
+            } else {
+                unset($shippingCarriers['free']);
+                // unset($shippingCarriers['internal']);
+            }
+        }
+
+        foreach ($shippingCarriers as $shippingMethod) {
             $object = new $shippingMethod['class'];
 
             if ($rates = $object->calculate()) {
@@ -57,7 +74,7 @@ class Shipping
      */
     public function removeAllShippingRates()
     {
-        if (! $cart = Cart::getCart()) {
+        if (!$cart = Cart::getCart()) {
             return;
         }
 
@@ -75,13 +92,13 @@ class Shipping
      */
     public function saveAllShippingRates()
     {
-        if (! $cart = Cart::getCart()) {
+        if (!$cart = Cart::getCart()) {
             return;
         }
 
         $shippingAddress = $cart->shipping_address;
 
-        if (! $shippingAddress) {
+        if (!$shippingAddress) {
             return;
         }
 
@@ -102,7 +119,7 @@ class Shipping
         $rates = [];
 
         foreach ($this->rates as $rate) {
-            if (! isset($rates[$rate->carrier])) {
+            if (!isset($rates[$rate->carrier])) {
                 $rates[$rate->carrier] = [
                     'carrier_title' => $rate->carrier_title,
                     'rates'         => [],
@@ -128,7 +145,7 @@ class Shipping
         foreach (Config::get('carriers') as $shippingMethod) {
             $object = new $shippingMethod['class'];
 
-            if (! $object->isAvailable()) {
+            if (!$object->isAvailable()) {
                 continue;
             }
 
@@ -155,7 +172,7 @@ class Shipping
 
         if (
             empty($shippingMethods)
-            || ! $shippingMethods
+            || !$shippingMethods
         ) {
             return false;
         }
