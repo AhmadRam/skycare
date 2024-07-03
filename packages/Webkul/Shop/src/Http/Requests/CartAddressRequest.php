@@ -49,7 +49,7 @@ class CartAddressRequest extends FormRequest
         $customerAddressIds = $this->getCustomerAddressIds();
 
         if (! empty($this->input("{$addressType}.id"))) {
-            $this->mergeWithRules([
+            return $this->mergeWithRules([
                 "{$addressType}.id" => ["in:{$customerAddressIds}"],
             ]);
         }
