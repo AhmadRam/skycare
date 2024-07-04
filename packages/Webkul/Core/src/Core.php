@@ -604,7 +604,7 @@ class Core
 
             $formatter->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, $symbol);
 
-            return $formatter->format($this->convertPrice($price));
+            return $formatter->format($price);
         }
 
         return $formatter->formatCurrency($price, $currency->code);
