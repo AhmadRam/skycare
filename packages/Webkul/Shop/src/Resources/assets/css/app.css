@@ -2,18 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url(https://fonts.googleapis.com/css?family=Tajawal:400,500);
-
-/* @font-face {
-    font-family: 'Tajawal, sans-serif';
-    src: url(https://fonts.googleapis.com/css?family=Tajawal:300,400,500,600,700,800,900);
+@font-face {
+    font-family: "bagisto-shop";
+    src: url("../fonts/bagisto-shop.woff") format("woff");
     font-weight: normal;
     font-style: normal;
-    font-display: swap;
-} */
+    font-display: block;
+}
 
-* {
-    font-family: Tajawal, sans-serif
+img.lazy {
+  visibility: hidden;
 }
 
 @layer components {
@@ -325,7 +323,7 @@
     .icon-users:before {
         content: "\e942";
     }
-
+      
 
     .journal-scroll::-webkit-scrollbar {
         width: 14px;
@@ -345,6 +343,15 @@
         border-radius: 12px;
         border: 3px solid transparent;
         background-clip: content-box;
+    }
+
+    .scrollbar-width-hidden {
+        -ms-overflow-style: none; 
+        scrollbar-width: none;
+    }
+
+    .scrollbar-width-hidden::-webkit-scrollbar { 
+        display: none;
     }
 
     .custom-select {
@@ -384,7 +391,7 @@
     .direction-rtl {
         direction: rtl;
     }
-
+    
     .label-pending,
     .label-processing,
     .label-closed,
@@ -395,22 +402,22 @@
         @apply text-[12px] text-white font-semibold py-px px-1.5 max-w-max rounded-[35px];
     }
 
-    .label-pending {
-        @apply bg-yellow-500;
+	.label-pending {
+		@apply bg-yellow-500;
+	}
+
+	.label-processing{
+		@apply bg-cyan-600;
     }
 
-    .label-processing {
-        @apply bg-cyan-600;
-    }
-
-    .label-completed,
+	.label-completed,
     .label-active {
-        @apply bg-green-600;
-    }
+		@apply bg-green-600;
+	}
 
-    .label-closed {
-        @apply bg-indigo-600;
-    }
+	.label-closed {
+		@apply bg-indigo-600;
+	}
 
     .label-canceled {
         @apply bg-rose-600;
@@ -423,7 +430,7 @@
     .primary-button {
         @apply flex gap-x-1.5 items-center place-content-center font-medium rounded-xl text-white bg-navyBlue border border-navyBlue px-8 py-4 max-w-max cursor-pointer transition-all hover:opacity-[0.9];
     }
-
+    
     .secondary-button {
         @apply flex gap-x-1.5 items-center place-content-center font-medium rounded-xl bg-white text-navyBlue border border-navyBlue px-8 py-4 max-w-max cursor-pointer transition-all hover:bg-[#050e3a0d];
     }
@@ -452,7 +459,7 @@
         0% {
             opacity: 0;
         }
-
+        
         100% {
             opacity: 1;
         }
@@ -475,7 +482,7 @@
         inset: 0;
         display: grid;
         place-content: center;
-        /* font-family: 'DM Serif Display'; */
+        font-family: 'DM Serif Display';
         overflow: hidden;
         letter-spacing: 24px;
     }
@@ -500,7 +507,7 @@
     html {
         margin-top: 0px !important;
     }
-
+    
     .break-word-custom {
         word-break: break-word;
     }

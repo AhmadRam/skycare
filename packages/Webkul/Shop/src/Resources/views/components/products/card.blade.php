@@ -118,6 +118,7 @@
                     @click="addToCart()"
                     ref="addToCartButton"
                 >
+                <i class="icon-heart-fill"></i>
 
                 @lang('shop::app.components.products.card.add-to-cart')
             </button>
