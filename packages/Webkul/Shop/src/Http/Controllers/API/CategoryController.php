@@ -41,6 +41,25 @@ class CategoryController extends APIController
 
         $categories = $this->categoryRepository->getAll(array_merge($defaultParams, request()->all()));
 
+        $parentObject = new stdClass;
+        $parentObject->id = 1000;
+        $parentObject->parent_id = 1;
+        $parentObject->name = __('admin::app.components.layouts.sidebar.brands');
+        $parentObject->slug = '';
+        $parentObject->url = 'prohair?brand=10';
+        $parentObject->position = 0;
+        $parentObject->display_mode = '';
+        $parentObject->description = '';
+        $parentObject->banner_path = '';
+        $parentObject->logo_path = '';
+        $parentObject->meta_title = '';
+        $parentObject->meta_keywords = '';
+        $parentObject->meta_description = '';
+        $parentObject->status = true;
+        $parentObject->children = [];
+
+        $categories->prepend($parentObject);
+
         return CategoryResource::collection($categories);
     }
 
@@ -53,7 +72,6 @@ class CategoryController extends APIController
 
         $attribute = $this->attributeRepository->getAttributeByCode('brand');
 
-        // Create the parent object
         $parentObject = new stdClass;
         $parentObject->id = 1000;
         $parentObject->parent_id = 1;
@@ -63,9 +81,7 @@ class CategoryController extends APIController
         $parentObject->status = true;
         $parentObject->children = [];
 
-        // Iterate through options and create child objects
         foreach ($attribute->options as $brand) {
-            // Create a new child object
             $childObject = new stdClass;
             $childObject->id = $brand->id;
             $childObject->parent_id = 1;
@@ -74,11 +90,10 @@ class CategoryController extends APIController
             $childObject->url = $brand->admin_name . '?' . 'brand=' . $brand->id;
             $childObject->status = true;
             $childObject->children = [];
-            // Add the child object to the parent's children array
+
             $parentObject->children[] = $childObject;
         }
 
-        // Wrap $parentObject in an array and merge it into the collection
         $categories->push($parentObject);
 
         return CategoryTreeResource::collection($categories);

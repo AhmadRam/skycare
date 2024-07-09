@@ -23,7 +23,7 @@ class CategoryRepository extends Repository
     /**
      * Get categories.
      *
-     * @return void
+     * @return object
      */
     public function getAll(array $params = [])
     {
