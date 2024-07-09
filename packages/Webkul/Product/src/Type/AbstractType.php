@@ -145,7 +145,7 @@ abstract class AbstractType
                 $attribute->type === 'boolean'
                 && $route !== 'admin.catalog.products.mass_update'
             ) {
-                $data[$attribute->code] = ! empty($data[$attribute->code]);
+                $data[$attribute->code] = !empty($data[$attribute->code]);
             }
 
             if (
@@ -155,7 +155,7 @@ abstract class AbstractType
                 $data[$attribute->code] = isset($data[$attribute->code]) ? implode(',', $data[$attribute->code]) : null;
             }
 
-            if (! isset($data[$attribute->code])) {
+            if (!isset($data[$attribute->code])) {
                 continue;
             }
 
@@ -179,7 +179,7 @@ abstract class AbstractType
                 || $attribute->type === 'file'
             ) {
                 $data[$attribute->code] = gettype($data[$attribute->code]) === 'object'
-                    ? request()->file($attribute->code)->store('product/'.$product->id)
+                    ? request()->file($attribute->code)->store('product/' . $product->id)
                     : $data[$attribute->code];
             }
 
@@ -204,7 +204,7 @@ abstract class AbstractType
 
             $attributeValue = $attributeValues->first();
 
-            if (! $attributeValue) {
+            if (!$attributeValue) {
                 $uniqueId = implode('|', array_filter([
                     $data['channel'],
                     $data['locale'],
@@ -230,7 +230,7 @@ abstract class AbstractType
                     /**
                      * If $data[$attribute->code]['delete'] is not empty, that means someone selected the "delete" option.
                      */
-                    if (! empty($data[$attribute->code]['delete'])) {
+                    if (!empty($data[$attribute->code]['delete'])) {
                         Storage::delete($previousTextValue);
 
                         $data[$attribute->code] = null;
@@ -240,7 +240,7 @@ abstract class AbstractType
                      * updated the file or image. In that case, we will remove the previous file.
                      */
                     elseif (
-                        ! empty($previousTextValue)
+                        !empty($previousTextValue)
                         && $data[$attribute->code] != $previousTextValue
                     ) {
                         Storage::delete($previousTextValue);
@@ -255,7 +255,7 @@ abstract class AbstractType
             return $product;
         }
 
-        if (! isset($data['categories'])) {
+        if (!isset($data['categories'])) {
             $data['categories'] = [];
         }
 
@@ -290,13 +290,13 @@ abstract class AbstractType
      */
     public function copy()
     {
-        if (! $this->canBeCopied()) {
+        if (!$this->canBeCopied()) {
             throw new \Exception(trans('product::app.response.product-can-not-be-copied', ['type' => $this->product->type]));
         }
 
         $copiedProduct = $this->product
             ->replicate()
-            ->fill(['sku' => 'temporary-sku-'.substr(md5(microtime()), 0, 6)]);
+            ->fill(['sku' => 'temporary-sku-' . substr(md5(microtime()), 0, 6)]);
 
         $copiedProduct->save();
 
@@ -324,7 +324,7 @@ abstract class AbstractType
             'name'           => trans('product::app.datagrid.copy-of', ['value' => $this->product->name]),
             'url_key'        => trans('product::app.datagrid.copy-of-slug', ['value' => $this->product->url_key]),
             'sku'            => $product->sku,
-            'product_number' => ! empty($this->product->product_number) ? trans('product::app.datagrid.copy-of-slug', ['value' => $this->product->product_number]) : null,
+            'product_number' => !empty($this->product->product_number) ? trans('product::app.datagrid.copy-of-slug', ['value' => $this->product->product_number]) : null,
             'status'         => 0,
         ];
 
@@ -346,7 +346,7 @@ abstract class AbstractType
                 ])),
             ]);
 
-            if (! is_null($value)) {
+            if (!is_null($value)) {
                 $newAttributeValue->{$attribute->column_name} = $value;
                 $productFlat->{$attribute->code} = $value;
             }
@@ -367,23 +367,23 @@ abstract class AbstractType
     {
         $attributesToSkip = config('products.copy.skip_attributes') ?? [];
 
-        if (! in_array('categories', $attributesToSkip)) {
+        if (!in_array('categories', $attributesToSkip)) {
             $product->categories()->sync($this->product->categories->pluck('id'));
         }
 
-        if (! in_array('inventories', $attributesToSkip)) {
+        if (!in_array('inventories', $attributesToSkip)) {
             foreach ($this->product->inventories as $inventory) {
                 $product->inventories()->save($inventory->replicate());
             }
         }
 
-        if (! in_array('customer_group_prices', $attributesToSkip)) {
+        if (!in_array('customer_group_prices', $attributesToSkip)) {
             foreach ($this->product->customer_group_prices as $customer_group_price) {
                 $product->customer_group_prices()->save($customer_group_price->replicate());
             }
         }
 
-        if (! in_array('images', $attributesToSkip)) {
+        if (!in_array('images', $attributesToSkip)) {
             foreach ($this->product->images as $image) {
                 $copiedImage = $product->images()->save($image->replicate());
 
@@ -391,7 +391,7 @@ abstract class AbstractType
             }
         }
 
-        if (! in_array('videos', $attributesToSkip)) {
+        if (!in_array('videos', $attributesToSkip)) {
             foreach ($this->product->videos as $video) {
                 $copiedVideo = $product->videos()->save($video->replicate());
 
@@ -399,7 +399,7 @@ abstract class AbstractType
             }
         }
 
-        if (! in_array('product_relations', $attributesToSkip)) {
+        if (!in_array('product_relations', $attributesToSkip)) {
             DB::table('product_relations')->insert([
                 'parent_id' => $this->product->id,
                 'child_id'  => $product->id,
@@ -414,11 +414,11 @@ abstract class AbstractType
     {
         $path = explode('/', $media->path);
 
-        $copiedMedia->path = 'product/'.$product->id.'/'.end($path);
+        $copiedMedia->path = 'product/' . $product->id . '/' . end($path);
 
         $copiedMedia->save();
 
-        Storage::makeDirectory('product/'.$product->id);
+        Storage::makeDirectory('product/' . $product->id);
 
         Storage::copy($media->path, $copiedMedia->path);
     }
@@ -463,11 +463,11 @@ abstract class AbstractType
      */
     public function isSaleable()
     {
-        if (! $this->product->status) {
+        if (!$this->product->status) {
             return false;
         }
 
-        if (! $this->haveSufficientQuantity(1)) {
+        if (!$this->haveSufficientQuantity(1)) {
             return false;
         }
 
@@ -558,7 +558,7 @@ abstract class AbstractType
      */
     public function totalQuantity()
     {
-        if (! $inventoryIndex = $this->getInventoryIndex()) {
+        if (!$inventoryIndex = $this->getInventoryIndex()) {
             return 0;
         }
 
@@ -592,7 +592,7 @@ abstract class AbstractType
             );
         }
 
-        if (! $group) {
+        if (!$group) {
             return $this->product->attribute_family->custom_attributes()->whereNotIn(
                 'attributes.code',
                 $this->skipAttributes
@@ -630,7 +630,7 @@ abstract class AbstractType
      */
     public function getMinimalPrice()
     {
-        if (! $priceIndex = $this->getPriceIndex()) {
+        if (!$priceIndex = $this->getPriceIndex()) {
             return $this->product->price;
         }
 
@@ -644,7 +644,7 @@ abstract class AbstractType
      */
     public function getRegularMinimalPrice()
     {
-        if (! $priceIndex = $this->getPriceIndex()) {
+        if (!$priceIndex = $this->getPriceIndex()) {
             return $this->product->price;
         }
 
@@ -658,7 +658,7 @@ abstract class AbstractType
      */
     public function getMaximumPrice()
     {
-        if (! $priceIndex = $this->getPriceIndex()) {
+        if (!$priceIndex = $this->getPriceIndex()) {
             return $this->product->price;
         }
 
@@ -672,7 +672,7 @@ abstract class AbstractType
      */
     public function getRegularMaximumPrice()
     {
-        if (! $priceIndex = $this->getPriceIndex()) {
+        if (!$priceIndex = $this->getPriceIndex()) {
             return $this->product->price;
         }
 
@@ -745,7 +745,7 @@ abstract class AbstractType
      */
     public function haveDiscount($qty = null)
     {
-        if (! $priceIndex = $this->getPriceIndex()) {
+        if (!$priceIndex = $this->getPriceIndex()) {
             return false;
         }
 
@@ -793,7 +793,7 @@ abstract class AbstractType
      */
     public function getTaxInclusiveRate($totalPrice)
     {
-        if (! $taxCategory = $this->getTaxCategory()) {
+        if (!$taxCategory = $this->getTaxCategory()) {
             return $totalPrice;
         }
 
@@ -850,12 +850,12 @@ abstract class AbstractType
 
         $data = $this->getQtyRequest($data);
 
-        if (! $this->haveSufficientQuantity($data['quantity'])) {
+        if (!$this->haveSufficientQuantity($data['quantity'])) {
             return trans('product::app.checkout.cart.inventory-warning');
         }
 
         $price = $this->getFinalPrice();
-
+        $weight = $this->product->weight != null && $this->product->weight != '' ? $this->product->weight : 0;
         $products = [
             [
                 'product_id'        => $this->product->id,
@@ -866,9 +866,9 @@ abstract class AbstractType
                 'base_price'        => $price,
                 'total'             => $convertedPrice * $data['quantity'],
                 'base_total'        => $price * $data['quantity'],
-                'weight'            => $this->product->weight ?? 0,
-                'total_weight'      => ($this->product->weight ?? 0) * $data['quantity'],
-                'base_total_weight' => ($this->product->weight ?? 0) * $data['quantity'],
+                'weight'            => $weight ?? 0,
+                'total_weight'      => ($weight ?? 0) * $data['quantity'],
+                'base_total_weight' => ($weight ?? 0) * $data['quantity'],
                 'type'              => $this->product->type,
                 'additional'        => $this->getAdditionalOptions($data),
             ],
@@ -919,12 +919,12 @@ abstract class AbstractType
                 return $options1['parent_id'] == $options2['parent_id'];
             } elseif (
                 isset($options1['parent_id'])
-                && ! isset($options2['parent_id'])
+                && !isset($options2['parent_id'])
             ) {
                 return false;
             } elseif (
                 isset($options2['parent_id'])
-                && ! isset($options1['parent_id'])
+                && !isset($options1['parent_id'])
             ) {
                 return false;
             }
@@ -1001,14 +1001,14 @@ abstract class AbstractType
      */
     public function isCartItemInactive(\Webkul\Checkout\Contracts\CartItem $item): bool
     {
-        if (! $item->product->status) {
+        if (!$item->product->status) {
             return true;
         }
 
         switch ($item->product->type) {
             case 'bundle':
                 foreach ($item->children as $child) {
-                    if (! $child->product->status) {
+                    if (!$child->product->status) {
                         return true;
                     }
                 }
@@ -1018,7 +1018,7 @@ abstract class AbstractType
             case 'configurable':
                 if (
                     $item->child
-                    && ! $item->child->product->status
+                    && !$item->child->product->status
                 ) {
                     return true;
                 }
@@ -1051,7 +1051,7 @@ abstract class AbstractType
 
         foreach ($customerGroupPrices as $customerGroupPrice) {
             if (
-                ! is_null($this->product->special_price)
+                !is_null($this->product->special_price)
                 && $customerGroupPrice->value >= $this->product->special_price
             ) {
                 continue;
@@ -1078,7 +1078,7 @@ abstract class AbstractType
         $offerLines = trans('product::app.type.abstract.offers', [
             'qty'      => $customerGroupPrice->qty,
             'price'    => core()->currency($price),
-            'discount' => '<span>'.$discount.'%</span>',
+            'discount' => '<span>' . $discount . '%</span>',
         ]);
 
         return $offerLines;
@@ -1120,7 +1120,7 @@ abstract class AbstractType
 
             if (
                 $customerGroupPrice->qty == $lastQty
-                && ! empty($lastCustomerGroupId)
+                && !empty($lastCustomerGroupId)
                 && empty($customerGroupPrice->customer_group_id)
             ) {
                 continue;
