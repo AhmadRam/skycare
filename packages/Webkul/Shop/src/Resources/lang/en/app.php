@@ -442,6 +442,7 @@ return [
                 'new'                         => 'New',
                 'review-description'          => 'Be the first to review this product',
                 'sale'                        => 'Sale',
+                'top_sell'                    => 'Top Selling',
             ],
 
             'carousel' => [
