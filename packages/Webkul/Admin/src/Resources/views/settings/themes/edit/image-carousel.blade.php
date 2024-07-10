@@ -333,11 +333,12 @@
                                     @lang('admin::app.settings.themes.edit.slider-image')
                                 </x-admin::form.control-group.label>
 
+                                <img class="pb-2" :src="selectedSliders.full_image">
+
                                 <x-admin::form.control-group.control
                                     type="image"
                                     name="slider_image"
                                     rules="required"
-                                     v-model="selectedSliders.slider_image"
                                     :is-multiple="false"
                                 />
 
@@ -404,7 +405,7 @@
                     try {
                         const sliderImage = formData.get("slider_image[]");
 
-                        if (!sliderImage) {
+                        if (!sliderImage && !this.isUpdating) {
                             throw new Error("{{ trans('admin::app.settings.themes.edit.slider-required') }}");
                         }
 
@@ -468,6 +469,8 @@
                 },
                 edit(image) {
                     this.selectedSliders = image;
+                    this.selectedSliders.full_image = `${window.location.protocol}//${window.location.host}/` + this
+                        .selectedSliders.image;
 
                     this.isUpdating = true;
 
