@@ -15,12 +15,12 @@
                                 <p class="text-base text-gray-800 dark:text-white font-semibold">
                                     @lang('admin::app.settings.themes.edit.slider')
                                 </p>
-                                
+
                                 <p class="text-xs text-gray-500 dark:text-gray-300 font-medium">
                                     @lang('admin::app.settings.themes.edit.slider-description')
                                 </p>
                             </div>
-            
+
                             <!-- Add Slider Button -->
                             <div class="flex gap-2.5">
                                 <div
@@ -70,9 +70,9 @@
                                 :name="'{{ $currentLocale->code }}[options]['+ index +'][image]'"
                                 :value="image.image"
                             />
-                        
+
                             <!-- Details -->
-                            <div 
+                            <div
                                 class="flex gap-2.5 justify-between py-5 cursor-pointer"
                                 :class="{
                                     'border-b border-slate-300 dark:border-gray-800': index < sliders.images.length - 1
@@ -81,8 +81,8 @@
                                 <div class="flex gap-2.5">
                                     <div class="grid gap-1.5 place-content-start">
                                         <p class="text-gray-600 dark:text-gray-300">
-                                            <div> 
-                                                @lang('admin::app.settings.themes.edit.image-title'): 
+                                            <div>
+                                                @lang('admin::app.settings.themes.edit.image-title'):
 
                                                 <span class="text-gray-600 dark:text-gray-300 transition-all">
                                                     @{{ image.title }}
@@ -91,8 +91,8 @@
                                         </p>
 
                                         <p class="text-gray-600 dark:text-gray-300">
-                                            <div> 
-                                                @lang('admin::app.settings.themes.edit.link'): 
+                                            <div>
+                                                @lang('admin::app.settings.themes.edit.link'):
 
                                                 <span class="text-gray-600 dark:text-gray-300 transition-all">
                                                     @{{ image.link }}
@@ -101,8 +101,8 @@
                                         </p>
 
                                         <p class="text-gray-600 dark:text-gray-300">
-                                            <div class="flex justify-between"> 
-                                                @lang('admin::app.settings.themes.edit.image'): 
+                                            <div class="flex justify-between">
+                                                @lang('admin::app.settings.themes.edit.image'):
 
                                                 <span class="text-gray-600 dark:text-gray-300 transition-all">
                                                     <a
@@ -111,7 +111,7 @@
                                                         target="_blank"
                                                         class="ltr:ml-2 rtl:mr-2 text-blue-600 transition-all hover:underline"
                                                     >
-                                                        <span 
+                                                        <span
                                                             :ref="'imageName_' + index"
                                                             v-text="image.image"
                                                         ></span>
@@ -124,12 +124,20 @@
 
                                 <!-- Actions -->
                                 <div class="grid gap-1 place-content-start text-right">
+
                                     <div class="flex gap-x-5 items-center">
-                                        <p 
+                                        <p
+                                            class="text-blue-600 cursor-pointer transition-all hover:underline"
+                                            @click="edit(image)"
+                                        >
+                                            @lang('admin::app.settings.themes.edit.edit')
+                                        </p>
+
+                                        <p
                                             class="text-red-600 cursor-pointer transition-all hover:underline"
                                             @click="remove(image)"
-                                        > 
-                                            @lang('admin::app.settings.themes.edit.delete')
+                                        >
+                                            @lang('admin::app.settings.themes.edit.services-content.delete')
                                         </p>
                                     </div>
                                 </div>
@@ -137,7 +145,7 @@
                         </div>
 
                         <!-- Empty Page -->
-                        <div    
+                        <div
                             class="grid gap-3.5 justify-center justify-items-center py-10 px-2.5"
                             v-else
                         >
@@ -146,12 +154,12 @@
                                 src="{{ bagisto_asset('images/empty-placeholders/default.svg') }}"
                                 alt="@lang('admin::app.settings.themes.edit.slider')"
                             >
-            
+
                             <div class="flex flex-col gap-1.5 items-center">
                                 <p class="text-base text-gray-400 font-semibold">
                                     @lang('admin::app.settings.themes.edit.slider-add-btn')
                                 </p>
-                                
+
                                 <p class="text-gray-400">
                                     @lang('admin::app.settings.themes.edit.slider-description')
                                 </p>
@@ -159,7 +167,7 @@
                         </div>
                     </div>
                 </div>
-            
+
                 <!-- General -->
                 <div class="flex flex-col gap-2 w-[360px] max-w-full max-sm:w-full">
                     <x-admin::accordion>
@@ -168,7 +176,7 @@
                                 @lang('admin::app.settings.themes.edit.general')
                             </p>
                         </x-slot>
-                    
+
                         <x-slot:content>
                             <input
                                 type="hidden"
@@ -228,7 +236,7 @@
                                 >
                                     @foreach($channels as $channel)
                                         <option value="{{ $channel->id }}">{{ $channel->name }}</option>
-                                    @endforeach 
+                                    @endforeach
                                 </x-admin::form.control-group.control>
 
                                 <x-admin::form.control-group.error control-name="channel_id" />
@@ -256,7 +264,7 @@
                                             :checked="{{ $theme->status }}"
                                         />
                                     </v-field>
-                        
+
                                     <label
                                         class="rounded-full dark:peer-focus:ring-blue-800 peer-checked:bg-blue-600 w-9 h-5 bg-gray-200 cursor-pointer peer-focus:ring-blue-300 after:bg-white after:border-gray-300 peer-checked:bg-navyBlue peer peer-checked:after:border-white peer-checked:after:ltr:translate-x-full peer-checked:after:rtl:-translate-x-full after:content-[''] after:absolute after:top-0.5 after:ltr:left-0.5 after:rtl:right-0.5 peer-focus:outline-none after:border after:rounded-full after:h-4 after:w-4 after:transition-all"
                                         for="status"
@@ -275,7 +283,7 @@
                 v-slot="{ meta, errors, handleSubmit }"
                 as="div"
             >
-                <form 
+                <form
                     @submit="handleSubmit($event, saveSliderImage)"
                     enctype="multipart/form-data"
                     ref="createSliderForm"
@@ -299,6 +307,7 @@
                                     type="text"
                                     name="{{ $currentLocale->code }}[title]"
                                     rules="required"
+                                    v-model="selectedSliders.title"
                                     :placeholder="trans('admin::app.settings.themes.edit.image-title')"
                                     :label="trans('admin::app.settings.themes.edit.image-title')"
                                 />
@@ -314,6 +323,7 @@
                                 <x-admin::form.control-group.control
                                     type="text"
                                     name="{{ $currentLocale->code }}[link]"
+                                    v-model="selectedSliders.link"
                                     :placeholder="trans('admin::app.settings.themes.edit.link')"
                                 />
                             </x-admin::form.control-group>
@@ -327,6 +337,7 @@
                                     type="image"
                                     name="slider_image"
                                     rules="required"
+                                     v-model="selectedSliders.slider_image"
                                     :is-multiple="false"
                                 />
 
@@ -341,7 +352,7 @@
                         <!-- Modal Footer -->
                         <x-slot:footer>
                             <div class="flex gap-x-2.5 items-center">
-                                <button 
+                                <button
                                     type="submit"
                                     class="px-3 py-1.5 bg-blue-600 border border-blue-700 rounded-md text-gray-50 font-semibold cursor-pointer"
                                 >
@@ -366,34 +377,50 @@
                     sliders: @json($theme->translate($currentLocale->code)['options'] ?? null),
 
                     deletedSliders: [],
+
+                    selectedSliders: [],
+
+                    isUpdating: false,
                 };
             },
-            
+
             created() {
                 if (
-                    this.sliders == null 
-                    || this.sliders.length == 0
+                    this.sliders == null ||
+                    this.sliders.length == 0
                 ) {
-                    this.sliders = { images: [] };
-                }   
+                    this.sliders = {
+                        images: []
+                    };
+                }
             },
 
             methods: {
-                saveSliderImage(params, { resetForm ,setErrors }) {
+                saveSliderImage(params, {
+                    resetForm,
+                    setErrors
+                }) {
                     let formData = new FormData(this.$refs.createSliderForm);
-
                     try {
                         const sliderImage = formData.get("slider_image[]");
 
-                        if (! sliderImage) {
+                        if (!sliderImage) {
                             throw new Error("{{ trans('admin::app.settings.themes.edit.slider-required') }}");
                         }
 
-                        this.sliders.images.push({
-                            title: formData.get("{{ $currentLocale->code }}[title]"),
-                            link: formData.get("{{ $currentLocale->code }}[link]"),
-                            slider_image: sliderImage,
-                        });
+                        if (!this.isUpdating) {
+                            this.sliders.images.push({
+                                title: formData.get("{{ $currentLocale->code }}[title]"),
+                                link: formData.get("{{ $currentLocale->code }}[link]"),
+                                slider_image: sliderImage,
+                            });
+                        } else {
+                            this.selectedSliders = {
+                                title: formData.get("{{ $currentLocale->code }}[title]"),
+                                link: formData.get("{{ $currentLocale->code }}[link]"),
+                                slider_image: sliderImage,
+                            };
+                        }
 
                         if (sliderImage instanceof File) {
                             this.setFile(sliderImage, this.sliders.images.length - 1);
@@ -403,8 +430,11 @@
 
                         this.$refs.addSliderModal.toggle();
                     } catch (error) {
-                        setErrors({'slider_image': [error.message]});
+                        setErrors({
+                            'slider_image': [error.message]
+                        });
                     }
+
                 },
 
                 setFile(file, index) {
@@ -413,7 +443,7 @@
                     dataTransfer.items.add(file);
 
                     setTimeout(() => {
-                        this.$refs['image_' + index][0].href =  URL.createObjectURL(file);
+                        this.$refs['image_' + index][0].href = URL.createObjectURL(file);
 
                         this.$refs['imageName_' + index][0].innerHTML = file.name;
 
@@ -425,18 +455,25 @@
                     this.$emitter.emit('open-confirm-modal', {
                         agree: () => {
                             this.deletedSliders.push(image);
-                    
+
                             this.sliders.images = this.sliders.images.filter(item => {
                                 return (
-                                    item.title !== image.title || 
-                                    item.link !== image.link || 
+                                    item.title !== image.title ||
+                                    item.link !== image.link ||
                                     item.image !== image.image
                                 );
                             });
                         }
                     });
                 },
+                edit(image) {
+                    this.selectedSliders = image;
+
+                    this.isUpdating = true;
+
+                    this.$refs.addSliderModal.toggle();
+                },
             },
         });
     </script>
-@endPushOnce    
+@endPushOnce
