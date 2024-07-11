@@ -415,6 +415,9 @@
                                 link: formData.get("{{ $currentLocale->code }}[link]"),
                                 slider_image: sliderImage,
                             });
+                            if (sliderImage instanceof File) {
+                                this.setFile(sliderImage, this.sliders.images.length - 1);
+                            }
                         } else {
                             const index = this.sliders.images.findIndex(item =>
                                 item.title === this.selectedSliders.title && item.image === this.selectedSliders
@@ -426,11 +429,13 @@
                                 link: formData.get("{{ $currentLocale->code }}[link]"),
                                 slider_image: sliderImage,
                             };
+
+                            if (sliderImage instanceof File) {
+                                this.setFile(sliderImage, index);
+                            }
                         }
 
-                        if (sliderImage instanceof File) {
-                            this.setFile(sliderImage, this.sliders.images.length - 1);
-                        }
+
 
                         resetForm();
 
