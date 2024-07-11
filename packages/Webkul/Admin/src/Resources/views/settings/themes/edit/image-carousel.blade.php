@@ -421,7 +421,7 @@
                                 .image
                             );
 
-                            this.sliders[index].images = {
+                            this.sliders.images[index] = {
                                 title: formData.get("{{ $currentLocale->code }}[title]"),
                                 link: formData.get("{{ $currentLocale->code }}[link]"),
                                 slider_image: sliderImage,
