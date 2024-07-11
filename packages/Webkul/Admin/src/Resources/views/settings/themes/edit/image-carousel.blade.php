@@ -416,7 +416,12 @@
                                 slider_image: sliderImage,
                             });
                         } else {
-                            this.selectedSliders = {
+                            const index = this.sliders.images.findIndex(item =>
+                                item.title === this.selectedSliders.title && item.image === this.selectedSliders
+                                .image
+                            );
+
+                            this.sliders[index].images = {
                                 title: formData.get("{{ $currentLocale->code }}[title]"),
                                 link: formData.get("{{ $currentLocale->code }}[link]"),
                                 slider_image: sliderImage,
