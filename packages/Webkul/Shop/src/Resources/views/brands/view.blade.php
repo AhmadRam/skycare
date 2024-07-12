@@ -69,6 +69,7 @@
             }
 
             .top-collection-card {
+                text-align: -webkit-center;
                 position: relative;
                 background: #f9fafb;
                 overflow: hidden;
@@ -90,11 +91,11 @@
                 color: #060C3B;
                 font-size: 30px;
                 font-family: DM Serif Display;
-                transform: translateX(-50%);
+                /* transform: translateX(-50%); */
                 width: max-content;
                 left: 50%;
                 bottom: 0px;
-                position: relative;
+                /* position: relative; */
                 margin: 0;
                 font-weight: inherit;
             }
