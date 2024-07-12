@@ -93,8 +93,8 @@
                 transform: translateX(-50%);
                 width: max-content;
                 left: 50%;
-                bottom: 30px;
-                position: absolute;
+                bottom: 0px;
+                position: relative;
                 margin: 0;
                 font-weight: inherit;
             }
