@@ -46,7 +46,7 @@ class CategoryController extends APIController
         $parentObject->id = 1000;
         $parentObject->parent_id = 1;
         $parentObject->name = __('admin::app.components.layouts.sidebar.brands');
-        $parentObject->slug = $brand->slug ?? '';
+        $parentObject->slug = $brand->slug ?? 'brands';
         $parentObject->url = 'brands';
         $parentObject->position = $brand->position ?? 0;
         $parentObject->display_mode = '';
@@ -77,8 +77,8 @@ class CategoryController extends APIController
         $parentObject->id = 1000;
         $parentObject->parent_id = 1;
         $parentObject->name = __('admin::app.components.layouts.sidebar.brands');
-        $parentObject->slug = '';
-        $parentObject->url = '';
+        $parentObject->slug = 'brands';
+        $parentObject->url = 'brands';
         $parentObject->status = true;
         $parentObject->children = [];
 

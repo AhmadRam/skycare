@@ -4,6 +4,7 @@ namespace Webkul\Shop\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Webkul\Attribute\Repositories\AttributeOptionRepository;
+use Webkul\Attribute\Repositories\AttributeRepository;
 use Webkul\Category\Repositories\CategoryRepository;
 use Webkul\Marketing\Repositories\URLRewriteRepository;
 use Webkul\Product\Repositories\ProductRepository;
@@ -59,6 +60,14 @@ class ProductsCategoriesProxyController extends Controller
 
         if ($category) {
             visitor()->visit($category);
+            $brands = app(AttributeRepository::class)->getAttributeByCode('brand')->options;
+
+            if ($slugOrURLKey == 'brands') {
+                return view('shop::brands.view', [
+                    'category' => $category,
+                    'brands' => $brands
+                ]);
+            }
 
             return view('shop::categories.view', [
                 'category' => $category,
