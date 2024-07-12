@@ -41,17 +41,18 @@ class CategoryController extends APIController
 
         $categories = $this->categoryRepository->getAll(array_merge($defaultParams, request()->all()));
 
+        $brand = $this->categoryRepository->findBySlug('brands');
         $parentObject = new stdClass;
         $parentObject->id = 1000;
         $parentObject->parent_id = 1;
         $parentObject->name = __('admin::app.components.layouts.sidebar.brands');
-        $parentObject->slug = '';
-        $parentObject->url = 'prohair?brand=10';
-        $parentObject->position = 0;
+        $parentObject->slug = $brand->slug ?? '';
+        $parentObject->url = 'brands';
+        $parentObject->position = $brand->position ?? 0;
         $parentObject->display_mode = '';
         $parentObject->description = '';
-        $parentObject->banner_path = '';
-        $parentObject->logo_path = '';
+        $parentObject->banner_path = $brand->banner_path ?? '';
+        $parentObject->logo_path = $brand->logo_path ?? '';
         $parentObject->meta_title = '';
         $parentObject->meta_keywords = '';
         $parentObject->meta_description = '';
