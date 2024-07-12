@@ -137,9 +137,11 @@
         <div class="container top-collection-grid">
             @foreach ($brands as $brand)
                 <div class="top-collection-card">
-                    <img src="" data-src="{{ $brand->swatch_value_url }}" class="lazy" width="396"
-                        height="396" alt="{{ $brand->label }}">
-                    <h3>{{ $brand->label }}</h3>
+                    <a href="/{{ $brand->admin_name . '?' . 'brand=' . $brand->id }}">
+                        <img src="" data-src="{{ $brand->swatch_value_url }}" class="lazy" width="396"
+                            height="396" alt="{{ $brand->label }}">
+                        <h3>{{ $brand->label }}</h3>
+                    </a>
                 </div>
             @endforeach
         </div>
