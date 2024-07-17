@@ -138,8 +138,8 @@
             @foreach ($brands as $brand)
                 <div class="top-collection-card">
                     <a href="/{{ $brand->admin_name . '?' . 'brand=' . $brand->id }}">
-                        <img src="" data-src="{{ $brand->swatch_value_url }}" class="lazy" width="396"
-                            height="396" alt="{{ $brand->label }}">
+                        <img src="" data-src="{{ url('cache/original/' . $brand->swatch_value) }}" class="lazy"
+                            width="396" height="396" alt="{{ $brand->label }}">
                         <h3>{{ $brand->label }}</h3>
                     </a>
                 </div>
