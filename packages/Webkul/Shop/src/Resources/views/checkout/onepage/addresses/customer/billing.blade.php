@@ -16,7 +16,7 @@
             {!! view_render_event('bagisto.shop.checkout.onepage.addresses.customer.billing.form.before') !!}
 
             <x-shop::form v-slot="{ meta, errors, values, handleSubmit }" as="div" ref="customerBillingAddressForm">
-                <form @submit="handleFormSubmit('storeCustomerBillingAddressToCart')">
+                <form @submit="handleSubmit($event, storeCustomerBillingAddressToCart)">
                     <div
                         class="grid gap-5 grid-cols-2 max-1060:grid-cols-[1fr] max-lg:grid-cols-2 max-sm:grid-cols-1 max-sm:mt-4">
                         <!-- Billing Address ID -->
@@ -174,7 +174,7 @@
 
             <!-- Billing Address Form -->
             <x-shop::form v-slot="{ meta, errors, values, handleSubmit }" as="div" id="modalForm">
-                <form @submit=handleFormSubmit('updateOrCreateCustomerAddress')>
+                <form @submit="handleSubmit($event, updateOrCreateCustomerAddress)">
                     {!! view_render_event('bagisto.shop.checkout.onepage.addresses.customer.billing.update_or_create.form.before') !!}
 
                     <!-- Address ID -->

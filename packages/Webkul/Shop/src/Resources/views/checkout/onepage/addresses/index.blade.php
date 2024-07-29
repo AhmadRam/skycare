@@ -217,43 +217,6 @@
             },
 
             methods: {
-                handleFormSubmit(name,event) {
-                    // Prevent the default form submission
-                    event.preventDefault();
-
-                    // Get all required fields
-                    const requiredFields = document.querySelectorAll('.required');
-                    let firstEmptyField = null;
-
-                    // Check for empty fields
-                    requiredFields.forEach(field => {
-                        if (!field.value.trim()) {
-                            // Add an error class or style
-                            field.classList.add('error');
-                            if (!firstEmptyField) {
-                                firstEmptyField = field;
-                            }
-                        } else {
-                            field.classList.remove('error');
-                        }
-                    });
-
-                    // Scroll to the first empty required field
-                    if (firstEmptyField) {
-                        firstEmptyField.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'center'
-                        });
-                        firstEmptyField.focus();
-                    } else {
-                        if (name = 'updateOrCreateCustomerAddress') {
-                            this.updateOrCreateCustomerAddress(event);
-                        } else {
-                            this.storeCustomerBillingAddressToCart(event);
-                        }
-                    }
-                },
-
                 init() {
                     this.getCountries();
 
