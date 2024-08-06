@@ -1087,6 +1087,41 @@ return [
             ],
         ],
     ], [
+        'key'    => 'sales.carriers.internal',
+        'name'   => 'internal shipping',
+        'sort'   => 2,
+        'fields' => [
+            [
+                'name'          => 'title',
+                'title'         => 'admin::app.configuration.index.sales.shipping-methods.flat-rate-shipping.title',
+                'type'          => 'text',
+                'depends'       => 'active:1',
+                'validation'    => 'required_if:active,1',
+                'channel_based' => true,
+                'locale_based'  => true,
+            ], [
+                'name'          => 'description',
+                'title'         => 'admin::app.configuration.index.sales.shipping-methods.flat-rate-shipping.description',
+                'type'          => 'textarea',
+                'channel_based' => true,
+                'locale_based'  => true,
+            ], [
+                'name'          => 'default_rate',
+                'title'         => 'admin::app.configuration.index.sales.shipping-methods.flat-rate-shipping.rate',
+                'type'          => 'text',
+                'depends'       => 'active:1',
+                'validation'    => 'required_if:active,1',
+                'channel_based' => true,
+                'locale_based'  => false,
+            ], [
+                'name'          => 'active',
+                'title'         => 'admin::app.configuration.index.sales.shipping-methods.flat-rate-shipping.status',
+                'type'          => 'boolean',
+                'channel_based' => true,
+                'locale_based'  => false,
+            ],
+        ],
+    ], [
         'key'  => 'sales.payment_methods',
         'name' => 'admin::app.configuration.index.sales.payment-methods.page-title',
         'info' => 'admin::app.configuration.index.sales.payment-methods.info',

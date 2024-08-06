@@ -33,16 +33,16 @@ class Shipping
 
         if ($cart->billing_address) {
             if ($cart->billing_address->country == "KW") {
-                // if ($cart->base_grand_total > 3) {
-                //     unset($shippingCarriers['flatrate']);
-                //     // unset($shippingCarriers['internal']);
-                // } else {
-                //     unset($shippingCarriers['free']);
-                // }
-                unset($shippingCarriers['flatrate']);
+                if ($cart->base_grand_total > 3) {
+                    unset($shippingCarriers['flatrate']);
+                    unset($shippingCarriers['internal']);
+                } else {
+                    unset($shippingCarriers['flatrate']);
+                    unset($shippingCarriers['free']);
+                }
             } else {
                 unset($shippingCarriers['free']);
-                // unset($shippingCarriers['internal']);
+                unset($shippingCarriers['internal']);
             }
         }
 

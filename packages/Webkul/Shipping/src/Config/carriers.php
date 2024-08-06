@@ -19,4 +19,13 @@ return [
         'default_rate' => '0',
         'class'        => 'Webkul\Shipping\Carriers\Free',
     ],
+
+    'internal' => [
+        'code'         => 'internal',
+        'title'        => 'Internal Shipping',
+        'description'  => 'Internal Shipping',
+        'active'       => true,
+        'default_rate' => '1',
+        'class'        => 'Webkul\Shipping\Carriers\Internal',
+    ],
 ];
