@@ -62,8 +62,8 @@ class CartRule
          * If cart rules are not available then don't process further.
          */
         if (
-            ! $this->haveCartRules()
-            && ! (float) $cart->base_discount_amount
+            !$this->haveCartRules()
+            && !(float) $cart->base_discount_amount
         ) {
             return;
         }
@@ -93,7 +93,7 @@ class CartRule
 
         $this->processFreeShippingDiscount();
 
-        if (! $this->checkCouponCode()) {
+        if (!$this->checkCouponCode()) {
             cart()->removeCouponCode();
         }
     }
@@ -128,7 +128,7 @@ class CartRule
     public function canProcessRule($rule): bool
     {
         if ($rule->coupon_type) {
-            if (! strlen($this->cart->coupon_code)) {
+            if (!strlen($this->cart->coupon_code)) {
                 return false;
             }
 
@@ -198,11 +198,11 @@ class CartRule
         $appliedRuleIds = [];
 
         foreach ($rules = $this->getCartRules() as $rule) {
-            if (! $this->canProcessRule($rule)) {
+            if (!$this->canProcessRule($rule)) {
                 continue;
             }
 
-            if (! $this->validator->validate($rule, $item)) {
+            if (!$this->validator->validate($rule, $item)) {
                 continue;
             }
 
@@ -223,7 +223,7 @@ class CartRule
                     $baseDiscountAmount = ($quantity * $item->base_price + $item->base_tax_amount - $item->base_discount_amount) * ($rulePercent / 100);
 
                     if (
-                        ! $rule->discount_quantity
+                        !$rule->discount_quantity
                         || $rule->discount_quantity > $quantity
                     ) {
                         $discountPercent = min(100, $item->discount_percent + $rulePercent);
@@ -259,7 +259,7 @@ class CartRule
 
                 case 'buy_x_get_y':
                     if (
-                        ! $rule->discount_step
+                        !$rule->discount_step
                         || $rule->discount_amount > $rule->discount_step
                     ) {
                         break;
@@ -314,7 +314,7 @@ class CartRule
      */
     public function processShippingDiscount()
     {
-        if (! $selectedShipping = $this->cart->selected_shipping_rate) {
+        if (!$selectedShipping = $this->cart->selected_shipping_rate) {
             return;
         }
 
@@ -324,17 +324,17 @@ class CartRule
         $appliedRuleIds = [];
 
         foreach ($this->getCartRules() as $rule) {
-            if (! $this->canProcessRule($rule)) {
+            if (!$this->canProcessRule($rule)) {
                 continue;
             }
 
-            if (! $this->validator->validate($rule, $this->cart)) {
+            if (!$this->validator->validate($rule, $this->cart)) {
                 continue;
             }
 
             if (
-                ! $rule
-                || ! $rule->apply_to_shipping
+                !$rule
+                || !$rule->apply_to_shipping
             ) {
                 continue;
             }
@@ -397,7 +397,7 @@ class CartRule
      */
     public function processFreeShippingDiscount()
     {
-        if (! $selectedShipping = $this->cart->selected_shipping_rate) {
+        if (!$selectedShipping = $this->cart->selected_shipping_rate) {
             return;
         }
 
@@ -409,18 +409,18 @@ class CartRule
 
         foreach ($this->cart->items->all() as $item) {
             foreach ($this->getCartRules() as $rule) {
-                if (! $this->canProcessRule($rule)) {
+                if (!$this->canProcessRule($rule)) {
                     continue;
                 }
 
                 /* given CartItem instance to the validator */
-                if (! $this->validator->validate($rule, $item)) {
+                if (!$this->validator->validate($rule, $item)) {
                     continue;
                 }
 
                 if (
-                    ! $rule
-                    || ! $rule->free_shipping
+                    !$rule
+                    || !$rule->free_shipping
                 ) {
                     continue;
                 }
@@ -467,11 +467,11 @@ class CartRule
             $totalPrice = $totalBasePrice = $validCount = 0;
 
             foreach ($this->cart->items as $item) {
-                if (! $this->canProcessRule($rule)) {
+                if (!$this->canProcessRule($rule)) {
                     continue;
                 }
 
-                if (! $this->validator->validate($rule, $item)) {
+                if (!$this->validator->validate($rule, $item)) {
                     continue;
                 }
 
@@ -494,8 +494,12 @@ class CartRule
      */
     public function checkCouponCode(): bool
     {
-        if (! $this->cart->coupon_code) {
+        if (!$this->cart->coupon_code) {
             return true;
+        }
+
+        if ($this->cart->base_grand_total <= 5) {
+            return false;
         }
 
         $coupons = $this->cartRuleCouponRepository->where(['code' => $this->cart->coupon_code])->get();
@@ -521,7 +525,7 @@ class CartRule
             $ratio = $item->base_total != 0 ? $child->base_total / $item->base_total : 0;
 
             foreach (['discount_amount', 'base_discount_amount'] as $column) {
-                if (! $item->{$column}) {
+                if (!$item->{$column}) {
                     continue;
                 }
 
@@ -540,8 +544,12 @@ class CartRule
         $customerGroup = $this->customerRepository->getCurrentGroup();
 
         return $this->cartRuleRepository
-            ->leftJoin('cart_rule_customer_groups', 'cart_rules.id', '=',
-                'cart_rule_customer_groups.cart_rule_id')
+            ->leftJoin(
+                'cart_rule_customer_groups',
+                'cart_rules.id',
+                '=',
+                'cart_rule_customer_groups.cart_rule_id'
+            )
             ->leftJoin('cart_rule_channels', 'cart_rules.id', '=', 'cart_rule_channels.cart_rule_id')
             ->where('cart_rule_customer_groups.customer_group_id', $customerGroup->id)
             ->where('cart_rule_channels.channel_id', core()->getCurrentChannel()->id)
