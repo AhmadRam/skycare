@@ -35,7 +35,7 @@
                 </x-shop::form.control-group.label>
 
                 <x-shop::form.control-group.control type="text" name="shipping.first_name" ::value="guest.cart.shippingAddress.firstName"
-                    rules="required" :label="trans('shop::app.checkout.onepage.addresses.shipping.first-name')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.first-name')" />
+                    :label="trans('shop::app.checkout.onepage.addresses.shipping.first-name')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.first-name')" />
 
                 <x-shop::form.control-group.error control-name="shipping.first_name" />
             </x-shop::form.control-group>
@@ -49,7 +49,7 @@
                 </x-shop::form.control-group.label>
 
                 <x-shop::form.control-group.control type="text" name="shipping.last_name" ::value="guest.cart.shippingAddress.lastName"
-                    rules="required" :label="trans('shop::app.checkout.onepage.addresses.shipping.last-name')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.last-name')" />
+                    :label="trans('shop::app.checkout.onepage.addresses.shipping.last-name')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.last-name')" />
 
                 <x-shop::form.control-group.error control-name="shipping.last_name" />
             </x-shop::form.control-group>
@@ -64,7 +64,8 @@
             </x-shop::form.control-group.label>
 
             <x-shop::form.control-group.control type="email" name="shipping.email" ::value="guest.cart.shippingAddress.email"
-                rules="required|email" :label="trans('shop::app.checkout.onepage.addresses.shipping.email')" placeholder="email@example.com" />
+                {{-- rules="required|email"  --}}
+                :label="trans('shop::app.checkout.onepage.addresses.shipping.email')" placeholder="email@example.com" />
 
             <x-shop::form.control-group.error control-name="shipping.email" />
         </x-shop::form.control-group>
@@ -134,7 +135,7 @@
                 </x-shop::form.control-group.label>
 
                 <template v-if="haveCities(values.shipping?.state)">
-                    <x-shop::form.control-group.control type="select" name="shipping.city" rules="required"
+                    <x-shop::form.control-group.control type="select" name="shipping.city"
                         :label="trans('shop::app.checkout.onepage.addresses.shipping.city')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.city')">
                         <option value="">
                             @lang('shop::app.checkout.onepage.addresses.shipping.select-city')
@@ -148,14 +149,14 @@
 
                 <template v-else>
                     <x-shop::form.control-group.control type="text" name="shipping.city" ::value="guest.cart.shippingAddress.city"
-                        rules="required" :label="trans('shop::app.checkout.onepage.addresses.shipping.city')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.city')" />
+                        :label="trans('shop::app.checkout.onepage.addresses.shipping.city')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.city')" />
                 </template>
 
                 {{-- <x-shop::form.control-group.control
                     type="text"
                     name="shipping.city"
                     ::value="guest.cart.shippingAddress.city"
-                    rules="required"
+
                     :label="trans('shop::app.checkout.onepage.addresses.shipping.city')"
                     :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.city')"
                 /> --}}
@@ -191,7 +192,7 @@
 
                 <x-shop::form.control-group.control type="text" name="shipping.address1[0]" ::value="guest.cart.shippingAddress.address1 && guest.cart.shippingAddress.address1.length > 0 ? guest.cart
                     .shippingAddress.address1[0] : ''"
-                    rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.shipping.block-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.block-address')" />
+                     :label="trans('shop::app.checkout.onepage.addresses.shipping.block-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.block-address')" />
 
                 <x-shop::form.control-group.error class="mb-2" control-name="shipping.address1[0]" />
 
@@ -213,7 +214,7 @@
 
                 <x-shop::form.control-group.control type="text" name="shipping.address1[1]" ::value="guest.cart.shippingAddress.address1 && guest.cart.shippingAddress.address1.length > 1 ? guest.cart
                     .shippingAddress.address1[1] : ''"
-                    rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.shipping.street-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.street-address')" />
+                     :label="trans('shop::app.checkout.onepage.addresses.shipping.street-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.street-address')" />
 
                 <x-shop::form.control-group.error class="mb-2" control-name="shipping.address1[1]" />
             </x-shop::form.control-group>
@@ -230,7 +231,7 @@
 
                 <x-shop::form.control-group.control type="text" name="shipping.address1[2]" ::value="guest.cart.shippingAddress.address1 && guest.cart.shippingAddress.address1.length > 2 ? guest.cart
                     .shippingAddress.address1[2] : ''"
-                    rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.shipping.house-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.house-address')" />
+                     :label="trans('shop::app.checkout.onepage.addresses.shipping.house-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.house-address')" />
 
                 <x-shop::form.control-group.error class="mb-2" control-name="shipping.address1[2]" />
             </x-shop::form.control-group>
@@ -293,7 +294,7 @@
 
             <x-shop::form.control-group.control type="text" name="shipping.address1[0]" ::value="guest.cart.shippingAddress.address1 && guest.cart.shippingAddress.address1.length > 0 ? guest.cart
                 .shippingAddress.address1[0] : ''"
-                rules="required|address" :label="trans('shop::app.checkout.onepage.addresses.shipping.street-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.street-address')" />
+                 :label="trans('shop::app.checkout.onepage.addresses.shipping.street-address')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.street-address')" />
 
             <x-shop::form.control-group.error class="mb-2" control-name="shipping.address1[0]" />
 
@@ -327,7 +328,7 @@
             </x-shop::form.control-group.label>
 
             <x-shop::form.control-group.control type="text" name="shipping.phone" ::value="guest.cart.shippingAddress.phone"
-                rules="required|numeric" :label="trans('shop::app.checkout.onepage.addresses.shipping.telephone')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.telephone')" />
+                :label="trans('shop::app.checkout.onepage.addresses.shipping.telephone')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.telephone')" />
 
             <x-shop::form.control-group.error control-name="shipping.phone" />
         </x-shop::form.control-group>

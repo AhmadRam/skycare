@@ -534,7 +534,20 @@
 
                             this.isLoading = false;
                         })
-                        .catch(() => {
+                        .catch((response) => {
+                            this.$emitter.emit('add-flash', {
+                                type: 'error',
+                                message: response.response.data.message
+                            });
+
+                            let container = document.getElementById('scrollBottom');
+
+                            if (container) {
+                                container.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'start'
+                                });
+                            }
                             this.isLoading = false;
                         });
                 },
@@ -636,7 +649,20 @@
 
                                     this.isLoading = false;
                                 })
-                                .catch(() => {
+                                .catch((response) => {
+                                    this.$emitter.emit('add-flash', {
+                                        type: 'error',
+                                        message: response.response.data.message
+                                    });
+
+                                    let container = document.getElementById('scrollBottom');
+
+                                    if (container) {
+                                        container.scrollIntoView({
+                                            behavior: 'smooth',
+                                            block: 'start'
+                                        });
+                                    }
                                     this.isLoading = false;
                                 });
                         }
@@ -686,7 +712,21 @@
 
                             this.isLoading = false;
                         })
-                        .catch(() => {
+                        .catch((response) => {
+
+                            this.$emitter.emit('add-flash', {
+                                type: 'error',
+                                message: response.response.data.message
+                            });
+
+                            let container = document.getElementById('scrollBottom');
+
+                            if (container) {
+                                container.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'start'
+                                });
+                            }
                             this.isLoading = false;
                         });
                 },
