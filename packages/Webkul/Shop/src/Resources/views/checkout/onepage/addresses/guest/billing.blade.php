@@ -81,7 +81,8 @@
                 </x-shop::form.control-group.label>
 
                 <x-shop::form.control-group.control type="select" name="billing.country" ::value="guest.cart.billingAddress.country"
-                    rules="{{ core()->isCountryRequired() ? 'required' : '' }}" :label="trans('shop::app.checkout.onepage.addresses.billing.country')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.country')">
+                    {{-- rules="{{ core()->isCountryRequired() ? 'required' : '' }}" --}}
+                     :label="trans('shop::app.checkout.onepage.addresses.billing.country')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.country')">
                     <option value="">
                         @lang('shop::app.checkout.onepage.addresses.billing.select-country')
                     </option>
@@ -103,7 +104,8 @@
 
                 <template v-if="haveStates(values.billing?.country)">
                     <x-shop::form.control-group.control type="select" name="billing.state"
-                        rules="{{ core()->isStateRequired() ? 'required' : '' }}" :label="trans('shop::app.checkout.onepage.addresses.billing.state')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.state')">
+                        {{-- rules="{{ core()->isStateRequired() ? 'required' : '' }}" --}}
+                         :label="trans('shop::app.checkout.onepage.addresses.billing.state')" :placeholder="trans('shop::app.checkout.onepage.addresses.billing.state')">
                         <option value="">
                             @lang('shop::app.checkout.onepage.addresses.billing.select-state')
                         </option>
@@ -116,7 +118,8 @@
 
                 <template v-else>
                     <x-shop::form.control-group.control type="text" name="billing.state" ::value="guest.cart.billingAddress.state"
-                        rules="{{ core()->isStateRequired() ? 'required' : '' }}" :label="trans('shop::app.checkout.onepage.addresses.billing.state')"
+                        {{-- rules="{{ core()->isStateRequired() ? 'required' : '' }}" --}}
+                         :label="trans('shop::app.checkout.onepage.addresses.billing.state')"
                         :placeholder="trans('shop::app.checkout.onepage.addresses.billing.state')" />
                 </template>
 
@@ -173,7 +176,8 @@
                 </x-shop::form.control-group.label>
 
                 <x-shop::form.control-group.control type="text" name="billing.postcode" ::value="guest.cart.billingAddress.postcode"
-                    rules="{{ core()->isPostCodeRequired() ? 'required' : '' }}" :label="trans('shop::app.checkout.onepage.addresses.billing.postcode')"
+                    {{-- rules="{{ core()->isPostCodeRequired() ? 'required' : '' }}" --}}
+                     :label="trans('shop::app.checkout.onepage.addresses.billing.postcode')"
                     :placeholder="trans('shop::app.checkout.onepage.addresses.billing.postcode')" />
 
                 <x-shop::form.control-group.error control-name="billing.postcode" />

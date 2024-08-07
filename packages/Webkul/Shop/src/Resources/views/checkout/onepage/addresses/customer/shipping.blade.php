@@ -268,7 +268,8 @@
                                 </x-shop::form.control-group.label>
 
                                 <x-shop::form.control-group.control type="select" name="shipping.country"
-                                    ::value="customer.updateOrCreateShippingAddress.params?.country" rules="{{ core()->isCountryRequired() ? 'required' : '' }}"
+                                    ::value="customer.updateOrCreateShippingAddress.params?.country"
+                                    {{-- rules="{{ core()->isCountryRequired() ? 'required' : '' }}" --}}
                                     :label="trans('shop::app.checkout.onepage.addresses.shipping.country')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.country')">
                                     <option value="">
                                         @lang('shop::app.checkout.onepage.addresses.shipping.select-country')
@@ -294,7 +295,8 @@
 
                                 <template v-if="haveStates(values.shipping?.country)">
                                     <x-shop::form.control-group.control type="select" name="shipping.state"
-                                        rules="{{ core()->isStateRequired() ? 'required' : '' }}" :label="trans('shop::app.checkout.onepage.addresses.shipping.state')"
+                                        {{-- rules="{{ core()->isStateRequired() ? 'required' : '' }}" --}}
+                                         :label="trans('shop::app.checkout.onepage.addresses.shipping.state')"
                                         :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.state')">
                                         <option value="">
                                             @lang('shop::app.checkout.onepage.addresses.shipping.select-state')
@@ -309,7 +311,8 @@
 
                                 <template v-else>
                                     <x-shop::form.control-group.control type="text" name="shipping.state"
-                                        ::value="customer.updateOrCreateShippingAddress.params?.state" rules="{{ core()->isStateRequired() ? 'required' : '' }}"
+                                        ::value="customer.updateOrCreateShippingAddress.params?.state"
+                                        {{-- rules="{{ core()->isStateRequired() ? 'required' : '' }}" --}}
                                         :label="trans('shop::app.checkout.onepage.addresses.shipping.state')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.state')" />
                                 </template>
 
@@ -362,7 +365,8 @@
                                 </x-shop::form.control-group.label>
 
                                 <x-shop::form.control-group.control type="text" name="shipping.postcode"
-                                    ::value="customer.updateOrCreateShippingAddress.params?.postcode" rules="{{ core()->isPostCodeRequired() ? 'required' : '' }}"
+                                    ::value="customer.updateOrCreateShippingAddress.params?.postcode"
+                                    {{-- rules="{{ core()->isPostCodeRequired() ? 'required' : '' }}" --}}
                                     :label="trans('shop::app.checkout.onepage.addresses.shipping.postcode')" :placeholder="trans('shop::app.checkout.onepage.addresses.shipping.postcode')" />
 
                                 <x-shop::form.control-group.error control-name="shipping.postcode" />
