@@ -498,9 +498,9 @@ class CartRule
             return true;
         }
 
-        if ($this->cart->base_grand_total <= 5) {
-            return false;
-        }
+        // if ($this->cart->base_grand_total <= 5) {
+        //     return false;
+        // }
 
         $coupons = $this->cartRuleCouponRepository->where(['code' => $this->cart->coupon_code])->get();
 
