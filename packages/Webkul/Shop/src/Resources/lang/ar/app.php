@@ -538,6 +538,7 @@ return [
             'buy-now'                => 'اشتر الآن',
             'compare'                => 'مقارنة',
             'description'            => 'الوصف',
+            'how_to_use'             => 'طريقة الإستخدام',
             'related-product-title'  => 'منتجات ذات صلة',
             'review'                 => 'المراجعات',
             'tax-inclusive'          => 'شامل للضرائب',

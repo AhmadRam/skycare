@@ -86,6 +86,23 @@
 
             {!! view_render_event('bagisto.shop.products.view.description.after', ['product' => $product]) !!}
 
+            <!-- How To Use Tab -->
+            {!! view_render_event('bagisto.shop.products.view.how_to_use.before', ['product' => $product]) !!}
+
+            <x-shop::tabs.item
+                class="container mt-[60px] !p-0 max-1180:hidden"
+                :title="trans('shop::app.products.view.how_to_use')"
+                :is-selected="false"
+            >
+                <div class="container mt-[60px] max-1180:px-5">
+                    <p class="text-[#6E6E6E] text-lg max-1180:text-sm">
+                        {!! $product->how_to_use !!}
+                    </p>
+                </div>
+            </x-shop::tabs.item>
+
+            {!! view_render_event('bagisto.shop.products.view.how_to_use.after', ['product' => $product]) !!}
+
 
             <!-- Additional Information Tab -->
             <x-shop::tabs.item
@@ -120,12 +137,12 @@
                                     href="{{ Storage::url($product[$customAttributeValue['code']]) }}"
                                     download="{{ $customAttributeValue['label'] }}"
                                 >
-                                    <img 
+                                    <img
                                         class="h-5 w-5 min-h-5 min-w-5"
                                         src="{{ Storage::url($customAttributeValue['value']) }}"
                                     />
                                 </a>
-                            @else 
+                            @else
                                 <div class="grid">
                                     <p class="text-base text-[#7D7D7D]">
                                         {!! $customAttributeValue['value'] ? $customAttributeValue['value'] : '-' !!}
@@ -195,7 +212,7 @@
                                         {{ $customAttributeValue['label'] }}
                                     </p>
                                 </a>
-                            @else 
+                            @else
                                 <div class="grid">
                                     <p class="text-base text-[#6E6E6E]">
                                         {{ $customAttributeValue['value'] ?? '-' }}
@@ -246,9 +263,9 @@
                     ref="formData"
                     @submit="handleSubmit($event, addToCart)"
                 >
-                    <input 
-                        type="hidden" 
-                        name="product_id" 
+                    <input
+                        type="hidden"
+                        name="product_id"
                         value="{{ $product->id }}"
                     >
 
@@ -257,10 +274,10 @@
                         name="is_buy_now"
                         v-model="is_buy_now"
                     >
-                    
-                    <input 
-                        type="hidden" 
-                        name="quantity" 
+
+                    <input
+                        type="hidden"
+                        name="quantity"
                         :value="qty"
                     >
 
@@ -297,7 +314,7 @@
                                 {!! view_render_event('bagisto.shop.products.rating.before', ['product' => $product]) !!}
 
                                 <div class="flex gap-4 items-center mt-4">
-                                    <x-shop::products.star-rating 
+                                    <x-shop::products.star-rating
                                         :value="$avgRatings"
                                         :is-editable=false
                                     />
@@ -319,7 +336,7 @@
 
                                     <span class="text-lg text-[#6E6E6E]">
                                         @if (
-                                            (bool) core()->getConfigData('taxes.catalogue.pricing.tax_inclusive') 
+                                            (bool) core()->getConfigData('taxes.catalogue.pricing.tax_inclusive')
                                             && $product->getTypeInstance()->getTaxCategory()
                                         )
                                             @lang('shop::app.products.view.tax-inclusive')

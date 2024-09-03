@@ -538,6 +538,7 @@ return [
             'buy-now'                => 'Buy Now',
             'compare'                => 'Compare',
             'description'            => 'Description',
+            'how_to_use'             => 'How To Use',
             'related-product-title'  => 'Related Products',
             'review'                 => 'Reviews',
             'tax-inclusive'          => 'Inclusive of all taxes',
