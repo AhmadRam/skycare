@@ -217,7 +217,7 @@ class ProductRepository extends Repository
         ], request()->input());
 
         if (!empty($params['query'])) {
-            $params['name'] = $params['query'];
+            // $params['name'] = $params['query'];
 
             $synonyms = $this->searchSynonymRepository->getSynonymsByQuery(urldecode($params['query']));
             foreach ($synonyms as $synonym) {
@@ -228,9 +228,9 @@ class ProductRepository extends Repository
                 }
                 $params['brand'] = implode(',', $brands ?? []);
             }
-            // if (!isset($brands)) {
-            //     $params['name'] = $params['query'];
-            // }
+            if (!isset($brands)) {
+                $params['name'] = $params['query'];
+            }
         }
 
         $query = $this->with([
@@ -303,7 +303,7 @@ class ProductRepository extends Repository
                 if ($attribute->code == 'name') {
                     $synonyms = $this->searchSynonymRepository->getSynonymsByQuery(urldecode($params['name']));
 
-                    $qb->orWhere(function ($subQuery) use ($alias, $synonyms) {
+                    $qb->where(function ($subQuery) use ($alias, $synonyms) {
                         foreach ($synonyms as $synonym) {
                             $subQuery->orWhere($alias . '.text_value', 'like', '%' . $synonym . '%');
                         }
