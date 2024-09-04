@@ -303,7 +303,7 @@ class ProductRepository extends Repository
                 if ($attribute->code == 'name') {
                     $synonyms = $this->searchSynonymRepository->getSynonymsByQuery(urldecode($params['name']));
 
-                    $qb->orWhere(function ($subQuery) use ($alias, $synonyms) {
+                    $qb->where(function ($subQuery) use ($alias, $synonyms) {
                         foreach ($synonyms as $synonym) {
                             $subQuery->orWhere($alias . '.text_value', 'like', '%' . $synonym . '%');
                         }
