@@ -218,6 +218,16 @@ class ProductRepository extends Repository
 
         if (!empty($params['query'])) {
             $params['name'] = $params['query'];
+
+            $synonyms = $this->searchSynonymRepository->getSynonymsByQuery(urldecode($params['query']));
+            foreach ($synonyms as $synonym) {
+                $attr = $this->attributeRepository->findOneByField('code', 'brand');
+                $brand_id = $attr->options()->whereTranslation('label', $synonym)->first()->id ?? null;
+                if ($brand_id) {
+                    $brands[] = $brand_id;
+                }
+                $params['brand'] = implode(',', $brands ?? []);
+            }
         }
 
         $query = $this->with([
@@ -266,6 +276,7 @@ class ProductRepository extends Repository
              * Retrieve all the filterable attributes.
              */
             $filterableAttributes = $this->attributeRepository->getProductDefaultAttributes(array_keys($params));
+            // $filterableAttributes = $this->attributeRepository->getProductDefaultAttributes(["*"]);
 
             /**
              * Filter the required attributes.
@@ -374,7 +385,6 @@ class ProductRepository extends Repository
                     /* `created_at` is not an attribute so it will be in else case */
                     $qb->orderBy('products.created_at', $sortOptions['order']);
                 }
-
             } else {
                 return $qb->inRandomOrder();
             }
