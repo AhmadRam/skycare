@@ -207,11 +207,11 @@
                                 ::name="controlName + '.city'"
                                 ::value="address.city"
                                 rules="required"
-                                :label="trans('admin::app.sales.orders.create.cart.address.city')"
+                                :label="trans('shop::app.sales.orders.create.cart.address.city')"
                                 :placeholder="trans('admin::app.sales.orders.create.cart.address.city')"
                             >
                                 <option value="">
-                                    @lang('admin::app.sales.orders.create.cart.address.select-city')
+                                    @lang('shop::app.checkout.onepage.addresses.billing.select-city')
                                 </option>
 
                                 <option
