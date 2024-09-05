@@ -215,7 +215,7 @@
                                 </option>
 
                                 <option
-                                    v-for='city in citys[selectedCountry]'
+                                    v-for='city in citys[selectedState]'
                                     :value="city.code"
                                 >
                                     @{{ city.default_name }}
