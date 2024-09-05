@@ -6,6 +6,7 @@ use Webkul\Admin\Http\Controllers\Sales\OrderController;
 use Webkul\Admin\Http\Controllers\Sales\RefundController;
 use Webkul\Admin\Http\Controllers\Sales\ShipmentController;
 use Webkul\Admin\Http\Controllers\Sales\TransactionController;
+use Webkul\Admin\Http\Controllers\Sales\CartController;
 
 /**
  * Sales routes.
@@ -32,6 +33,10 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
          */
         Route::controller(OrderController::class)->prefix('orders')->group(function () {
             Route::get('', 'index')->name('admin.sales.orders.index');
+
+            Route::get('create/{cartId}', 'create')->name('admin.sales.orders.create');
+
+            Route::post('create/{cartId}', 'store')->name('admin.sales.orders.store');
 
             Route::get('abandoned-orders', 'abandonedOrders')->name('admin.sales.abandoned-orders.index');
 
@@ -77,6 +82,28 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
             Route::post('create', 'store')->name('admin.sales.transactions.store');
 
             Route::get('view/{id}', 'view')->name('admin.sales.transactions.view');
+        });
+
+        Route::controller(CartController::class)->prefix('cart')->group(function () {
+            Route::get('{id}', 'index')->name('admin.sales.cart.index');
+
+            Route::post('create', 'store')->name('admin.sales.cart.store');
+
+            Route::post('{id}/items', 'storeItem')->name('admin.sales.cart.items.store');
+
+            Route::put('{id}/items', 'updateItem')->name('admin.sales.cart.items.update');
+
+            Route::delete('{id}/items', 'destroyItem')->name('admin.sales.cart.items.destroy');
+
+            Route::post('{id}/addresses', 'storeAddress')->name('admin.sales.cart.addresses.store');
+
+            Route::post('{id}/shipping-methods', 'storeShippingMethod')->name('admin.sales.cart.shipping_methods.store');
+
+            Route::post('{id}/payment-methods', 'storePaymentMethod')->name('admin.sales.cart.payment_methods.store');
+
+            Route::post('{id}/coupon', 'storeCoupon')->name('admin.sales.cart.store_coupon');
+
+            Route::delete('{id}/coupon', 'destroyCoupon')->name('admin.sales.cart.remove_coupon');
         });
     });
 });

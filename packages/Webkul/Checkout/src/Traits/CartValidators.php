@@ -87,4 +87,35 @@ trait CartValidators
 
         return $cart->checkMinimumOrder();
     }
+
+
+    /**
+     * Check minimum Order Amount of cart.
+     */
+    public function getOrderAmount(): int
+    {
+        $minimumOrderAmount = $this->cart->sub_total;
+
+        if (core()->getConfigData('sales.order_settings.minimum_order.include_tax_to_amount')) {
+            $minimumOrderAmount += $this->cart->tax_total;
+        }
+
+        if (core()->getConfigData('sales.order_settings.minimum_order.include_discount_amount')) {
+            $minimumOrderAmount -= $this->cart->tax_total;
+        }
+
+        return $minimumOrderAmount;
+    }
+
+    /**
+     * Check minimum order.
+     */
+    public function haveMinimumOrderAmount(): bool
+    {
+        if (! core()->getConfigData('sales.order_settings.minimum_order.enable')) {
+            return true;
+        }
+
+        return $this->getOrderAmount() >= ((int) core()->getConfigData('sales.order_settings.minimum_order.minimum_order_amount') ?: 0);
+    }
 }

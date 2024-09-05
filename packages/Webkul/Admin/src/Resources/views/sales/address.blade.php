@@ -49,22 +49,3 @@
         {{ __('admin::app.sales.orders.view.contact') }} : {{ $address->phone }}
     </p>
 </div>
-
-
-
-<?php $address1 = explode(PHP_EOL, $address->address1); ?>
-<p>{{ $address->company_name ?? '' }}</p>
-{{-- <p>{{ $address->name }}</p> --}}
-<p>{{ core()->country_name($address->country) }}</p>
-<p>{{ $address->state }}</p>
-<p>{{ $address->postcode }} {{ $address->city }}</p>
-<p>{{ trans('admin::app.customers.addresses.block') }} : {{ $address1[0] ?? null }}</p>
-<p>{{ trans('admin::app.customers.addresses.street') }} : {{ $address1[1] ?? null }}</p>
-<p>{{ trans('admin::app.customers.addresses.house') }} :
-    {{ (isset($address1[2]) ? 'House No:' . $address1[2] : '') . (isset($address1[3]) ? ' / Floor: ' . $address1[3] : '') . (isset($address1[4]) ? ' / Flat: ' . $address1[4] : '') }}
-</p>
-<p>{{ trans('admin::app.customers.addresses.avenue') }} : {{ $address1[5] ?? null }}</p>
-<p>{{ trans('admin::app.customers.addresses.note') }} : {{ $address->note }}</p>
-<p><i class="fas fa-phone-square-alt"></i> <a
-        href="tel:{{ $address->phone_code }}{{ $address->phone }}">{{ $address->phone_code }}{{ $address->phone }}</a>
-</p>

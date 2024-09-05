@@ -5,6 +5,7 @@ namespace Webkul\Admin\Http\Controllers\Customers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Event;
 use Webkul\Admin\Http\Controllers\Controller;
+use Webkul\Admin\Http\Resources\AddressResource;
 use Webkul\Core\Rules\AlphaNumericSpace;
 use Webkul\Core\Rules\PhoneNumber;
 use Webkul\Customer\Repositories\CustomerAddressRepository;
@@ -21,8 +22,7 @@ class AddressController extends Controller
     public function __construct(
         protected CustomerRepository $customerRepository,
         protected CustomerAddressRepository $customerAddressRepository
-    ) {
-    }
+    ) {}
 
     /**
      * Fetch address by customer id.
@@ -51,7 +51,7 @@ class AddressController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(): JsonResponse
+    public function store(int $id): JsonResponse
     {
         $this->validate(request(), [
             'company_name' => [new AlphaNumericSpace],
@@ -76,6 +76,8 @@ class AddressController extends Controller
             'state',
             'postcode',
             'phone',
+            'note',
+            'email',
             'default_address',
         ]), [
             'address1' => implode(PHP_EOL, array_filter(request()->input('address1'))),
@@ -84,12 +86,15 @@ class AddressController extends Controller
 
         Event::dispatch('customer.addresses.create.before');
 
-        $customerAddress = $this->customerAddressRepository->create($data);
+        $customerAddress = $this->customerAddressRepository->create(array_merge($data, [
+            'customer_id' => $id,
+        ]));
 
         Event::dispatch('customer.addresses.create.after', $customerAddress);
 
         return new JsonResponse([
             'message' => trans('admin::app.customers.addresses.create-success'),
+            'data'    => new AddressResource($customerAddress),
         ]);
     }
 
@@ -133,6 +138,8 @@ class AddressController extends Controller
             'state',
             'postcode',
             'phone',
+            'note',
+            'email',
             'default_address',
         ]), [
             'address1' => implode(PHP_EOL, array_filter(request()->input('address1'))),
@@ -147,6 +154,7 @@ class AddressController extends Controller
 
         return new JsonResponse([
             'message' => trans('admin::app.customers.addresses.update-success'),
+            'data'    => new AddressResource($customerAddress),
         ]);
     }
 

@@ -63,6 +63,14 @@ abstract class AbstractType
      */
     protected $canBeMovedFromWishlistToCart = true;
 
+
+    /**
+     * Product can be added to cart with options or not.
+     *
+     * @var bool
+     */
+    protected $canBeAddedToCartWithoutOptions = true;
+
     /**
      * Products of this type can be copied in the admin backend.
      *
@@ -577,6 +585,16 @@ abstract class AbstractType
     }
 
     /**
+     * Return true if product can be added to cart without options.
+     *
+     * @return bool
+     */
+    public function canBeAddedToCartWithoutOptions()
+    {
+        return $this->canBeAddedToCartWithoutOptions;
+    }
+
+    /**
      * Retrieve product attributes.
      *
      * @param  \Webkul\Attribute\Contracts\Group  $group
@@ -979,6 +997,8 @@ abstract class AbstractType
             return $result;
         }
 
+        return $result;
+        ////////////////////////////////////////////////////////
         $price = round($this->getFinalPrice($item->quantity), 4);
 
         if ($price == $item->base_price) {

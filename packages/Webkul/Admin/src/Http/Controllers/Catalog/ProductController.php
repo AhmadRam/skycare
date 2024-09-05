@@ -23,6 +23,7 @@ use Webkul\Product\Repositories\ProductInventoryRepository;
 use Webkul\Product\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Webkul\Admin\Http\Resources\ProductResource;
 use Webkul\Product\Models\ProductImage;
 
 class ProductController extends Controller
@@ -338,21 +339,23 @@ class ProductController extends Controller
 
         $products = $this->productRepository->searchFromDatabase();
 
-        foreach ($products as $product) {
-            $results[] = [
-                'id'              => $product->id,
-                'sku'             => $product->sku,
-                'name'            => $product->name,
-                'price'           => $product->price,
-                'formatted_price' => core()->formatBasePrice($product->price),
-                'images'          => $product->images,
-                'inventories'     => $product->inventories,
-            ];
-        }
+        return ProductResource::collection($products);
 
-        $products->setCollection(collect($results));
+        // foreach ($products as $product) {
+        //     $results[] = [
+        //         'id'              => $product->id,
+        //         'sku'             => $product->sku,
+        //         'name'            => $product->name,
+        //         'price'           => $product->price,
+        //         'formatted_price' => core()->formatBasePrice($product->price),
+        //         'images'          => $product->images,
+        //         'inventories'     => $product->inventories,
+        //     ];
+        // }
 
-        return response()->json($products);
+        // $products->setCollection(collect($results));
+
+        // return response()->json($products);
     }
 
     /**

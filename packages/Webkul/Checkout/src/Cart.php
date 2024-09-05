@@ -257,33 +257,28 @@ class Cart
      */
     public function create($data)
     {
-        $cartData = [
+        $data = array_merge([
+            'is_guest'              => 1,
             'channel_id'            => core()->getCurrentChannel()->id,
             'global_currency_code'  => $baseCurrencyCode = core()->getBaseCurrencyCode(),
             'base_currency_code'    => $baseCurrencyCode,
             'channel_currency_code' => core()->getChannelBaseCurrencyCode(),
             'cart_currency_code'    => core()->getCurrentCurrencyCode(),
-            'items_count'           => 1,
-        ];
+        ], $data);
 
-        /**
-         * Fill in the customer data, as far as possible.
-         */
-        if (auth()->guard()->check()) {
-            $customer = auth()->guard()->user();
+        $customer = $data['customer'] ?? auth()->guard()->user();
 
-            $cartData = array_merge($cartData, [
-                'customer_id'         => $customer->id,
+        if ($customer) {
+            $data = array_merge($data, [
                 'is_guest'            => 0,
+                'customer_id'         => $customer->id,
                 'customer_first_name' => $customer->first_name,
                 'customer_last_name'  => $customer->last_name,
                 'customer_email'      => $customer->email,
             ]);
-        } else {
-            $cartData['is_guest'] = 1;
         }
 
-        $cart = $this->cartRepository->create($cartData);
+        $cart = $this->cartRepository->create($data);
 
         if (!$cart) {
             session()->flash('error', __('shop::app.checkout.cart.create-error'));
@@ -306,45 +301,89 @@ class Cart
      */
     public function updateItems($data)
     {
-        foreach ($data['qty'] as $itemId => $quantity) {
-            $item = $this->cartItemRepository->find($itemId);
+        if (isset($data['qty'])) {
 
-            if (!$item) {
-                continue;
+            foreach ($data['qty'] as $itemId => $quantity) {
+                $item = $this->cartItemRepository->find($itemId);
+
+                if (isset($data['price'])) {
+                    $data['price'][$itemId] = $item->price;
+                }
+
+                if (!$item) {
+                    continue;
+                }
+
+                if (!$item->product->status) {
+                    throw new \Exception(__('shop::app.checkout.cart.item.inactive'));
+                }
+
+                if ($quantity <= 0) {
+                    $this->removeItem($itemId);
+
+                    throw new \Exception(__('shop::app.checkout.cart.illegal'));
+                }
+
+                $item->quantity = $quantity;
+
+                if (!$this->isItemHaveQuantity($item)) {
+                    throw new \Exception(__('shop::app.checkout.cart.inventory-warning'));
+                }
+
+                Event::dispatch('checkout.cart.update.before', $item);
+
+                $this->cartItemRepository->update([
+                    'quantity'          => $quantity,
+                    'total'             => core()->convertPrice($item->price * $quantity),
+                    'base_total'        => $item->price * $quantity,
+                    'total_weight'      => $item->weight * $quantity,
+                    'base_total_weight' => $item->weight * $quantity,
+                ], $itemId);
+
+                Event::dispatch('checkout.cart.update.after', $item);
             }
 
-            if (!$item->product->status) {
-                throw new \Exception(__('shop::app.checkout.cart.item.inactive'));
+        }
+
+        if (isset($data['price'])) {
+            foreach ($data['price'] as $itemId => $price) {
+                $item = $this->cartItemRepository->find($itemId);
+
+                if (!$item) {
+                    continue;
+                }
+
+                if (!$item->product->status) {
+                    throw new \Exception(__('shop::app.checkout.cart.item.inactive'));
+                }
+
+                $item = $this->cartItemRepository->update([
+                    "price" => $price,
+                    "base_price" => $price,
+                    "total" => $price * $item->quantity,
+                    "base_total" => $price * $item->quantity,
+                ], $itemId);
             }
 
-            if ($quantity <= 0) {
-                $this->removeItem($itemId);
-
-                throw new \Exception(__('shop::app.checkout.cart.illegal'));
-            }
-
-            $item->quantity = $quantity;
-
-            if (!$this->isItemHaveQuantity($item)) {
-                throw new \Exception(__('shop::app.checkout.cart.inventory-warning'));
-            }
-
-            Event::dispatch('checkout.cart.update.before', $item);
-
-            $this->cartItemRepository->update([
-                'quantity'          => $quantity,
-                'total'             => core()->convertPrice($item->price * $quantity),
-                'base_total'        => $item->price * $quantity,
-                'total_weight'      => $item->weight * $quantity,
-                'base_total_weight' => $item->weight * $quantity,
-            ], $itemId);
-
-            Event::dispatch('checkout.cart.update.after', $item);
         }
 
         $this->collectTotals();
 
         return true;
+    }
+
+    /**
+     * Update or create billing address.
+     */
+    public function saveAddresses(array $params): void
+    {
+        $this->updateOrCreateBillingAddress($params['billing']);
+
+        $this->updateOrCreateShippingAddress($params['shipping'] ?? []);
+
+        $this->saveCustomerDetails();
+
+        $this->resetShippingMethod();
     }
 
     /**
@@ -472,6 +511,24 @@ class Cart
         $this->cart->save();
     }
 
+
+    /**
+     * Save shipping method for cart.
+     */
+    public function resetShippingMethod(): bool
+    {
+        if (! $this->cart) {
+            return false;
+        }
+
+        Shipping::removeAllShippingRates();
+
+        $this->cart->shipping_method = null;
+        $this->cart->save();
+
+        return true;
+    }
+
     /**
      * Save shipping method for cart.
      *
@@ -553,6 +610,7 @@ class Cart
         $quantities = 0;
 
         foreach ($cart->items as $item) {
+
             $cart->discount_amount += $item->discount_amount;
             $cart->base_discount_amount += $item->base_discount_amount;
 
