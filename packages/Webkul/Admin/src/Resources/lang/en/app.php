@@ -168,6 +168,7 @@ return [
                     'status'          => 'Status',
                     'success'         => 'Success',
                     'view'            => 'View',
+                    'phone'           => 'Phone',
                 ],
             ],
 
