@@ -568,7 +568,7 @@
                         v-if="! (customer.updateOrCreateBillingAddress.params.id > -1)">
                         <v-field type="checkbox" name="billing.save_address" v-slot="{ field }" value="1">
                             <input type="checkbox" name="billing.save_address" v-bind="field"
-                                id="billing.save_address" class="sr-only peer" />
+                                id="billing.save_address" class="sr-only peer" checked/>
                         </v-field>
 
                         <label

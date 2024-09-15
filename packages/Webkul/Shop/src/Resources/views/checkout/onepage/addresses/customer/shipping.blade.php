@@ -546,7 +546,7 @@
                             v-if="! (customer.updateOrCreateShippingAddress.params.id > -1)">
                             <v-field type="checkbox" name="shipping.save_address" v-slot="{ field }" value="1">
                                 <input type="checkbox" name="shipping.save_address" v-bind="field"
-                                    id="shipping.save_address" class="sr-only peer" />
+                                    id="shipping.save_address" class="sr-only peer" checked />
                             </v-field>
 
                             <label
