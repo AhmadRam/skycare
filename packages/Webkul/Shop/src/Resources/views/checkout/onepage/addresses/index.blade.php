@@ -407,6 +407,10 @@
                                         shipping_address_id: id,
                                     });
                                 }
+
+                                params[addressType]['billing_address_id'] = id;
+                                this.storeCustomerBillingAddressToCart(params[addressType]);
+
                             });
 
                         return;
@@ -431,6 +435,9 @@
                                         shipping_address_id: id,
                                     });
                                 }
+
+                                params[addressType]['billing_address_id'] = id;
+                                this.storeCustomerBillingAddressToCart(params[addressType]);
                             });
 
                         return;
@@ -464,6 +471,9 @@
                             shipping_address_id: 0,
                         });
                     }
+
+                    params[addressType]['billing_address_id'] = 0;
+                    this.storeCustomerBillingAddressToCart(params[addressType]);
                 },
 
                 storeCustomerAddressToCart(params) {

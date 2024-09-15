@@ -150,7 +150,7 @@
                 ) !!}
 
                 <!-- Shipping Address Form -->
-                <x-shop::form v-slot="{ meta, errors, values, handleSubmit }" as="div">
+                <x-shop::form v-slot="{ meta, errors, values, handleSubmit }" as="div" ref="customerShippingAddressForm">
                     <form @submit="handleSubmit($event, updateOrCreateCustomerAddress)">
                         {!! view_render_event('bagisto.shop.checkout.onepage.addresses.customer.shipping.update_or_create.form.before') !!}
 

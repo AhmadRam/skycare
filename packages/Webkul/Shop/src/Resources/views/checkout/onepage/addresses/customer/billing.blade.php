@@ -173,7 +173,7 @@
             ) !!}
 
             <!-- Billing Address Form -->
-            <x-shop::form v-slot="{ meta, errors, values, handleSubmit }" as="div" id="modalForm">
+            <x-shop::form v-slot="{ meta, errors, values, handleSubmit }" as="div" id="modalForm" ref="customerBillingAddressForm">
                 <form @submit="handleSubmit($event, updateOrCreateCustomerAddress)">
                     {!! view_render_event('bagisto.shop.checkout.onepage.addresses.customer.billing.update_or_create.form.before') !!}
 
