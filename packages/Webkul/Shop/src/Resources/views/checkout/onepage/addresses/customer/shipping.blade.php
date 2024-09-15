@@ -542,11 +542,11 @@
                         {!! view_render_event('bagisto.shop.checkout.onepage.addresses.customer.shipping.update_or_create.phone.after') !!}
 
                         <!-- Checkbox For Save Address -->
-                        <div class="flex gap-x-1.5 items-center mt-5 text-sm text-[#6E6E6E] select-none"
+                        {{-- <div class="flex gap-x-1.5 items-center mt-5 text-sm text-[#6E6E6E] select-none"
                             v-if="! (customer.updateOrCreateShippingAddress.params.id > -1)">
                             <v-field type="checkbox" name="shipping.save_address" v-slot="{ field }" value="1">
                                 <input type="checkbox" name="shipping.save_address" v-bind="field"
-                                    id="shipping.save_address" class="sr-only peer" checked />
+                                    id="shipping.save_address" class="sr-only peer" />
                             </v-field>
 
                             <label
@@ -557,7 +557,7 @@
                             <label for="shipping.save_address" class="cursor-pointer">
                                 @lang('shop::app.checkout.onepage.addresses.shipping.save-address')
                             </label>
-                        </div>
+                        </div> --}}
 
                         <!-- Save Button -->
                         <div class="flex justify-end mt-4">

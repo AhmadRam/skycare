@@ -388,6 +388,7 @@
                 updateOrCreateCustomerAddress(params) {
                     let addressType = params.type;
 
+                    params[addressType]['save_address'] = 1;
                     if (params[addressType]['save_address']) {
                         this.storeCustomerAddress(params[addressType], addressType)
                             .then((response) => {
@@ -408,9 +409,25 @@
                                     });
                                 }
 
+                                var new_address = {
+                                    id: id,
+                                    companyName: params[addressType]['company_name'],
+                                    firstName: params[addressType]['first_name'],
+                                    lastName: params[addressType]['last_name'],
+                                    email: params[addressType]['email'],
+                                    address1: params[addressType]['address1'],
+                                    country: params[addressType]['country'],
+                                    state: params[addressType]['state'],
+                                    city: params[addressType]['city'],
+                                    note: params[addressType]['note'],
+                                    postcode: params[addressType]['postcode'],
+                                    phone: params[addressType]['phone'],
+                                };
+
+                                this.customerBillingAddresses.push(new_address);
+
                                 params[addressType]['billing_address_id'] = id;
                                 this.storeCustomerBillingAddressToCart(params[addressType]);
-
                             });
 
                         return;
@@ -499,7 +516,7 @@
 
                     let address = this.customerBillingAddresses.find((address) => address.id == params[
                         'billing_address_id']);
-
+                    console.log(address);
                     if (!address) {
                         this.isLoading = false;
 

@@ -564,11 +564,11 @@
                     {!! view_render_event('bagisto.shop.checkout.onepage.addresses.customer.billing.update_or_create.phone.after') !!}
 
                     <!-- Checkbox For Save Address -->
-                    <div class="flex gap-x-1.5 items-center mt-5 text-sm text-[#6E6E6E] select-none"
+                    {{-- <div class="flex gap-x-1.5 items-center mt-5 text-sm text-[#6E6E6E] select-none"
                         v-if="! (customer.updateOrCreateBillingAddress.params.id > -1)">
                         <v-field type="checkbox" name="billing.save_address" v-slot="{ field }" value="1">
                             <input type="checkbox" name="billing.save_address" v-bind="field"
-                                id="billing.save_address" class="sr-only peer" checked/>
+                                id="billing.save_address" class="sr-only peer" />
                         </v-field>
 
                         <label
@@ -579,7 +579,7 @@
                         <label for="billing.save_address" class="cursor-pointer">
                             @lang('shop::app.checkout.onepage.addresses.billing.save-address')
                         </label>
-                    </div>
+                    </div> --}}
 
                     <!-- Save Button -->
                     <div class="flex justify-end mt-4">
