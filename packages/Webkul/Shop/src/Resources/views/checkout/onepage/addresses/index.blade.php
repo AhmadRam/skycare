@@ -388,8 +388,8 @@
                 updateOrCreateCustomerAddress(params) {
                     let addressType = params.type;
 
-                    params[addressType]['save_address'] = 1;
-                    if (params[addressType]['save_address']) {
+                    // params[addressType]['save_address'] = 1;
+                    if (params[addressType]['id']) {
                         this.storeCustomerAddress(params[addressType], addressType)
                             .then((response) => {
                                 const {
@@ -516,7 +516,7 @@
 
                     let address = this.customerBillingAddresses.find((address) => address.id == params[
                         'billing_address_id']);
-                    console.log(address);
+                    // console.log(address);
                     if (!address) {
                         this.isLoading = false;
 

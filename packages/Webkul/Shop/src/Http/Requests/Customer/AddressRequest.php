@@ -34,7 +34,7 @@ class AddressRequest extends FormRequest
             'first_name'   => ['required'],
             'last_name'    => ['required'],
             'address1'     => ['required', 'array'],
-            'address1.*'   => ['required', new Address],
+            'address1.*'   => [new Address],
             'country'      => core()->isCountryRequired() ? ['required'] : [],
             'state'        => core()->isStateRequired() ? ['required'] : [],
             'city'         => ['required', 'string'],

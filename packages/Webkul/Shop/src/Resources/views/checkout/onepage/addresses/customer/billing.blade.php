@@ -460,7 +460,7 @@
 
                         <!-- Floor -->
                         <x-shop::form.control-group>
-                            <x-shop::form.control-group.label class="!mt-0">
+                            <x-shop::form.control-group.label class="!mt-0 required">
                                 @lang('shop::app.checkout.onepage.addresses.billing.floor-address')
                             </x-shop::form.control-group.label>
 
@@ -478,7 +478,7 @@
                     <div class="grid grid-cols-2 gap-x-5" v-if="values.billing?.country == 'KW'">
                         <!-- Flat -->
                         <x-shop::form.control-group>
-                            <x-shop::form.control-group.label class="!mt-0">
+                            <x-shop::form.control-group.label class="!mt-0 required">
                                 @lang('shop::app.checkout.onepage.addresses.billing.flat-address')
                             </x-shop::form.control-group.label>
 
@@ -494,7 +494,7 @@
 
                         <!-- Avenue -->
                         <x-shop::form.control-group>
-                            <x-shop::form.control-group.label class="!mt-0">
+                            <x-shop::form.control-group.label class="!mt-0 required">
                                 @lang('shop::app.checkout.onepage.addresses.billing.avenue-address')
                             </x-shop::form.control-group.label>
 
