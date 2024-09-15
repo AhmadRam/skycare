@@ -389,7 +389,7 @@
                     let addressType = params.type;
 
                     // params[addressType]['save_address'] = 1;
-                    if (params[addressType]['id']) {
+                    if (!params[addressType]['id']) {
                         this.storeCustomerAddress(params[addressType], addressType)
                             .then((response) => {
                                 const {
