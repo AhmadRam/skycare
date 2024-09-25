@@ -46,7 +46,8 @@ class CartResource extends JsonResource
             'billing_address'                => $this->billing_address,
             'shipping_address'               => $this->shipping_address,
             'have_stockable_items'           => $this->haveStockableItems(),
-            'payment_method'                 => $this->payment ? core()->getConfigData('sales.payment_methods.'.$this->payment->method.'.title') : '',
+            'payment_method'                 => $this->payment ? core()->getConfigData('sales.payment_methods.' . $this->payment->method . '.title') : '',
+            'free_shipping_amount'           => __('shop::app.checkout.onepage.shipping.free-shipping', ['total' => core()->formatPrice(5 - $this->sub_total)]),
         ];
     }
 }

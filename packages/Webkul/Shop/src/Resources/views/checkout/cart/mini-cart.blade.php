@@ -1,10 +1,6 @@
 <!-- Mini Cart Vue Component -->
 <v-mini-cart>
-    <span
-        class="icon-cart text-2xl cursor-pointer"
-        role="button"
-        aria-label="@lang('shop::app.checkout.cart.mini-cart.shopping-cart')"
-    ></span>
+    <span class="icon-cart text-2xl cursor-pointer" role="button" aria-label="@lang('shop::app.checkout.cart.mini-cart.shopping-cart')"></span>
 </v-mini-cart>
 
 @pushOnce('scripts')
@@ -60,12 +56,12 @@
                 {!! view_render_event('bagisto.shop.checkout.mini-cart.drawer.content.before') !!}
 
                 <!-- Cart Item Listing -->
-                <div 
-                    class="grid gap-12 mt-9" 
+                <div
+                    class="grid gap-12 mt-9"
                     v-if="cart?.items?.length"
                 >
-                    <div 
-                        class="flex gap-x-5" 
+                    <div
+                        class="flex gap-x-5"
                         v-for="item in cart?.items"
                     >
                         <!-- Cart Item Image -->
@@ -161,7 +157,7 @@
                                 {!! view_render_event('bagisto.shop.checkout.mini-cart.drawer.content.quantity_changer.after') !!}
 
                                 {!! view_render_event('bagisto.shop.checkout.mini-cart.drawer.content.remove_button.before') !!}
-                                
+
                                 <!-- Cart Item Remove Button -->
                                 <button
                                     type="button"
@@ -212,7 +208,7 @@
                         </p>
 
                         {!! view_render_event('bagisto.shop.checkout.mini-cart.subtotal.after') !!}
-                        
+
                         <div
                             v-else
                             class="flex justify-center items-center"
@@ -233,14 +229,14 @@
                                     stroke="currentColor"
                                     stroke-width="4"
                                 ></circle>
-                
+
                                 <path
                                     class="opacity-75"
                                     fill="currentColor"
                                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                                 ></path>
                             </svg>
-                
+
                             <span class="opacity-0 realative text-3xl font-semibold" v-text="cart.formatted_grand_total"></span>
                         </div>
                     </div>
@@ -249,7 +245,12 @@
 
                     <!-- Cart Action Container -->
                     <div class="grid gap-2.5 px-6">
+
                         {!! view_render_event('bagisto.shop.checkout.mini-cart.continue_to_checkout.before') !!}
+
+                        <p class="text-base p-1" v-if="cart.sub_total < 5" style="background:#efc981;">
+                                @{{ cart.free_shipping_amount }}
+                        </p>
 
                         <a
                             href="{{ route('shop.checkout.onepage.index') }}"
@@ -280,10 +281,10 @@
             template: '#v-mini-cart-template',
 
             data() {
-                return  {
+                return {
                     cart: null,
 
-                    isLoading:false,
+                    isLoading: false
                 }
             },
 
@@ -316,12 +317,17 @@
 
                     qty[item.id] = quantity;
 
-                    this.$axios.put('{{ route('shop.api.checkout.cart.update') }}', { qty })
+                    this.$axios.put('{{ route('shop.api.checkout.cart.update') }}', {
+                            qty
+                        })
                         .then(response => {
                             if (response.data.message) {
                                 this.cart = response.data.data;
                             } else {
-                                this.$emitter.emit('add-flash', { type: 'warning', message: response.data.data.message });
+                                this.$emitter.emit('add-flash', {
+                                    type: 'warning',
+                                    message: response.data.data.message
+                                });
                             }
 
                             this.isLoading = false;
@@ -336,10 +342,13 @@
                         .then(response => {
                             this.cart = response.data.data;
 
-                            this.$emitter.emit('add-flash', { type: 'success', message: response.data.message });
+                            this.$emitter.emit('add-flash', {
+                                type: 'success',
+                                message: response.data.message
+                            });
                         })
                         .catch(error => {});
-                },
+                }
             },
         });
     </script>

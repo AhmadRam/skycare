@@ -774,6 +774,7 @@ return [
 
             'shipping' => [
                 'shipping-method' => 'طريقة الشحن',
+                'free-shipping' => 'للحصول على الشحن المجاني تحتاج الى شراء :total أكثر',
             ],
 
             'summary' => [

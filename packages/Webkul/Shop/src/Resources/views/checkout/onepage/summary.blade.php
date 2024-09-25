@@ -1,9 +1,6 @@
 {!! view_render_event('bagisto.shop.checkout.cart.summary.before') !!}
 
-<v-cart-summary
-    :cart="cart"
-    :is-cart-loading="isCartLoading"
->
+<v-cart-summary :cart="cart" :is-cart-loading="isCartLoading">
 </v-cart-summary>
 
 {!! view_render_event('bagisto.shop.checkout.cart.summary.after') !!}
@@ -63,6 +60,15 @@
                 <div class="grid gap-4 mt-6 mb-8">
 
                     {!! view_render_event('bagisto.shop.checkout.onepage.summary.sub_total.before') !!}
+
+                    <div class="flex text-right justify-between" v-if="cart.sub_total < 5">
+                        <p
+                            class="text-base max-sm:text-sm max-sm:font-normal" style="background:#efc981;"
+                            v-text="cart.free_shipping_amount"
+                        >
+                        </p>
+
+                    </div>
 
                     <div class="flex text-right justify-between">
                         <p class="text-base max-sm:text-sm max-sm:font-normal">
@@ -212,7 +218,7 @@
 
                     selectedPaymentMethod: null,
 
-                    isLoading: false,
+                    isLoading: false
                 }
             },
 

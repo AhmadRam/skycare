@@ -774,6 +774,7 @@ return [
 
             'shipping' => [
                 'shipping-method' => 'Shipping Method',
+                'free-shipping' => 'To get free shipping, you need to purchase :total more',
             ],
 
             'summary' => [
