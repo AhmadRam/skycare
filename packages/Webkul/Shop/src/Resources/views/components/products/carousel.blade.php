@@ -128,24 +128,45 @@
 
                 swipeLeft() {
                     const container = this.$refs.swiperContainer;
+                    var locale = `{{ app()->getLocale() }}`;
+                    if (locale == 'ar') {
+                        // Check if we are at the end of the list (including cloned items)
+                        if (Math.abs(container.scrollLeft) + container.clientWidth + 10 >= container.scrollWidth) {
+                            // Jump back to the original start (seamless transition)
+                            container.scrollLeft = container.scrollWidth / 2 - container.clientWidth;
+                        } else {
+                            container.scrollLeft -= this.offset;
+                        }
 
-                    if (container.scrollLeft === 0) {
-                        // If we are at the very beginning, move to the cloned end (seamless transition)
-                        container.scrollLeft = container.scrollWidth / 2;
                     } else {
-                        container.scrollLeft -= this.offset;
+                        if (container.scrollLeft === 0) {
+                            // If we are at the very beginning, move to the cloned end (seamless transition)
+                            container.scrollLeft = container.scrollWidth / 2;
+                        } else {
+                            container.scrollLeft -= this.offset;
+                        }
                     }
                 },
 
                 swipeRight() {
                     const container = this.$refs.swiperContainer;
 
-                    // Check if we are at the end of the list (including cloned items)
-                    if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
-                        // Jump back to the original start (seamless transition)
-                        container.scrollLeft = container.scrollWidth / 2 - container.clientWidth;
+                    var locale = `{{ app()->getLocale() }}`;
+                    if (locale == 'ar') {
+                        if (container.scrollLeft === 0) {
+                            // If we are at the very beginning, move to the cloned end (seamless transition)
+                            container.scrollLeft = container.scrollWidth / 2;
+                        } else {
+                            container.scrollLeft += this.offset;
+                        }
                     } else {
-                        container.scrollLeft += this.offset;
+                        // Check if we are at the end of the list (including cloned items)
+                        if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
+                            // Jump back to the original start (seamless transition)
+                            container.scrollLeft = container.scrollWidth / 2 - container.clientWidth;
+                        } else {
+                            container.scrollLeft += this.offset;
+                        }
                     }
                 },
 
