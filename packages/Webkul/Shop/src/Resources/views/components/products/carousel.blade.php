@@ -152,7 +152,7 @@
                 startAutoScroll() {
                     // Start auto-scrolling every `scrollDelay` milliseconds
                     var locale = `{{ app()->getLocale() }}`;
-                    if (locale == 'en') {
+                    if (locale == 'ar') {
                         this.autoScrollInterval = setInterval(this.swipeLeft, this.scrollDelay);
                     } else {
                         this.autoScrollInterval = setInterval(this.swipeRight, this.scrollDelay);
