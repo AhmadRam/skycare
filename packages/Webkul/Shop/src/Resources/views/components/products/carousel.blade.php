@@ -1,4 +1,8 @@
-<v-products-carousel src="{{ $src }}" title="{{ $title }}" navigation-link="{{ $navigationLink ?? '' }}">
+<v-products-carousel
+    src="{{ $src }}"
+    title="{{ $title }}"
+    navigation-link="{{ $navigationLink ?? '' }}"
+>
     <x-shop::shimmer.products.carousel :navigation-link="$navigationLink ?? false" />
 </v-products-carousel>
 
@@ -55,7 +59,7 @@
             >
                 <x-shop::products.card
                     class="min-w-[291px] max-md:h-fit max-md:min-w-56 max-sm:min-w-[192px]"
-                    v-for="product in clonedProducts"
+                    v-for="product in products"
                 />
             </div>
 
@@ -88,11 +92,10 @@
             data() {
                 return {
                     isLoading: true,
+
                     products: [],
+
                     offset: 323,
-                    autoScrollInterval: null,
-                    scrollDelay: 3000, // Delay in ms between auto-scrolls
-                    clonedProducts: [], // Array to hold cloned products for infinite scrolling
                 };
             },
 
@@ -100,28 +103,14 @@
                 this.getProducts();
             },
 
-            beforeUnmount() {
-                this.stopAutoScroll(); // Clean up interval when component is destroyed
-            },
-
             methods: {
                 getProducts() {
                     this.$axios.get(this.src)
                         .then(response => {
                             this.isLoading = false;
+
                             this.products = response.data.data;
-
-                            // Clone products to the start and end to enable infinite scroll
-                            this.clonedProducts = [
-                                ...this.products, // Original list of products
-                                ...this.products, // Clone the list at the end
-                            ];
-
-                            this.$nextTick(() => {
-                                this.startAutoScroll(); // Start auto-scroll after the DOM is updated
-                            });
-                        })
-                        .catch(error => {
+                        }).catch(error => {
                             console.log(error);
                         });
                 },
@@ -129,39 +118,20 @@
                 swipeLeft() {
                     const container = this.$refs.swiperContainer;
 
-                    if (container.scrollLeft === 0) {
-                        // If we are at the very beginning, move to the cloned end (seamless transition)
-                        container.scrollLeft = container.scrollWidth / 2;
-                    } else {
-                        container.scrollLeft -= this.offset;
-                    }
+                    container.scrollLeft -= this.offset;
                 },
 
                 swipeRight() {
                     const container = this.$refs.swiperContainer;
 
-                    // Check if we are at the end of the list (including cloned items)
+                    // Check if scroll reaches the end
                     if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
-                        // Jump back to the original start (seamless transition)
-                        container.scrollLeft = container.scrollWidth / 2 - container.clientWidth;
+                        // Reset scroll to the beginning
+                        container.scrollLeft = 0;
                     } else {
+                        // Scroll to the right
                         container.scrollLeft += this.offset;
                     }
-                },
-
-                startAutoScroll() {
-                    // Start auto-scrolling every `scrollDelay` milliseconds
-                    var locale = `{{ app()->getLocale() }}`;
-                    if (locale == 'ar') {
-                        this.autoScrollInterval = setInterval(this.swipeLeft, this.scrollDelay);
-                    } else {
-                        this.autoScrollInterval = setInterval(this.swipeRight, this.scrollDelay);
-                    }
-                },
-
-                stopAutoScroll() {
-                    // Clear the auto-scroll interval to stop scrolling
-                    clearInterval(this.autoScrollInterval);
                 },
             },
         });
