@@ -1,8 +1,4 @@
-<v-products-carousel
-    src="{{ $src }}"
-    title="{{ $title }}"
-    navigation-link="{{ $navigationLink ?? '' }}"
->
+<v-products-carousel src="{{ $src }}" title="{{ $title }}" navigation-link="{{ $navigationLink ?? '' }}">
     <x-shop::shimmer.products.carousel :navigation-link="$navigationLink ?? false" />
 </v-products-carousel>
 
@@ -117,8 +113,8 @@
 
                             // Clone products to the start and end to enable infinite scroll
                             this.clonedProducts = [
-                                ...this.products,   // Original list of products
-                                ...this.products,   // Clone the list at the end
+                                ...this.products, // Original list of products
+                                ...this.products, // Clone the list at the end
                             ];
 
                             this.$nextTick(() => {
@@ -155,7 +151,13 @@
 
                 startAutoScroll() {
                     // Start auto-scrolling every `scrollDelay` milliseconds
-                    this.autoScrollInterval = setInterval(this.swipeRight, this.scrollDelay);
+                    var locale = `{{ app()->getLocale() }}`;
+                    if (locale) {
+                        this.autoScrollInterval = setInterval(this.swipeLeft, this.scrollDelay);
+                    } else {
+                        this.autoScrollInterval = setInterval(this.swipeRight, this.scrollDelay);
+
+                    }
                 },
 
                 stopAutoScroll() {
@@ -165,5 +167,4 @@
             },
         });
     </script>
-
 @endPushOnce
