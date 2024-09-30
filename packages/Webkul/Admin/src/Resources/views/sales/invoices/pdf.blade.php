@@ -323,8 +323,6 @@
                                         <p>{{ $invoice->order->$addressType->postcode . ' ' . $invoice->order->$addressType->city }}
                                         </p>
 
-                                        <p>{{ $invoice->order->$addressType->city }}</p>
-
                                         <p>{{ $invoice->order->$addressType->state }}</p>
 
                                         <p>{{ core()->country_name($invoice->order->$addressType->country) }}</p>
