@@ -91,7 +91,7 @@
                     products: [],
                     offset: 323,
                     autoScrollInterval: null,
-                    scrollDelay: 3000, // Delay in ms between auto-scrolls
+                    scrollDelay: 5000, // Delay in ms between auto-scrolls
                     clonedProducts: [], // Array to hold cloned products for infinite scrolling
                 };
             },
