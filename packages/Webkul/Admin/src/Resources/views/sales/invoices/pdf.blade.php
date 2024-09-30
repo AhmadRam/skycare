@@ -18,7 +18,9 @@
             src: url({{ asset('vendor/webkul/ui/assets/fonts/Noto/NotoSans-Regular.ttf') }}) format('truetype');
         }
     </style>
-
+    <script>
+        window.print();
+    </script>
     @php
         /* main font will be set on locale based */
         $mainFontFamily = app()->getLocale() === 'ar' ? 'DejaVu Sans' : 'Noto Sans';
