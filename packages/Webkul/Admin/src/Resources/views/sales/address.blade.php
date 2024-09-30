@@ -8,7 +8,7 @@
     </p>
 
     <p class="text-gray-600 dark:text-gray-300 !leading-6">
-        @if ($address->country)
+        @if ($address->country == 'KW')
             <?php $address1 = explode(PHP_EOL, $address->address1); ?>
             @if (isset($address1[0]))
                 {{ trans('shop::app.checkout.onepage.addresses.billing.block-address') }} :

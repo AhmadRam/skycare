@@ -284,10 +284,44 @@
 
                                         <p>{{ $invoice->order->$addressType->name }}</p>
 
-                                        <p>{{ $invoice->order->$addressType->address1 }}</p>
+                                        <p>
+                                            @if ($invoice->order->$addressType->country == 'KW')
+                                                <?php $address1 = explode(PHP_EOL, $invoice->order->$addressType->address1); ?>
+                                                @if (isset($address1[0]))
+                                                    {{ trans('shop::app.checkout.onepage.addresses.billing.block-address') }}
+                                                    :
+                                                    {{ $address1[0] ?? null }}<br>
+                                                @endif
+                                                @if (isset($address1[1]))
+                                                    {{ trans('shop::app.checkout.onepage.addresses.billing.street-address') }}
+                                                    :
+                                                    {{ $address1[1] ?? null }}<br>
+                                                @endif
+                                                @if (isset($address1[3]))
+                                                    {{ trans('shop::app.checkout.onepage.addresses.billing.house-address') }}
+                                                    :
+                                                    {{ (isset($address1[2]) ? 'House No:' . $address1[2] : '') . (isset($address1[3]) ? ' / Floor: ' . $address1[3] : '') . (isset($address1[4]) ? ' / Flat: ' . $address1[4] : '') }}<br>
+                                                @endif
+                                                @if (isset($address1[5]))
+                                                    {{ trans('shop::app.checkout.onepage.addresses.billing.avenue-address') }}
+                                                    :
+                                                    {{ $address1[5] ?? null }}<br>
+                                                @endif
+                                            @else
+                                                {{ $invoice->order->$addressType->address1 }}<br>
+                                            @endif
+                                        </p>
+
+                                        <p>
+                                            {{ trans('shop::app.checkout.onepage.addresses.billing.note-address') }} :
+                                            {{ $invoice->order->$addressType->note }}<br>
+                                        </p>
+
 
                                         <p>{{ $invoice->order->$addressType->postcode . ' ' . $invoice->order->$addressType->city }}
                                         </p>
+
+                                        <p>{{ $invoice->order->$addressType->city }}</p>
 
                                         <p>{{ $invoice->order->$addressType->state }}</p>
 

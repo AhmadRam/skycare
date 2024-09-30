@@ -350,5 +350,18 @@
                 }
             });
         </script>
+
+        <script>
+            function openSmallWindow(event) {
+                event.preventDefault();
+                var url = event.currentTarget.href;
+                var windowName = 'Print_Window';
+                var windowFeatures = 'width=800,height=800';
+                var newWindow = window.open(url, windowName, windowFeatures);
+                newWindow.onload = function() {
+                    newWindow.print();
+                };
+            }
+        </script>
     @endPushOnce
 </x-admin::layouts>

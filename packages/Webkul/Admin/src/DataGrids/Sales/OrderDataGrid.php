@@ -4,6 +4,7 @@ namespace Webkul\Admin\DataGrids\Sales;
 
 use Illuminate\Support\Facades\DB;
 use Webkul\DataGrid\DataGrid;
+use Webkul\Sales\Models\Invoice;
 use Webkul\Sales\Models\Order;
 use Webkul\Sales\Models\OrderAddress;
 use Webkul\Sales\Repositories\OrderRepository;
@@ -261,5 +262,19 @@ class OrderDataGrid extends DataGrid
                 },
             ]);
         }
+
+        $this->addAction([
+            'icon'   => 'icon-export',
+            'title'  => trans('admin::app.sales.orders.index.datagrid.download-pdf'),
+            'method' => 'GET',
+            'url'    => function ($row) {
+                $invoice = Invoice::where('order_id', $row->id)->first();
+                if ($invoice) {
+                    return route('admin.sales.invoices.print', $invoice->id ?? 0);
+                }
+                return "#";
+            },
+            'onclick' => 'openSmallWindow(event)',
+        ]);
     }
 }
