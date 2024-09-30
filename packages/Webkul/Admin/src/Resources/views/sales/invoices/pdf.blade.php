@@ -304,7 +304,7 @@
                                                     :
                                                     {{ (isset($address1[2]) ? 'House No:' . $address1[2] : '') . (isset($address1[3]) ? ' / Floor: ' . $address1[3] : '') . (isset($address1[4]) ? ' / Flat: ' . $address1[4] : '') }}<br>
                                                 @endif
-                                                @if (isset($address1[5]))
+                                                @if (isset($address1[5]) && $address1[5] != null)
                                                     {{ trans('shop::app.checkout.onepage.addresses.billing.avenue-address') }}
                                                     :
                                                     {{ $address1[5] ?? null }}<br>
@@ -314,11 +314,13 @@
                                             @endif
                                         </p>
 
-                                        <p>
-                                            {{ trans('shop::app.checkout.onepage.addresses.billing.note-address') }} :
-                                            {{ $invoice->order->$addressType->note }}<br>
-                                        </p>
-
+                                        @if (isset($invoice->order->$addressType->note) && $invoice->order->$addressType->note != null)
+                                            <p>
+                                                {{ trans('shop::app.checkout.onepage.addresses.billing.note-address') }}
+                                                :
+                                                {{ $invoice->order->$addressType->note }}<br>
+                                            </p>
+                                        @endif
 
                                         <p>{{ $invoice->order->$addressType->postcode . ' ' . $invoice->order->$addressType->city }}
                                         </p>
