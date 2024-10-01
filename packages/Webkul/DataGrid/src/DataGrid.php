@@ -95,16 +95,12 @@ abstract class DataGrid
     /**
      * Prepare actions.
      */
-    public function prepareActions()
-    {
-    }
+    public function prepareActions() {}
 
     /**
      * Prepare mass actions.
      */
-    public function prepareMassActions()
-    {
-    }
+    public function prepareMassActions() {}
 
     /**
      * Get columns.
@@ -227,18 +223,18 @@ abstract class DataGrid
                 $this->queryBuilder->where(function ($scopeQueryBuilder) use ($requestedValues) {
                     foreach ($requestedValues as $value) {
                         collect($this->columns)
-                            ->filter(fn ($column) => $column->searchable && $column->type !== ColumnTypeEnum::BOOLEAN->value)
-                            ->each(fn ($column) => $scopeQueryBuilder->orWhere($column->getDatabaseColumnName(), 'LIKE', '%'.$value.'%'));
+                            ->filter(fn($column) => $column->searchable && $column->type !== ColumnTypeEnum::BOOLEAN->value)
+                            ->each(fn($column) => $scopeQueryBuilder->orWhere($column->getDatabaseColumnName(), 'LIKE', '%' . $value . '%'));
                     }
                 });
             } else {
-                $column = collect($this->columns)->first(fn ($c) => $c->index === $requestedColumn);
+                $column = collect($this->columns)->first(fn($c) => $c->index === $requestedColumn);
 
                 switch ($column->type) {
                     case ColumnTypeEnum::STRING->value:
                         $this->queryBuilder->where(function ($scopeQueryBuilder) use ($column, $requestedValues) {
                             foreach ($requestedValues as $value) {
-                                $scopeQueryBuilder->orWhere($column->getDatabaseColumnName(), 'LIKE', '%'.$value.'%');
+                                $scopeQueryBuilder->orWhere($column->getDatabaseColumnName(), 'LIKE', '%' . $value . '%');
                             }
                         });
 
@@ -262,7 +258,10 @@ abstract class DataGrid
                     case ColumnTypeEnum::DATE_TIME_RANGE->value:
                         $this->queryBuilder->where(function ($scopeQueryBuilder) use ($column, $requestedValues) {
                             foreach ($requestedValues as $value) {
-                                $scopeQueryBuilder->whereBetween($column->getDatabaseColumnName(), [$value[0] ?? '', $value[1] ?? '']);
+                                $scopeQueryBuilder->whereBetween($column->getDatabaseColumnName(), [
+                                    ($value[0] ?? '') . ' 00:00:01',
+                                    ($value[1] ?? '') . ' 23:59:59',
+                                ]);
                             }
                         });
 
@@ -271,7 +270,7 @@ abstract class DataGrid
                     default:
                         $this->queryBuilder->where(function ($scopeQueryBuilder) use ($column, $requestedValues) {
                             foreach ($requestedValues as $value) {
-                                $scopeQueryBuilder->orWhere($column->getDatabaseColumnName(), 'LIKE', '%'.$value.'%');
+                                $scopeQueryBuilder->orWhere($column->getDatabaseColumnName(), 'LIKE', '%' . $value . '%');
                             }
                         });
 
@@ -348,7 +347,7 @@ abstract class DataGrid
      */
     public function setExportFile($records, $format = 'csv')
     {
-        $this->exportFile = Excel::download(new DataGridExport($records), Str::random(36).'.'.$format);
+        $this->exportFile = Excel::download(new DataGridExport($records), Str::random(36) . '.' . $format);
     }
 
     /**
@@ -394,7 +393,7 @@ abstract class DataGrid
                 $getUrl = $action->url;
 
                 $record->actions[] = [
-                    'index'  => ! empty($action->index) ? $action->index : 'action_'.$index + 1,
+                    'index'  => ! empty($action->index) ? $action->index : 'action_' . $index + 1,
                     'icon'   => $action->icon,
                     'title'  => $action->title,
                     'method' => $action->method,
