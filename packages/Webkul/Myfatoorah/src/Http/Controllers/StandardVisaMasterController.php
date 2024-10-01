@@ -2,7 +2,7 @@
 
 namespace Webkul\Myfatoorah\Http\Controllers;
 
-class StandardControllerVisaMaster extends StandardController
+class StandardVisaMasterController extends StandardController
 {
 
 }

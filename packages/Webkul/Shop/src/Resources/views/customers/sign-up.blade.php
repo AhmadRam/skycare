@@ -26,7 +26,8 @@
                 aria-label="@lang('shop::app.customers.signup-form.bagisto')"
             >
                 <img
-                    src="{{ core()->getCurrentChannel()->logo_url ?? bagisto_asset('images/logo.svg') }}"
+                    {{-- src="{{ core()->getCurrentChannel()->logo_url ?? bagisto_asset('images/logo.svg') }}" --}}
+                    src="{{ asset('themes/shop/default/build/assets/skycare_' . app()->getLocale() . '.png') }}"
                     alt="{{ config('app.name') }}"
                     width="131"
                     height="29"

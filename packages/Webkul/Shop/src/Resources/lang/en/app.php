@@ -933,6 +933,18 @@ return [
                 'title'   => 'New comment added to your order :order_id placed on :created_at',
             ],
 
+
+            'abandoned' => [
+                'greeting' => 'We noticed that you have added some products to your shopping cart but did not complete the purchase.',
+                'greeting2' => "Don't worry, the products you selected are still in your shopping cart. If you need help completing your order or have any questions, we're here to help!l",
+                'subject'  => 'Reminder that there are products in your shopping cart',
+                'summary'  => 'Summary of Order',
+                'title'    => 'Incomplete order reminder!',
+                'footer1'  => 'Thank you for shopping with us!',
+                'url'      => 'Complete the order',
+                'footer2'  => 'Thank you for shopping with us!',
+            ],
+
             'billing-address'   => 'Billing Address',
             'carrier'           => 'Carrier',
             'contact'           => 'Contact',

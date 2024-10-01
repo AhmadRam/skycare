@@ -29,7 +29,8 @@
                     aria-label="@lang('shop::app.checkout.cart.index.bagisto')"
                 >
                     <img
-                        src="{{ core()->getCurrentChannel()->logo_url ?? bagisto_asset('images/logo.svg') }}"
+                        {{-- src="{{ core()->getCurrentChannel()->logo_url ?? bagisto_asset('images/logo.svg') }}" --}}
+                        src="{{ asset('themes/shop/default/build/assets/skycare_' . app()->getLocale() . '.png') }}"
                         alt="{{ config('app.name') }}"
                         width="131"
                         height="29"
@@ -45,7 +46,7 @@
 
     <div class="flex-auto">
         <div class="container px-[60px] max-lg:px-8">
-            
+
             {!! view_render_event('bagisto.shop.checkout.cart.breadcrumbs.before') !!}
 
             <!-- Breadcrumbs -->
@@ -84,7 +85,7 @@
 
                 <!-- Cart Information -->
                 <template v-else>
-                    <div 
+                    <div
                         class="flex flex-wrap gap-20 mt-8 pb-8 max-1060:flex-col"
                         v-if="cart?.items?.length"
                     >
@@ -120,12 +121,12 @@
                                     </span>
                                 </div>
 
-                                <div 
+                                <div
                                     class="max-sm:ltr:ml-9 max-sm:rtl:mr-9 max-sm:mt-2.5"
                                     v-if="selectedItemsCount"
                                 >
                                     <span
-                                        class="text-base text-[#0A49A7] cursor-pointer" 
+                                        class="text-base text-[#0A49A7] cursor-pointer"
                                         role="button"
                                         tabindex="0"
                                         @click="removeSelectedItems"
@@ -137,24 +138,24 @@
                                         <span class="mx-2.5 border-r-[2px] border-[#E9E9E9]"></span>
 
                                         <span
-                                            class="text-base text-[#0A49A7] cursor-pointer" 
+                                            class="text-base text-[#0A49A7] cursor-pointer"
                                             role="button"
                                             tabindex="0"
                                             @click="moveToWishlistSelectedItems"
                                         >
                                             @lang('shop::app.checkout.cart.index.move-to-wishlist')
-                                        </span>    
+                                        </span>
                                     @endif
                                 </div>
                             </div>
-                        
+
                             {!! view_render_event('bagisto.shop.checkout.cart.cart_mass_actions.after') !!}
 
                             {!! view_render_event('bagisto.shop.checkout.cart.item.listing.before') !!}
 
                             <!-- Cart Item Listing Container -->
-                            <div 
-                                class="grid gap-y-6" 
+                            <div
+                                class="grid gap-y-6"
                                 v-for="item in cart?.items"
                             >
                                 <div class="flex gap-x-2.5 justify-between flex-wrap pb-5 border-b border-[#E9E9E9]">
@@ -199,8 +200,8 @@
                                             {!! view_render_event('bagisto.shop.checkout.cart.item_name.before') !!}
 
                                             <a :href="`{{ route('shop.product_or_category.index', '') }}/${item.product_url_key}`">
-                                                <p 
-                                                    class="text-base font-medium" 
+                                                <p
+                                                    class="text-base font-medium"
                                                     v-text="item.name"
                                                 >
                                                 </p>
@@ -249,12 +250,12 @@
                                             {!! view_render_event('bagisto.shop.checkout.cart.formatted_total.before') !!}
 
                                             <div class="sm:hidden">
-                                                <p 
-                                                    class="text-lg font-semibold" 
+                                                <p
+                                                    class="text-lg font-semibold"
                                                     v-text="item.formatted_total"
                                                 >
                                                 </p>
-                                                
+
                                                 <span
                                                     class="text-base text-[#0A49A7] cursor-pointer"
                                                     role="button"
@@ -284,8 +285,8 @@
 
                                         {!! view_render_event('bagisto.shop.checkout.cart.total.before') !!}
 
-                                        <p 
-                                            class="text-lg font-semibold" 
+                                        <p
+                                            class="text-lg font-semibold"
                                             v-text="item.formatted_total"
                                         >
                                         </p>
@@ -293,17 +294,17 @@
                                         {!! view_render_event('bagisto.shop.checkout.cart.total.after') !!}
 
                                         {!! view_render_event('bagisto.shop.checkout.cart.remove_button.before') !!}
-                                        
+
                                         <!-- Cart Item Remove Button -->
                                         <span
-                                            class="text-base text-[#0A49A7] cursor-pointer" 
+                                            class="text-base text-[#0A49A7] cursor-pointer"
                                             role="button"
                                             tabindex="0"
                                             @click="removeItem(item.id)"
                                         >
                                             @lang('shop::app.checkout.cart.index.remove')
                                         </span>
-                                        
+
                                         {!! view_render_event('bagisto.shop.checkout.cart.remove_button.after') !!}
                                     </div>
                                 </div>
@@ -312,7 +313,7 @@
                             {!! view_render_event('bagisto.shop.checkout.cart.item.listing.after') !!}
 
                             {!! view_render_event('bagisto.shop.checkout.cart.controls.before') !!}
-        
+
                             <!-- Cart Item Actions -->
                             <div class="flex flex-wrap gap-8 justify-end">
                                 {!! view_render_event('bagisto.shop.checkout.cart.continue_shopping.before') !!}
@@ -322,7 +323,7 @@
                                     href="{{ route('shop.home.index') }}"
                                 >
                                     @lang('shop::app.checkout.cart.index.continue-shopping')
-                                </a> 
+                                </a>
 
                                 {!! view_render_event('bagisto.shop.checkout.cart.continue_shopping.after') !!}
 
@@ -359,7 +360,7 @@
                             src="{{ bagisto_asset('images/thank-you.png') }}"
                             alt="@lang('shop::app.checkout.cart.index.empty-product')"
                         />
-                        
+
                         <p
                             class="text-xl"
                             role="heading"

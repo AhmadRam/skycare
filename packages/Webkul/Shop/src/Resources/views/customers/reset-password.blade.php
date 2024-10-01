@@ -17,7 +17,7 @@
 
     <div class="container mt-20 max-1180:px-5">
         {!! view_render_event('bagisto.shop.customers.reset_password.logo.before') !!}
-        
+
         <!-- Company Logo -->
         <div class="flex gap-x-14 items-center max-[1180px]:gap-x-9">
             <a
@@ -26,7 +26,8 @@
                 aria-label="@lang('shop::app.customers.reset-password.bagisto')"
             >
                 <img
-                    src="{{ core()->getCurrentChannel()->logo_url ?? bagisto_asset('images/logo.svg') }}"
+                    {{-- src="{{ core()->getCurrentChannel()->logo_url ?? bagisto_asset('images/logo.svg') }}" --}}
+                    src="{{ asset('themes/shop/default/build/assets/skycare_' . app()->getLocale() . '.png') }}"
                     alt="{{ config('app.name') }}"
                     width="131"
                     height="29"

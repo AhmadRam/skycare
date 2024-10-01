@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\Fix;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Webkul\Shop\Console\Commands\AbandonedCarts;
 
 class Kernel extends ConsoleKernel
 {
@@ -15,6 +16,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Fix::class,
+        AbandonedCarts::class,
     ];
 
     /**
@@ -29,6 +31,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('indexer:index --type=price')->dailyAt('00:01');
 
         $schedule->command('product:price-rule:index')->dailyAt('00:01');
+
+        $schedule->command('abandoned:cart')->everyThreeHours();
     }
 
     /**
@@ -39,6 +43,7 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__ . '/../../packages/Webkul/Shop/src/Console/Commands');
         $this->load(__DIR__ . '/../../packages/Webkul/Core/src/Console/Commands');
 
         require base_path('routes/console.php');
