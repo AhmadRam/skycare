@@ -49,8 +49,11 @@ class OrderDataGrid extends DataGrid
             $queryBuilder->where('orders.status', '!=', 'no_status');
         }
 
+        $this->addFilter('increment_id', 'orders.increment_id');
         $this->addFilter('full_name', DB::raw('CONCAT(' . DB::getTablePrefix() . 'orders.customer_first_name, " ", ' . DB::getTablePrefix() . 'orders.customer_last_name)'));
+        $this->addFilter('phone', DB::raw('COALESCE(order_address_shipping.phone, order_address_billing.phone)'));
         $this->addFilter('created_at', 'orders.created_at');
+
 
         return $queryBuilder;
     }
