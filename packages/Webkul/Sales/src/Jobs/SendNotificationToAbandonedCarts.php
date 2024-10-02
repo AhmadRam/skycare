@@ -25,7 +25,7 @@ class SendNotificationToAbandonedCarts implements ShouldQueue
     public function handle()
     {
         $date = Carbon::now()->subHours(3);
-        $carts = app(CartRepository::class)->whereNotNull('customer_email')->where('created_at', '>=', $date)->get();
+        $carts = app(CartRepository::class)->whereNotNull('customer_email')->where('created_at', '>=', $date)->where('is_active', 0)->get();
         foreach ($carts as $cart) {
             Mail::queue(new AbandonedCart($cart));
         }
