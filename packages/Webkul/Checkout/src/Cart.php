@@ -405,6 +405,7 @@ class Cart
             'city',
             'postcode',
             'phone',
+            'note',
         ];
 
         $address = collect($address)
@@ -446,6 +447,7 @@ class Cart
             'city',
             'postcode',
             'phone',
+            'note',
         ];
 
         if ($this->cart->billing_address->use_for_shipping) {
