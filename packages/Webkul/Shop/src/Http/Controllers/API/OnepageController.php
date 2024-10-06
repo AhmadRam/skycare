@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Event;
 use Webkul\Checkout\Facades\Cart;
 use Webkul\Customer\Repositories\CustomerRepository;
 use Webkul\Payment\Facades\Payment;
+use Webkul\Sales\Jobs\CreateOdooOrder;
 use Webkul\Sales\Repositories\OrderRepository;
 use Webkul\Shipping\Facades\Shipping;
 use Webkul\Shop\Http\Requests\CartAddressRequest;
@@ -180,6 +181,8 @@ class OnepageController extends APIController
         Cart::deActivateCart();
 
         Cart::activateCartIfSessionHasDeactivatedCartId();
+
+        CreateOdooOrder::dispatch($order->id)->onQueue('odoo');
 
         session()->flash('order', $order);
 
