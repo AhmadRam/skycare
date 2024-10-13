@@ -64,7 +64,7 @@
                     @lang('admin::app.dashboard.index.stock-threshold')
                 </p>
 
-                <!-- Products List -->  
+                <!-- Products List -->
                 @include('admin::dashboard.stock-threshold-products')
             </div>
             {!! view_render_event('bagisto.admin.dashboard.stock_thereshold.after') !!}
@@ -82,6 +82,9 @@
             <!-- Store Stats -->
             <div class="rounded bg-white dark:bg-gray-900 box-shadow">
                 <!-- Total Sales Detailes -->
+                @include('admin::dashboard.total-sales-month')
+
+                <!-- Total Sales Detailes -->
                 @include('admin::dashboard.total-sales')
 
                 <!-- Total Visitors Detailes -->
@@ -97,7 +100,7 @@
             {!! view_render_event('bagisto.admin.dashboard.store_stats.after') !!}
         </div>
     </div>
-    
+
     @pushOnce('scripts')
         <script type="module" src="{{ bagisto_asset('js/chart.js') }}"></script>
 
@@ -129,7 +132,7 @@
                     return {
                         filters: {
                             start: "{{ $startDate->format('Y-m-d') }}",
-                            
+
                             end: "{{ $endDate->format('Y-m-d') }}",
                         }
                     }

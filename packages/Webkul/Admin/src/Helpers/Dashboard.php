@@ -34,6 +34,8 @@ class Dashboard
             'total_customers'       => $this->customerReporting->getTotalCustomersProgress(),
             'total_orders'          => $this->saleReporting->getTotalOrdersProgress(),
             'total_sales'           => $this->saleReporting->getTotalSalesProgress(),
+            'total_unpaid_sales'    => $this->saleReporting->getTotalUnpaidSalesProgress(),
+            'total_paid_sales'      => $this->saleReporting->getTotalPaidSalesProgress(),
             'avg_sales'             => $this->saleReporting->getAverageSalesProgress(),
             'total_unpaid_invoices' => [
                 'total'           => $total = $this->saleReporting->getTotalPendingInvoicesAmount(),
@@ -108,6 +110,18 @@ class Dashboard
             'total_orders' => $this->saleReporting->getTotalOrdersProgress(),
             'total_sales'  => $this->saleReporting->getTotalSalesProgress(),
             'over_time'    => $this->saleReporting->getCurrentTotalSalesOverTime(),
+        ];
+    }
+
+    /**
+     * Returns sales statistics.
+     */
+    public function getSalesStatsMonth(): array
+    {
+        return [
+            'total_orders' => $this->saleReporting->getTotalOrdersProgress(),
+            'total_sales'  => $this->saleReporting->getTotalSalesProgress(),
+            'over_time'    => $this->saleReporting->getCurrentTotalSalesOverTime('month'),
         ];
     }
 

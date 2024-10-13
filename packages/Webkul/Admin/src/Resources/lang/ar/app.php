@@ -122,6 +122,8 @@ return [
             'total-customers'             => 'إجمالي العملاء',
             'total-orders'                => 'إجمالي الطلبات',
             'total-sales'                 => 'إجمالي المبيعات',
+            'total-paid-sales'            => 'إجمالي المبيعات المدفوعة',
+            'total-unpaid-sales'          => 'إجمالي المبيعات الغير مدفوعة',
             'total-stock'                 => ':total_stock مخزون',
             'total-unpaid-invoices'       => 'إجمالي الفواتير الغير مدفوعة',
             'unique-visitors'             => ':count فريد',

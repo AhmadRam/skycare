@@ -54,6 +54,79 @@
                         </div>
                     </div>
 
+                    <!-- Total Sales -->
+                    <div class="flex gap-2.5 flex-1 min-w-[200px]">
+                        <div class="w-full h-[60px] max-w-[60px] max-h-[60px] dark:invert dark:mix-blend-exclusion">
+                            <img
+                                src="{{ bagisto_asset('images/total-sales.svg')}}"
+                                title="@lang('admin::app.dashboard.index.total-sales')"
+                            >
+                        </div>
+
+                        <!-- Sales Stats -->
+                        <div class="grid gap-1 place-content-start">
+                            <p class="text-base text-gray-800 leading-none dark:text-white font-semibold">
+                                @{{ report.statistics.total_paid_sales.formatted_total }}
+                            </p>
+
+                            <p class="text-xs text-gray-600 dark:text-gray-300 font-semibold">
+                                @lang('admin::app.dashboard.index.total-paid-sales')
+                            </p>
+
+                            <!-- Sales Percentage -->
+                            <div class="flex gap-0.5 items-center">
+                                <span
+                                    class="text-base  text-emerald-500"
+                                    :class="[report.statistics.total_paid_sales.progress < 0 ? 'icon-down-stat text-red-500 dark:!text-red-500' : 'icon-up-stat text-emerald-500 dark:!text-emerald-500']"
+                                ></span>
+
+                                <p
+                                    class="text-xs text-emerald-500 font-semibold"
+                                    :class="[report.statistics.total_paid_sales.progress < 0 ?  'text-red-500' : 'text-emerald-500']"
+                                >
+                                    @{{ Math.abs(report.statistics.total_paid_sales.progress.toFixed(2)) }}%
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Total Sales -->
+                    <div class="flex gap-2.5 flex-1 min-w-[200px]">
+                        <div class="w-full h-[60px] max-w-[60px] max-h-[60px] dark:invert dark:mix-blend-exclusion">
+                            <img
+                                src="{{ bagisto_asset('images/total-sales.svg')}}"
+                                title="@lang('admin::app.dashboard.index.total-sales')"
+                            >
+                        </div>
+
+                        <!-- Sales Stats -->
+                        <div class="grid gap-1 place-content-start">
+                            <p class="text-base text-gray-800 leading-none dark:text-white font-semibold">
+                                @{{ report.statistics.total_unpaid_sales.formatted_total }}
+                            </p>
+
+                            <p class="text-xs text-gray-600 dark:text-gray-300 font-semibold">
+                                @lang('admin::app.dashboard.index.total-unpaid-sales')
+                            </p>
+
+                            <!-- Sales Percentage -->
+                            <div class="flex gap-0.5 items-center">
+                                <span
+                                    class="text-base  text-emerald-500"
+                                    :class="[report.statistics.total_unpaid_sales.progress < 0 ? 'icon-down-stat text-red-500 dark:!text-red-500' : 'icon-up-stat text-emerald-500 dark:!text-emerald-500']"
+                                ></span>
+
+                                <p
+                                    class="text-xs text-emerald-500 font-semibold"
+                                    :class="[report.statistics.total_unpaid_sales.progress < 0 ?  'text-red-500' : 'text-emerald-500']"
+                                >
+                                    @{{ Math.abs(report.statistics.total_unpaid_sales.progress.toFixed(2)) }}%
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Total Orders -->
                     <div class="flex gap-2.5 flex-1 min-w-[200px]">
                         <div class="w-full h-[60px] max-w-[60px] max-h-[60px] dark:invert dark:mix-blend-exclusion">

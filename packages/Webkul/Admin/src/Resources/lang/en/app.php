@@ -122,6 +122,8 @@ return [
             'total-customers'             => 'Total Customers',
             'total-orders'                => 'Total Orders',
             'total-sales'                 => 'Total Sales',
+            'total-paid-sales'            => 'Total Paid Sales',
+            'total-unpaid-sales'          => 'Total UnPaid Sales',
             'total-stock'                 => ':total_stock Stock',
             'total-unpaid-invoices'       => 'Total Unpaid Invoices',
             'unique-visitors'             => ':count unique',
