@@ -16,7 +16,6 @@ class DashboardController extends Controller
         'today'                    => 'getTodayStats',
         'stock-threshold-products' => 'getStockThresholdProducts',
         'total-sales'              => 'getSalesStats',
-        'total-sales-month'        => 'getSalesStatsMonth',
         'total-visitors'           => 'getVisitorStats',
         'top-selling-products'     => 'getTopSellingProducts',
         'top-customers'            => 'getTopCustomers',
@@ -50,21 +49,6 @@ class DashboardController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function stats()
-    {
-        $stats = $this->dashboardHelper->{$this->typeFunctions[request()->query('type')]}();
-
-        return response()->json([
-            'statistics' => $stats,
-            'date_range' => $this->dashboardHelper->getDateRange(),
-        ]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function statsMonth()
     {
         $stats = $this->dashboardHelper->{$this->typeFunctions[request()->query('type')]}();
 

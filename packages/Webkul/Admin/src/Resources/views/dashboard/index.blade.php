@@ -82,9 +82,6 @@
             <!-- Store Stats -->
             <div class="rounded bg-white dark:bg-gray-900 box-shadow">
                 <!-- Total Sales Detailes -->
-                @include('admin::dashboard.total-sales-month')
-
-                <!-- Total Sales Detailes -->
                 @include('admin::dashboard.total-sales')
 
                 <!-- Total Visitors Detailes -->

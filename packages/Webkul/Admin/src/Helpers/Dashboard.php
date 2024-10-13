@@ -109,18 +109,6 @@ class Dashboard
         return [
             'total_orders' => $this->saleReporting->getTotalOrdersProgress(),
             'total_sales'  => $this->saleReporting->getTotalSalesProgress(),
-            'over_time'    => $this->saleReporting->getCurrentTotalSalesOverTime(),
-        ];
-    }
-
-    /**
-     * Returns sales statistics.
-     */
-    public function getSalesStatsMonth(): array
-    {
-        return [
-            'total_orders' => $this->saleReporting->getTotalOrdersProgress(),
-            'total_sales'  => $this->saleReporting->getTotalSalesProgress(),
             'over_time'    => $this->saleReporting->getCurrentTotalSalesOverTime('month'),
         ];
     }
