@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Event;
 use Webkul\Checkout\Models\Cart as ModelsCart;
 use Webkul\Customer\Models\RegisterDevice;
 use Webkul\Customer\Repositories\CustomerActivityRepository;
+use Webkul\Sales\Jobs\CreateOdooOrder;
 use Webkul\Sales\Repositories\InvoiceRepository;
 
 class StandardController extends Controller
@@ -165,6 +166,8 @@ class StandardController extends Controller
                 Cart::deActivateCart();
 
                 Cart::activateCartIfSessionHasDeactivatedCartId();
+
+                CreateOdooOrder::dispatch($order->id)->onQueue('odoo');
 
                 // app(CustomerActivityRepository::class)->create([
                 //     'note' => 'قام بإنشاء طلب جديد رقم  ' . $order->id,

@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Webkul\Core\Models\CountryState;
 use Webkul\Core\Models\CountryStateCity;
+use Webkul\Sales\Jobs\CreateOdooOrder;
+use Webkul\Sales\Models\Order;
 
 class Fix extends Command
 {
@@ -33,6 +35,11 @@ class Fix extends Command
     public function handle()
     {
         $this->info('start!');
+
+
+        CreateOdooOrder::dispatchSync(Order::get()->last()->id);
+
+        dd("asd");
         $csvFile = 'CityDataGrid.csv';
         $csvData = $this->csvToArray($csvFile);
         foreach ($csvData as $row) {

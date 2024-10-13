@@ -24,7 +24,7 @@ class AbandonedCart extends Mailable
     {
         return new Envelope(
             to: [
-                new Address('a.n.s.r.96@gmail.com', $this->cart->customer_first_name . ' ' . $this->cart->customer_last_name),
+                new Address($this->cart->customer_email, $this->cart->customer_first_name . ' ' . $this->cart->customer_last_name),
             ],
             subject: trans('shop::app.emails.orders.abandoned.subject'),
         );
