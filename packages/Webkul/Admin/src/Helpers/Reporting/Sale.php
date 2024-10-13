@@ -213,7 +213,7 @@ class Sale extends AbstractReporting
             ->resetModel()
             ->where('status', '!=', 'no_status')
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->sum(DB::raw('base_grand_total - base_grand_total_invoiced - base_grand_total_refunded'));
+            ->sum(DB::raw('base_grand_total - (base_grand_total_invoiced - base_grand_total_refunded)'));
     }
 
     /**
