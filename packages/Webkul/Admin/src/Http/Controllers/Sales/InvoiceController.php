@@ -22,8 +22,7 @@ class InvoiceController extends Controller
     public function __construct(
         protected OrderRepository $orderRepository,
         protected InvoiceRepository $invoiceRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -137,12 +136,13 @@ class InvoiceController extends Controller
      */
     public function printInvoice(int $id)
     {
+        app()->setLocale('ar');
         $invoice = $this->invoiceRepository->findOrFail($id);
         return view('admin::sales.invoices.pdf', compact('invoice'));
 
         return $this->downloadPDF(
             view('admin::sales.invoices.pdf', compact('invoice'))->render(),
-            'invoice-'.$invoice->created_at->format('d-m-Y')
+            'invoice-' . $invoice->created_at->format('d-m-Y')
         );
     }
 }
