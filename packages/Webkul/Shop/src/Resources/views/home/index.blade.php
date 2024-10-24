@@ -65,7 +65,7 @@
         @endswitch
     @endforeach
 
-    <div class="container mt-20 max-lg:px-8 max-sm:mt-8">
+    <div class="m-20 max-lg:px-12 max-sm:mt-12" style="margin-left: 100px;margin-right: 100px;">
         <div class="elfsight-app-6b83226e-9d00-4db3-ab16-dfc624716697" data-elfsight-app-lazy></div>
     </div>
 </x-shop::layouts>
