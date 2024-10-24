@@ -45,8 +45,7 @@ class CartRule
         protected CartRuleCustomerRepository $cartRuleCustomerRepository,
         protected CartRuleCouponUsageRepository $cartRuleCouponUsageRepository,
         protected Validator $validator
-    ) {
-    }
+    ) {}
 
     /**
      * Collect discount on cart
@@ -198,6 +197,18 @@ class CartRule
         $appliedRuleIds = [];
 
         foreach ($rules = $this->getCartRules() as $rule) {
+
+            if ($rule->discount_amount == 0) {
+                if (isset($item->additional['bundle_options'])) {
+                    $items_count = sizeOf($item->additional['bundle_options'][1]);
+                    // dd($items_count,$item->additional['bundle_options'][1]);
+                    if ($items_count < 2) {
+                        continue;
+                    }
+                }
+            }
+
+
             if (!$this->canProcessRule($rule)) {
                 continue;
             }
@@ -217,6 +228,15 @@ class CartRule
             switch ($rule->action_type) {
                 case 'by_percent':
                     $rulePercent = min(100, $rule->discount_amount);
+                    if (isset($items_count)) {
+                        if ($items_count == 2) {
+                            $rulePercent = min(100, 15);
+                        } else if ($items_count == 3) {
+                            $rulePercent = min(100, 20);
+                        } else if ($items_count == 4) {
+                            $rulePercent = min(100, 30);
+                        }
+                    }
 
                     $discountAmount = ($quantity * $item->price + $item->tax_amount - $item->discount_amount) * ($rulePercent / 100);
 

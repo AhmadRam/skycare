@@ -7,7 +7,7 @@
             >
                 {{ $prices['from']['regular']['formatted_price'] }}
             </span>
-            
+
             {{ $prices['from']['final']['formatted_price'] }}
         </p>
     @else
@@ -20,8 +20,8 @@
         $prices['from']['regular']['price'] != $prices['to']['regular']['price']
         || $prices['from']['final']['price'] != $prices['to']['final']['price']
     )
-        <p class="text-base font-normal">To</p>
-        
+        <p class="text-base font-normal">{{ __('admin::app.dashboard.index.to') }}</p>
+
         @if ($prices['to']['regular']['price'] != $prices['to']['final']['price'])
             <p class="flex gap-4 items-center max-sm:text-lg">
                 <span
@@ -30,7 +30,7 @@
                 >
                     {{ $prices['to']['regular']['formatted_price'] }}
                 </span>
-                
+
                 {{ $prices['to']['final']['formatted_price'] }}
             </p>
         @else

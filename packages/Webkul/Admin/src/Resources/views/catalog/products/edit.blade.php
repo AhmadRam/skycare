@@ -72,7 +72,7 @@
                             class="transparent-button px-1 py-1.5 hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 dark:text-white"
                         >
                             <span class="icon-store text-2xl"></span>
-                            
+
                             {{ $currentChannel->name }}
 
                             <input type="hidden" name="channel" value="{{ $currentChannel->code }}"/>
@@ -105,7 +105,7 @@
                             <span class="icon-language text-2xl"></span>
 
                             {{ $currentLocale->name }}
-                            
+
                             <input type="hidden" name="locale" value="{{ $currentLocale->code }}"/>
 
                             <span class="icon-sort-down text-2xl"></span>
@@ -182,7 +182,7 @@
                                             'attribute' => $attribute,
                                             'product'   => $product,
                                         ])
-            
+
                                         <x-admin::form.control-group.error :control-name="$attribute->code . (in_array($attribute->type, ['multiselect', 'checkbox']) ? '[]' : '')" />
                                     </x-admin::form.control-group>
 

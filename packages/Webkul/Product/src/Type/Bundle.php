@@ -25,9 +25,9 @@ class Bundle extends AbstractType
      * @var array
      */
     protected $skipAttributes = [
-        'price',
+        // 'price',
         'cost',
-        'special_price',
+        // 'special_price',
         'special_price_from',
         'special_price_to',
         'length',
@@ -168,6 +168,30 @@ class Bundle extends AbstractType
      */
     public function getProductPrices()
     {
+        $bundle = app('Webkul\Product\Helpers\BundleOption')->getBundleConfig($this->product);
+        $price = 0;
+
+        foreach ($bundle['options'] as $option) {
+            foreach ($option['products'] as $product) {
+                if (!empty($product['is_default'])) {
+                    $price += $product['price']['final']['price'];
+                }
+            }
+        }
+
+        return [
+            'regular' => [
+                'price'           => core()->convertPrice($regularPrice = $this->evaluatePrice($price)),
+                'formatted_price' => core()->currency($regularPrice),
+            ],
+
+            'final'   => [
+                'price'           => core()->convertPrice($minimalPrice = $this->evaluatePrice($this->product->special_price)),
+                'formatted_price' => core()->currency($minimalPrice),
+            ],
+        ];
+
+
         return [
             'from' => [
                 'regular' => [
@@ -200,6 +224,11 @@ class Bundle extends AbstractType
      */
     public function getPriceHtml()
     {
+        return view('shop::products.prices.index', [
+            'product' => $this->product,
+            'prices'  => $this->getProductPrices(),
+        ])->render();
+
         return view('shop::products.prices.bundle', [
             'product' => $this->product,
             'prices'  => $this->getProductPrices(),
@@ -385,11 +414,11 @@ class Bundle extends AbstractType
                     $bundleOptionQuantities[$option->id] = $qty;
                 }
 
-                $label = $qty.' x '.$optionProduct->product->name;
+                $label = $qty . ' x ' . $optionProduct->product->name;
 
                 $price = $optionProduct->product->getTypeInstance()->getMinimalPrice();
                 if ($price != 0) {
-                    $label .= ' '.core()->currency($price);
+                    $label .= ' ' . core()->currency($price);
                 }
 
                 $labels[] = $label;
