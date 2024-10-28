@@ -161,6 +161,19 @@ class Sale extends AbstractReporting
     }
 
     /**
+     * Retrieves total refunded sales and their progress.
+     */
+    public function getTotalRefundedSalesProgress(): array
+    {
+        return [
+            'previous'        => $previous = $this->getTotalRefundedSales($this->lastStartDate, $this->lastEndDate),
+            'current'         => $current = $this->getTotalRefundedSales($this->startDate, $this->endDate),
+            'formatted_total' => core()->formatBasePrice($current),
+            'progress'        => $this->getPercentageChange($previous, $current),
+        ];
+    }
+
+    /**
      * Retrieves sub total sales and their progress.
      */
     public function getSubTotalSalesProgress(): array
@@ -197,6 +210,8 @@ class Sale extends AbstractReporting
         return $this->orderRepository
             ->resetModel()
             ->where('status', '!=', 'no_status')
+            ->where('status', '!=', 'closed')
+            ->where('status', '!=', 'canceled')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->sum(DB::raw('base_grand_total'));
     }
@@ -211,9 +226,9 @@ class Sale extends AbstractReporting
     {
         return $this->orderRepository
             ->resetModel()
-            ->where('status', '!=', 'no_status')
+            ->where('status', 'pending')
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->sum(DB::raw('base_grand_total - (base_grand_total_invoiced - base_grand_total_refunded)'));
+            ->sum(DB::raw('base_grand_total'));
     }
 
     /**
@@ -227,8 +242,27 @@ class Sale extends AbstractReporting
         return $this->orderRepository
             ->resetModel()
             ->where('status', '!=', 'no_status')
+            ->where('status', '!=', 'closed')
+            ->where('status', '!=', 'canceled')
+            ->where('status', '!=', 'pending')
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->sum(DB::raw('base_grand_total_invoiced - base_grand_total_refunded'));
+            ->sum(DB::raw('base_grand_total'));
+    }
+
+    /**
+     * Retrieves total refunded sales
+     *
+     * @param  \Carbon\Carbon  $startDate
+     * @param  \Carbon\Carbon  $endDate
+     */
+    public function getTotalRefundedSales($startDate, $endDate): float
+    {
+        return $this->orderRepository
+            ->resetModel()
+            ->where('status', '!=', 'no_status')
+            ->whereIn('status', ['closed', 'canceled'])
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum(DB::raw('base_grand_total'));
     }
 
     /**

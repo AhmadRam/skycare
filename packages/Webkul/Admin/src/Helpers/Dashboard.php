@@ -36,6 +36,7 @@ class Dashboard
             'total_sales'           => $this->saleReporting->getTotalSalesProgress(),
             'total_unpaid_sales'    => $this->saleReporting->getTotalUnpaidSalesProgress(),
             'total_paid_sales'      => $this->saleReporting->getTotalPaidSalesProgress(),
+            'total_refunded_sales'  => $this->saleReporting->getTotalRefundedSalesProgress(),
             'avg_sales'             => $this->saleReporting->getAverageSalesProgress(),
             'total_unpaid_invoices' => [
                 'total'           => $total = $this->saleReporting->getTotalPendingInvoicesAmount(),

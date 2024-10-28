@@ -236,6 +236,26 @@
                         </div>
                     </div>
 
+                    <!-- Refunded Invoices -->
+                    <div class="flex gap-2.5 flex-1 min-w-[200px]">
+                        <div class="w-full h-[60px] max-w-[60px] max-h-[60px] dark:invert dark:mix-blend-exclusion">
+                            <img
+                                src="{{ bagisto_asset('images/unpaid-invoices.svg')}}"
+                                title="@lang('admin::app.dashboard.index.total-unpaid-invoices')"
+                            >
+                        </div>
+
+                        <div class="grid gap-1 place-content-start">
+                            <p class="text-base text-gray-800 leading-none dark:text-white font-semibold">
+                                @{{ report.statistics.total_refunded_sales.formatted_total }}
+                            </p>
+
+                            <p class="text-xs text-gray-600 dark:text-gray-300 font-semibold">
+                                @lang('admin::app.dashboard.index.total-refunded-sales')
+                            </p>
+                        </div>
+                    </div>
+
                     <!-- Unpaid Invoices -->
                     <div class="flex gap-2.5 flex-1 min-w-[200px]">
                         <div class="w-full h-[60px] max-w-[60px] max-h-[60px] dark:invert dark:mix-blend-exclusion">
