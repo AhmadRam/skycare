@@ -42,7 +42,7 @@
     {!! view_render_event('bagisto.shop.layout.head') !!}
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-{{--
+
     <!-- Meta Pixel Code -->
     <script>
         ! function(f, b, e, v, n, t, s) {
@@ -87,15 +87,15 @@
             f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', 'GTM-MMHJVPMM');
     </script>
-    <!-- End Google Tag Manager --> --}}
+    <!-- End Google Tag Manager -->
 </head>
 
 <body>
-{{--
+
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MMHJVPMM" height="0" width="0"
             style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) --> --}}
+    <!-- End Google Tag Manager (noscript) -->
 
     {!! view_render_event('bagisto.shop.layout.body.before') !!}
 
