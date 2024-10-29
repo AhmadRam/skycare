@@ -16,7 +16,7 @@
         id="v-quantity-changer-template"
     >
         <div>
-            <span 
+            <span
                 class="icon-minus text-2xl cursor-pointer"
                 role="button"
                 tabindex="0"
@@ -29,8 +29,8 @@
                 class="w-2.5 text-center select-none"
                 v-text="quantity"
             ></p>
-            
-            <span 
+
+            <span
                 class="icon-plus text-2xl cursor-pointer"
                 role="button"
                 tabindex="0"
@@ -71,7 +71,7 @@
                 },
 
                 decrease() {
-                    if (this.quantity > 1) {
+                    if (this.quantity > 0) {
                         this.quantity -= 1;
                     }
 

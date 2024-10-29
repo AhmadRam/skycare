@@ -205,6 +205,16 @@ class CartRule
                     if ($items_count < 2) {
                         continue;
                     }
+                } else {
+                    $cart = Cart::getCart();
+                    $skus = [];
+                    foreach ($rule->conditions as $condition) {
+                        $skus[] = $condition['value'];
+                    }
+                    $items_count = $cart->items->whereIn('sku', $skus)->sum('quantity');
+                    if ($items_count < 2) {
+                        continue;
+                    }
                 }
             }
 
@@ -233,7 +243,7 @@ class CartRule
                             $rulePercent = min(100, 15);
                         } else if ($items_count == 3) {
                             $rulePercent = min(100, 20);
-                        } else if ($items_count == 4) {
+                        } else if ($items_count >= 4) {
                             $rulePercent = min(100, 30);
                         }
                     }
