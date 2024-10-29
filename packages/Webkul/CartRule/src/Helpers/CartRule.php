@@ -209,7 +209,9 @@ class CartRule
                     $cart = Cart::getCart();
                     $skus = [];
                     foreach ($rule->conditions as $condition) {
-                        $skus[] = $condition['value'];
+                        if ($condition['value']) {
+                            $skus[] = $condition['value'];
+                        }
                     }
                     $items_count = $cart->items->whereIn('sku', $skus)->sum('quantity');
                     if ($items_count < 2) {
