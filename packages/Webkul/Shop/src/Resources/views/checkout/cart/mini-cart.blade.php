@@ -196,18 +196,37 @@
                     <div class="flex justify-between items-center mt-8 mb-8 px-6 pb-2 border-b border-[#E9E9E9]">
                         {!! view_render_event('bagisto.shop.checkout.mini-cart.subtotal.before') !!}
 
-                        <p class="text-sm font-medium text-[#6E6E6E]">
-                            @lang('shop::app.checkout.cart.mini-cart.subtotal')
-                        </p>
+                        <div v-if="! isLoading" style="width:100%">
+                            <!-- Subtotal Section -->
+                            {!! view_render_event('bagisto.shop.checkout.mini-cart.subtotal.before') !!}
 
-                        <p
-                            v-if="! isLoading"
-                            class="text-3xl font-semibold"
-                            v-text="cart.formatted_grand_total"
-                        >
-                        </p>
+                            <div v-if="cart.discount_amount > 0" class="flex justify-between items-center">
+                                <p class="text-sm font-medium text-[#6E6E6E]">
+                                    @lang('shop::app.checkout.cart.mini-cart.subtotal')
+                                </p>
+                                <p class="font-medium text-[#6E6E6E] line-through" v-text="cart.formatted_sub_total"></p>
+                            </div>
 
-                        {!! view_render_event('bagisto.shop.checkout.mini-cart.subtotal.after') !!}
+                            <!-- Discount Section -->
+                            <div  v-if="cart.discount_amount > 0" class="flex justify-between items-center">
+                                <p class="text-sm font-medium text-[#6E6E6E]">
+                                    @lang('shop::app.checkout.cart.summary.discount-amount')
+                                    <span class="text-sm text-red-500" v-text="`(${discountPercentage}%)`"></span>
+                                </p>
+                                <p class="font-medium text-red-500" v-text="`- ${cart.formatted_discount_amount}`"></p>
+                            </div>
+
+                            <!-- Grand Total Section -->
+                            <div class="flex justify-between items-center">
+                                <p class="text-sm font-medium text-[#6E6E6E]">
+                                    @lang('shop::app.checkout.cart.summary.grand-total')
+                                </p>
+                                <p class="text-3xl font-semibold" v-text="cart.formatted_grand_total"></p>
+                            </div>
+
+                            {!! view_render_event('bagisto.shop.checkout.mini-cart.subtotal.after') !!}
+                        </div>
+
 
                         <div
                             v-else
@@ -270,8 +289,8 @@
 
                     {!! view_render_event('bagisto.shop.checkout.mini-cart.action.after') !!}
                 </div>
-            </x-slot>
-        </x-shop::drawer>
+             </x-slot>
+            </x-shop::drawer>
 
         {!! view_render_event('bagisto.shop.checkout.mini-cart.drawer.after') !!}
     </script>
@@ -299,6 +318,16 @@
                 this.$emitter.on('update-mini-cart', (cart) => {
                     this.cart = cart;
                 });
+            },
+
+            computed: {
+                discountPercentage() {
+                    if (this.cart.sub_total > 0 && this.cart.discount_amount > 0) {
+                        // Calculate the discount percentage
+                        return ((this.cart.discount_amount / this.cart.sub_total) * 100).toFixed(2);
+                    }
+                    return 0;
+                },
             },
 
             methods: {

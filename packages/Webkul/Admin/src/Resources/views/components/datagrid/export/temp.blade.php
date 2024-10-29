@@ -10,8 +10,14 @@
     <tbody>
         @foreach ($records as $record)
             <tr>
-                @foreach($record as $column => $value)
-                    <td>{{ $value }} </td>
+                @foreach ($record as $column => $value)
+                    @if (isset($record->status) &&
+                            ($record->status == 'closed' || $record->status == 'canceled') &&
+                            $column == 'base_grand_total')
+                        <td>-{{ $value }} </td>
+                    @else
+                        <td>{{ $value }} </td>
+                    @endif
                 @endforeach
             </tr>
         @endforeach
