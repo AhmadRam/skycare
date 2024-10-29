@@ -209,7 +209,7 @@ class CartRule
                     $cart = Cart::getCart();
                     $skus = [];
                     foreach ($rule->conditions as $condition) {
-                        if ($condition['value']) {
+                        if (isset($condition['value'])) {
                             $skus[] = $condition['value'];
                         }
                     }
