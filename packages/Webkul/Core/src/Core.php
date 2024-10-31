@@ -115,8 +115,7 @@ class Core
         protected CoreConfigRepository $coreConfigRepository,
         protected CustomerGroupRepository $customerGroupRepository,
         protected TaxCategoryRepository $taxCategoryRepository
-    ) {
-    }
+    ) {}
 
     /**
      * Get the version number of the Bagisto.
@@ -641,7 +640,32 @@ class Core
             $price = 0;
         }
 
-        $formatter = new \NumberFormatter(app()->getLocale(), \NumberFormatter::CURRENCY);
+        // $formatter = new \NumberFormatter(app()->getLocale(), \NumberFormatter::CURRENCY);
+        $formatter = new \NumberFormatter('en', \NumberFormatter::CURRENCY);
+        /////////////////////////
+        $arr = [
+            'KWD' => ['en' => 'KD', 'ar' => 'د.ك'],
+            'OMR' => ['en' => 'OR', 'ar' => 'ر.ع'],
+            'BHD' => ['en' => 'BD', 'ar' => 'د.ب'],
+            'AED' => ['en' => 'AD', 'ar' => 'د.إ'],
+            'QAR' => ['en' => 'QR', 'ar' => 'ر.ق'],
+            'SAR' => ['en' => 'SR', 'ar' => 'ر.س'],
+        ];
+
+        $currency = $this->getBaseCurrency();
+
+        $symbol = isset($arr[$currency->code]) ? $arr[$currency->code][app()->getLocale()] : null;
+
+        if ($symbol) {
+            if ($this->currencySymbol($currency->code) == $symbol) {
+                return $formatter->formatCurrency($price, $currency->code);
+            }
+
+            $formatter->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, $symbol);
+
+            return $formatter->format($price);
+        }
+        //////////////////////////////////////
 
         if ($symbol = $this->getBaseCurrency()->symbol) {
             if ($this->currencySymbol($this->getBaseCurrencyCode()) == $symbol) {
