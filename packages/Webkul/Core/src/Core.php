@@ -576,7 +576,8 @@ class Core
             ? $this->getAllCurrencies()->where('code', $currencyCode)->first()
             : $this->getCurrentCurrency();
 
-        $formatter = new \NumberFormatter(app()->getLocale(), \NumberFormatter::CURRENCY);
+        // $formatter = new \NumberFormatter(app()->getLocale(), \NumberFormatter::CURRENCY);
+        $formatter = new \NumberFormatter('en', \NumberFormatter::CURRENCY);
 
         $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $currency->decimal ?? 2);
 
