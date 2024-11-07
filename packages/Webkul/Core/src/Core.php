@@ -485,16 +485,38 @@ class Core
             : $this->currencyRepository->findOneByField('code', $targetCurrencyCode);
 
         if (!$targetCurrency) {
-            return $amount;
+            return $this->customRound($amount);
         }
 
         $exchangeRate = $this->getExchangeRate($targetCurrency->id);
 
         if (!$exchangeRate) {
-            return $amount;
+            return $this->customRound($amount);
         }
 
-        return (float) $amount * $exchangeRate->rate;
+        $amount = (float) $amount * $exchangeRate->rate;
+        return $this->customRound($amount);
+    }
+
+    function customRound($number) {
+        // Extract the integer and decimal parts
+        $integerPart = floor($number);
+        $decimalPart = $number - $integerPart;
+
+        // Convert decimal part to a whole number for easier comparison
+        $thousandths = round($decimalPart * 1000);
+
+        // Check the hundredths digit (10s place in thousandths)
+        $hundredthsDigit = $thousandths % 100;
+
+        // Round up if hundredths is 50 or more, otherwise round down
+        if ($hundredthsDigit == 50) {
+            return $integerPart + $decimalPart;
+        }else if ($hundredthsDigit > 50) {
+            return $integerPart + ceil($decimalPart * 10) / 10;
+        } else {
+            return $integerPart + floor($decimalPart * 10) / 10;
+        }
     }
 
     /**

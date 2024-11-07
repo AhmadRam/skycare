@@ -8,6 +8,7 @@ use Webkul\CartRule\Repositories\CartRuleCouponRepository;
 use Webkul\CartRule\Repositories\CartRuleCouponUsageRepository;
 use Webkul\CartRule\Repositories\CartRuleCustomerRepository;
 use Webkul\CartRule\Repositories\CartRuleRepository;
+use Webkul\CatalogRule\Repositories\CatalogRuleRepository;
 use Webkul\Checkout\Facades\Cart;
 use Webkul\Checkout\Models\CartItem;
 use Webkul\Checkout\Repositories\CartRepository;
@@ -44,6 +45,7 @@ class CartRule
         protected CartRuleCouponRepository $cartRuleCouponRepository,
         protected CartRuleCustomerRepository $cartRuleCustomerRepository,
         protected CartRuleCouponUsageRepository $cartRuleCouponUsageRepository,
+        protected CatalogRuleRepository $catalogRuleRepository,
         protected Validator $validator
     ) {}
 
@@ -71,8 +73,9 @@ class CartRule
 
         $this->calculateCartItemTotals();
 
+        $catalog_rule_skus = $this->getCatalogRuleSkus();
         foreach ($cart->items as $item) {
-            $itemCartRuleIds = $this->process($item);
+            $itemCartRuleIds = $this->process($item, $catalog_rule_skus);
 
             $appliedCartRuleIds = array_merge($appliedCartRuleIds, $itemCartRuleIds);
 
@@ -188,7 +191,7 @@ class CartRule
     /**
      * Cart item discount calculation process
      */
-    public function process(CartItem $item): array
+    public function process(CartItem $item, $catalog_rule_skus = []): array
     {
         $item->discount_percent = 0;
         $item->discount_amount = 0;
@@ -197,6 +200,10 @@ class CartRule
         $appliedRuleIds = [];
 
         foreach ($rules = $this->getCartRules() as $rule) {
+
+            if (in_array($item->sku, $catalog_rule_skus)) {
+                continue;
+            }
 
             if ($rule->discount_amount == 0) {
                 if (isset($item->additional['bundle_options'])) {
@@ -597,6 +604,47 @@ class CartRule
             })
             ->where('status', 1)
             ->orderBy('sort_order', 'asc');
+    }
+
+    /**
+     * @return \Builder
+     */
+    public function getCatalogRuleSkus()
+    {
+        $customerGroup = $this->customerRepository->getCurrentGroup();
+
+        $catalog_rules =  $this->catalogRuleRepository
+            ->leftJoin(
+                'catalog_rule_customer_groups',
+                'catalog_rules.id',
+                '=',
+                'catalog_rule_customer_groups.catalog_rule_id'
+            )
+            ->leftJoin('catalog_rule_channels', 'catalog_rules.id', '=', 'catalog_rule_channels.catalog_rule_id')
+            ->where('catalog_rule_customer_groups.customer_group_id', $customerGroup->id)
+            ->where('catalog_rule_channels.channel_id', core()->getCurrentChannel()->id)
+            ->where(function ($query) {
+                /** @var Builder $query1 */
+                $query->where('catalog_rules.starts_from', '<=', Carbon::now()->format('Y-m-d H:m:s'))
+                    ->orWhereNull('catalog_rules.starts_from');
+            })
+            ->where(function ($query) {
+                /** @var Builder $query2 */
+                $query->where('catalog_rules.ends_till', '>=', Carbon::now()->format('Y-m-d H:m:s'))
+                    ->orWhereNull('catalog_rules.ends_till');
+            })
+            ->where('status', 1)
+            ->orderBy('sort_order', 'asc')->get();
+
+        foreach ($catalog_rules as $catalog_rule) {
+            foreach ($catalog_rule->conditions as $condition) {
+                if ($condition['attribute'] == "product|sku" && $condition['operator'] == "==") {
+                    $skus[] = $condition['value'];
+                }
+            }
+        }
+
+        return $skus ?? [];
     }
 
     /**
