@@ -498,7 +498,8 @@ class Core
         return $this->customRound($amount);
     }
 
-    function customRound($number) {
+    function customRound($number)
+    {
         // Extract the integer and decimal parts
         $integerPart = floor($number);
         $decimalPart = $number - $integerPart;
@@ -512,7 +513,7 @@ class Core
         // Round up if hundredths is 50 or more, otherwise round down
         if ($hundredthsDigit == 50) {
             return $integerPart + $decimalPart;
-        }else if ($hundredthsDigit > 50) {
+        } else if ($hundredthsDigit > 50) {
             return $integerPart + ceil($decimalPart * 10) / 10;
         } else {
             return $integerPart + floor($decimalPart * 10) / 10;
@@ -533,7 +534,7 @@ class Core
             : $this->currencyRepository->findOneByField('code', $targetCurrencyCode);
 
         if (!$targetCurrency) {
-            return $amount;
+            $this->customRound($amount);
         }
 
         $exchangeRate = $this->exchangeRateRepository->findOneWhere([
@@ -544,10 +545,11 @@ class Core
             $exchangeRate === null
             || !$exchangeRate->rate
         ) {
-            return $amount;
+            $this->customRound($amount);
         }
 
-        return (float) $amount / $exchangeRate->rate;
+        $amount = (float) $amount / $exchangeRate->rate;
+        return $this->customRound($amount);
     }
 
     /**
