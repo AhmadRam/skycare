@@ -150,6 +150,9 @@ class OrderDataGrid extends DataGrid
             'searchable' => false,
             'filterable' => true,
             'sortable'   => true,
+            'closure'    => function ($row) {
+                return core()->convertToBasePrice($row->base_grand_total);
+            },
         ]);
 
         $this->addColumn([

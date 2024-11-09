@@ -534,7 +534,7 @@ class Core
             : $this->currencyRepository->findOneByField('code', $targetCurrencyCode);
 
         if (!$targetCurrency) {
-            $this->customRound($amount);
+            return number_format($this->customRound($amount), 3);
         }
 
         $exchangeRate = $this->exchangeRateRepository->findOneWhere([
@@ -545,11 +545,11 @@ class Core
             $exchangeRate === null
             || !$exchangeRate->rate
         ) {
-            $this->customRound($amount);
+            return number_format($this->customRound($amount), 3);
         }
 
         $amount = (float) $amount / $exchangeRate->rate;
-        return $this->customRound($amount);
+        return number_format($this->customRound($amount), 3);
     }
 
     /**
@@ -667,6 +667,7 @@ class Core
         // $formatter = new \NumberFormatter(app()->getLocale(), \NumberFormatter::CURRENCY);
         $formatter = new \NumberFormatter('en', \NumberFormatter::CURRENCY);
         /////////////////////////
+
         $arr = [
             'KWD' => ['en' => 'KD', 'ar' => 'د.ك'],
             'OMR' => ['en' => 'OR', 'ar' => 'ر.ع'],
@@ -677,6 +678,7 @@ class Core
         ];
 
         $currency = $this->getBaseCurrency();
+        $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $currency->decimal ?? 2);
 
         $symbol = isset($arr[$currency->code]) ? $arr[$currency->code][app()->getLocale()] : null;
 
