@@ -511,7 +511,7 @@ class Core
         $hundredthsDigit = $thousandths % 100;
 
         // Round up if hundredths is 50 or more, otherwise round down
-        if ($hundredthsDigit == 50) {
+        if ($hundredthsDigit == 50 || $hundredthsDigit == 0) {
             return $integerPart + $decimalPart;
         } else if ($hundredthsDigit > 50) {
             return $integerPart + ceil($decimalPart * 10) / 10;
@@ -595,6 +595,8 @@ class Core
             $price = 0;
         }
 
+        $price = $this->customRound($price);
+
         $currency = $currencyCode
             ? $this->getAllCurrencies()->where('code', $currencyCode)->first()
             : $this->getCurrentCurrency();
@@ -663,6 +665,8 @@ class Core
         if (is_null($price)) {
             $price = 0;
         }
+
+        $price = $this->customRound($price);
 
         // $formatter = new \NumberFormatter(app()->getLocale(), \NumberFormatter::CURRENCY);
         $formatter = new \NumberFormatter('en', \NumberFormatter::CURRENCY);

@@ -62,7 +62,7 @@ class StandardController extends Controller
         $data = [
             'PaymentMethodId'    => (int) $payment_method_id,
             'CustomerName'       => "$billingAddress->first_name $billingAddress->last_name",
-            'InvoiceValue'       => $cart->grand_total,
+            'InvoiceValue'       => core()->customRound($cart->grand_total),
             'DisplayCurrencyIso' => $cart->cart_currency_code,
             'CustomerEmail'      => $billingAddress->email,
             'CallBackUrl'        => route('myfatoorah.standard.callback') . "?register_device_id=" . $register_device_id . '&order_id=' . $order->id . '&cart_id=' . $cart->id,
