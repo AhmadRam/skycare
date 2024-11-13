@@ -99,6 +99,7 @@ return [
             'order-count'                 => ':count Orders',
             'order-id'                    => '#:id',
             'overall-details'             => 'Overall Details',
+            'wholesale-overall-details'   => 'Wholesale Overall Details',
             'pay-by'                      => 'Pay By - :method',
             'product-count'               => ':count Products',
             'product-image'               => 'Product Image',
@@ -115,13 +116,16 @@ return [
             'to'                          => 'To',
             'today-customers'             => 'Today’s Customers',
             'today-details'               => 'Today’s Details',
+            'wholesale-today-details'     => 'Wholesale Today’s Details',
             'today-orders'                => 'Today’s Orders',
             'today-sales'                 => 'Today’s Sales',
+            'wholesale-today-sales'       => 'Wholesale Today’s Sales',
             'top-performing-categories'   => 'Top Performing Categories',
             'top-selling-products'        => 'Top Selling Products',
             'total-customers'             => 'Total Customers',
             'total-orders'                => 'Total Orders',
             'total-sales'                 => 'Total Sales',
+            'wholesale-total-sales'       => 'Total Wholesale Sales',
             'total-paid-sales'            => 'Total Paid Sales',
             'total-unpaid-sales'          => 'Total Unpaid Sales',
             'total-refunded-sales'        => 'Total Refunded Sales',
@@ -3180,6 +3184,14 @@ return [
                 'view-details'                     => 'View Details',
                 'visits'                           => 'Visits',
             ],
+
+            'sales' => [
+                'title' => 'Product Sales',
+                'wholesale' => 'Wholesale',
+                'total_qty' => 'Total Qty',
+                'total_cost' => 'Total Cost',
+                'profit' => 'Total Profit',
+            ]
         ],
 
         'view' => [

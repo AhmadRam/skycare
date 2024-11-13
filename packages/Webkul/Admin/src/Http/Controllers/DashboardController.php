@@ -13,9 +13,12 @@ class DashboardController extends Controller
      */
     protected $typeFunctions = [
         'over-all'                 => 'getOverAllStats',
+        'wholesale-over-all'       => 'getWholesaleOverAllStats',
         'today'                    => 'getTodayStats',
+        'wholesale-today'          => 'getwholesaleTodayStats',
         'stock-threshold-products' => 'getStockThresholdProducts',
         'total-sales'              => 'getSalesStats',
+        'wholesale-total-sales'    => 'getWholesaleSalesStats',
         'total-visitors'           => 'getVisitorStats',
         'top-selling-products'     => 'getTopSellingProducts',
         'top-customers'            => 'getTopCustomers',

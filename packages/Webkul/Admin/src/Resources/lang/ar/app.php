@@ -99,6 +99,7 @@ return [
             'order-count'                 => ':count طلب',
             'order-id'                    => '#:id',
             'overall-details'             => 'تفاصيل عامة',
+            'wholesale-overall-details'   => 'تفاصيل عامة جملة',
             'pay-by'                      => 'الدفع عن طريق - :method',
             'product-count'               => ':count منتج',
             'product-image'               => 'صورة المنتج',
@@ -115,13 +116,16 @@ return [
             'to'                          => 'إلى',
             'today-customers'             => 'عملاء اليوم',
             'today-details'               => 'تفاصيل اليوم',
+            'wholesale-today-details'     => 'تفاصيل البيع بالجملة اليوم',
             'today-orders'                => 'طلبات اليوم',
             'today-sales'                 => 'مبيعات اليوم',
+            'wholesale-today-sales'       => 'مبيعات الجملة اليوم',
             'top-performing-categories'   => 'أفضل الفئات الأدائية',
             'top-selling-products'        => 'أعلى المنتجات مبيعًا',
             'total-customers'             => 'إجمالي العملاء',
             'total-orders'                => 'إجمالي الطلبات',
             'total-sales'                 => 'إجمالي المبيعات',
+            'wholesale-total-sales'       => 'إجمالي المبيعات الجملة',
             'total-paid-sales'            => 'إجمالي المبيعات المدفوعة',
             'total-unpaid-sales'          => 'إجمالي المبيعات الغير مدفوعة',
             'total-refunded-sales'        => 'إجمالي المبيعات المسترجعة',
@@ -3113,6 +3117,7 @@ return [
                 'total'                         => 'الإجمالي',
                 'total-orders'                  => 'إجمالي الطلبات',
                 'total-sales'                   => 'إجمالي المبيعات',
+                'wholesale-total-sales'         => 'إجمالي المبيعات الجملة',
                 'total-visits'                  => 'إجمالي الزيارات',
                 'total-visits-info'             => 'إجمالي الزائرين في المتجر',
                 'view-details'                  => 'عرض التفاصيل',
@@ -3179,6 +3184,15 @@ return [
                 'view-details'                     => 'عرض التفاصيل',
                 'visits'                           => 'الزيارات',
             ],
+
+            'sales' => [
+                'title' => 'مبيعات المنتج',
+                'wholesale' => 'جملة',
+                'total_qty' => 'إجمالي الكمية',
+                'total_cost' => 'التكلفة الإجمالية',
+                'profit' => 'الربح الإجمالي',
+            ]
+
         ],
 
         'view' => [

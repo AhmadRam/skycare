@@ -56,8 +56,8 @@ class CustomerRepository extends Repository
             $request = request();
 
             foreach ($data[$type] as $imageId => $image) {
-                $file = $type.'.'.$imageId;
-                $dir = 'customer/'.$customer->id;
+                $file = $type . '.' . $imageId;
+                $dir = 'customer/' . $customer->id;
 
                 if ($request->hasFile($file)) {
                     if ($customer->{$type}) {
@@ -122,20 +122,20 @@ class CustomerRepository extends Repository
     /**
      * Get customers count by date.
      */
-    public function getCustomersCountByDate(?Carbon $from = null, ?Carbon $to = null): ?int
+    public function getCustomersCountByDate(?Carbon $from = null, ?Carbon $to = null, $condition = ['!=', 3]): ?int
     {
         if ($from && $to) {
-            return $this->count([['created_at', '>=', $from], ['created_at', '<=', $to]]);
+            return $this->count([['created_at', '>=', $from], ['created_at', '<=', $to], ['customer_group_id', $condition[0], $condition[1]]]);
         }
 
         if ($from) {
-            return $this->count([['created_at', '>=', $from]]);
+            return $this->count([['created_at', '>=', $from], ['customer_group_id', $condition[0], $condition[1]]]);
         }
 
         if ($to) {
-            return $this->count([['created_at', '<=', $to]]);
+            return $this->count([['created_at', '<=', $to], ['customer_group_id', $condition[0], $condition[1]]]);
         }
 
-        return $this->count();
+        return $this->count(['customer_group_id', $condition[0], $condition[1]]);
     }
 }

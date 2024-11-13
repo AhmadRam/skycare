@@ -55,6 +55,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
             Route::get('view/stats', 'viewStats')->name('admin.reporting.sales.view.stats');
 
             Route::get('coupon-codes', 'couponCodes')->name('admin.reporting.coupon_codes_report.index');
+
+            Route::get('product-sales', 'productSales')->name('admin.reporting.product_sales_report.index');
         });
     });
 });

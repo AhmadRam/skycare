@@ -3,6 +3,7 @@
 namespace Webkul\Admin\Http\Controllers\Reporting;
 
 use Webkul\Admin\DataGrids\Sales\CouponCodesDataGrid;
+use Webkul\Admin\DataGrids\Sales\ProductSalesDataGrid;
 
 class SaleController extends Controller
 {
@@ -62,5 +63,20 @@ class SaleController extends Controller
             'startDate' => $this->reportingHelper->getStartDate(),
             'endDate'   => $this->reportingHelper->getEndDate(),
         ]);
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function productSales()
+    {
+        if (request()->ajax()) {
+            return app(ProductSalesDataGrid::class)->toJson();
+        }
+
+        return view('admin::reporting.sales.product-sales');
     }
 }

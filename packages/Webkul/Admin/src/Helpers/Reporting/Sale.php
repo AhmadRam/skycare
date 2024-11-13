@@ -30,11 +30,11 @@ class Sale extends AbstractReporting
      *
      * @return array
      */
-    public function getTotalOrdersProgress()
+    public function getTotalOrdersProgress($condition = ['!=', 3])
     {
         return [
-            'previous' => $previous = $this->getTotalOrders($this->lastStartDate, $this->lastEndDate),
-            'current'  => $current = $this->getTotalOrders($this->startDate, $this->endDate),
+            'previous' => $previous = $this->getTotalOrders($this->lastStartDate, $this->lastEndDate, $condition),
+            'current'  => $current = $this->getTotalOrders($this->startDate, $this->endDate, $condition),
             'progress' => $this->getPercentageChange($previous, $current),
         ];
     }
@@ -67,12 +67,15 @@ class Sale extends AbstractReporting
      * @param  \Carbon\Carbon  $startDate
      * @param  \Carbon\Carbon  $endDate
      */
-    public function getTotalOrders($startDate, $endDate): int
+    public function getTotalOrders($startDate, $endDate, $group_condition = ['!=', 3]): int
     {
         return $this->orderRepository
             ->resetModel()
-            ->where('status', '!=', 'no_status')
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+            ->select('orders.*', 'customers.customer_group_id')
+            ->where('customers.customer_group_id', $group_condition[0], $group_condition[1])
+            ->where('orders.status', '!=', 'no_status')
+            ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->count();
     }
 
@@ -97,11 +100,11 @@ class Sale extends AbstractReporting
     /**
      * Retrieves today orders and their progress.
      */
-    public function getTodayOrdersProgress(): array
+    public function getTodayOrdersProgress($condition = ['!=', 3]): array
     {
         return [
-            'previous' => $previous = $this->getTotalOrders(now()->subDay()->startOfDay(), now()->subDay()->endOfDay()),
-            'current'  => $current = $this->getTotalOrders(now()->today(), now()->endOfDay()),
+            'previous' => $previous = $this->getTotalOrders(now()->subDay()->startOfDay(), now()->subDay()->endOfDay(), $condition),
+            'current'  => $current = $this->getTotalOrders(now()->today(), now()->endOfDay(), $condition),
             'progress' => $this->getPercentageChange($previous, $current),
         ];
     }
@@ -109,13 +112,16 @@ class Sale extends AbstractReporting
     /**
      * Retrieves orders
      *
-     * @return array
+     * @return object
      */
-    public function getTodayOrders()
+    public function getTodayOrders($condition = ['!=', 3])
     {
         return $this->orderRepository
             ->resetModel()
-            ->where('status', '!=', 'no_status')
+            ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+            ->select('orders.*', 'customers.customer_group_id')
+            ->where('customers.customer_group_id', $condition[0], $condition[1])
+            ->where('orders.status', '!=', 'no_status')
             ->with(['addresses', 'payment', 'items'])
             ->whereBetween('orders.created_at', [now()->today(), now()->endOfDay()])
             ->get();
@@ -124,11 +130,11 @@ class Sale extends AbstractReporting
     /**
      * Retrieves total sales and their progress.
      */
-    public function getTotalSalesProgress(): array
+    public function getTotalSalesProgress($condition = ['!=', 3]): array
     {
         return [
-            'previous'        => $previous = $this->getTotalSales($this->lastStartDate, $this->lastEndDate),
-            'current'         => $current = $this->getTotalSales($this->startDate, $this->endDate),
+            'previous'        => $previous = $this->getTotalSales($this->lastStartDate, $this->lastEndDate, $condition),
+            'current'         => $current = $this->getTotalSales($this->startDate, $this->endDate, $condition),
             'formatted_total' => core()->formatBasePrice($current),
             'progress'        => $this->getPercentageChange($previous, $current),
         ];
@@ -137,11 +143,11 @@ class Sale extends AbstractReporting
     /**
      * Retrieves total unpaid sales and their progress.
      */
-    public function getTotalUnpaidSalesProgress(): array
+    public function getTotalUnpaidSalesProgress($condition = ['!=', 3]): array
     {
         return [
-            'previous'        => $previous = $this->getTotalUnpaidSales($this->lastStartDate, $this->lastEndDate),
-            'current'         => $current = $this->getTotalUnpaidSales($this->startDate, $this->endDate),
+            'previous'        => $previous = $this->getTotalUnpaidSales($this->lastStartDate, $this->lastEndDate, $condition),
+            'current'         => $current = $this->getTotalUnpaidSales($this->startDate, $this->endDate, $condition),
             'formatted_total' => core()->formatBasePrice($current),
             'progress'        => $this->getPercentageChange($previous, $current),
         ];
@@ -150,11 +156,11 @@ class Sale extends AbstractReporting
     /**
      * Retrieves total unpaid sales and their progress.
      */
-    public function getTotalPaidSalesProgress(): array
+    public function getTotalPaidSalesProgress($condition = ['!=', 3]): array
     {
         return [
-            'previous'        => $previous = $this->getTotalPaidSales($this->lastStartDate, $this->lastEndDate),
-            'current'         => $current = $this->getTotalPaidSales($this->startDate, $this->endDate),
+            'previous'        => $previous = $this->getTotalPaidSales($this->lastStartDate, $this->lastEndDate, $condition),
+            'current'         => $current = $this->getTotalPaidSales($this->startDate, $this->endDate, $condition),
             'formatted_total' => core()->formatBasePrice($current),
             'progress'        => $this->getPercentageChange($previous, $current),
         ];
@@ -163,11 +169,11 @@ class Sale extends AbstractReporting
     /**
      * Retrieves total refunded sales and their progress.
      */
-    public function getTotalRefundedSalesProgress(): array
+    public function getTotalRefundedSalesProgress($condition = ['!=', 3]): array
     {
         return [
-            'previous'        => $previous = $this->getTotalRefundedSales($this->lastStartDate, $this->lastEndDate),
-            'current'         => $current = $this->getTotalRefundedSales($this->startDate, $this->endDate),
+            'previous'        => $previous = $this->getTotalRefundedSales($this->lastStartDate, $this->lastEndDate, $condition),
+            'current'         => $current = $this->getTotalRefundedSales($this->startDate, $this->endDate, $condition),
             'formatted_total' => core()->formatBasePrice($current),
             'progress'        => $this->getPercentageChange($previous, $current),
         ];
@@ -189,11 +195,11 @@ class Sale extends AbstractReporting
     /**
      * Retrieves today sales and their progress.
      */
-    public function getTodaySalesProgress(): array
+    public function getTodaySalesProgress($condition = ['!=', 3]): array
     {
         return [
-            'previous'        => $previous = $this->getTotalSales(now()->subDay()->startOfDay(), now()->subDay()->endOfDay()),
-            'current'         => $current = $this->getTotalSales(now()->today(), now()->endOfDay()),
+            'previous'        => $previous = $this->getTotalSales(now()->subDay()->startOfDay(), now()->subDay()->endOfDay(), $condition),
+            'current'         => $current = $this->getTotalSales(now()->today(), now()->endOfDay(), $condition),
             'formatted_total' => core()->formatBasePrice($current),
             'progress'        => $this->getPercentageChange($previous, $current),
         ];
@@ -205,14 +211,17 @@ class Sale extends AbstractReporting
      * @param  \Carbon\Carbon  $startDate
      * @param  \Carbon\Carbon  $endDate
      */
-    public function getTotalSales($startDate, $endDate): float
+    public function getTotalSales($startDate, $endDate, $group_condition = ['!=', 3]): float
     {
         return $this->orderRepository
             ->resetModel()
-            ->where('status', '!=', 'no_status')
-            ->where('status', '!=', 'closed')
-            ->where('status', '!=', 'canceled')
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+            ->select('orders.*', 'customers.customer_group_id')
+            ->where('customers.customer_group_id', $group_condition[0], $group_condition[1])
+            ->where('orders.status', '!=', 'no_status')
+            ->where('orders.status', '!=', 'closed')
+            ->where('orders.status', '!=', 'canceled')
+            ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->sum(DB::raw('base_grand_total'));
     }
 
@@ -222,12 +231,15 @@ class Sale extends AbstractReporting
      * @param  \Carbon\Carbon  $startDate
      * @param  \Carbon\Carbon  $endDate
      */
-    public function getTotalUnpaidSales($startDate, $endDate): float
+    public function getTotalUnpaidSales($startDate, $endDate, $group_condition = ['!=', 3]): float
     {
         return $this->orderRepository
             ->resetModel()
-            ->where('status', 'pending')
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+            ->select('orders.*', 'customers.customer_group_id')
+            ->where('customers.customer_group_id', $group_condition[0], $group_condition[1])
+            ->where('orders.status', 'pending')
+            ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->sum(DB::raw('base_grand_total'));
     }
 
@@ -237,15 +249,18 @@ class Sale extends AbstractReporting
      * @param  \Carbon\Carbon  $startDate
      * @param  \Carbon\Carbon  $endDate
      */
-    public function getTotalPaidSales($startDate, $endDate): float
+    public function getTotalPaidSales($startDate, $endDate, $group_condition = ['!=', 3]): float
     {
         return $this->orderRepository
             ->resetModel()
-            ->where('status', '!=', 'no_status')
-            ->where('status', '!=', 'closed')
-            ->where('status', '!=', 'canceled')
-            ->where('status', '!=', 'pending')
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+            ->select('orders.*', 'customers.customer_group_id')
+            ->where('customers.customer_group_id', $group_condition[0], $group_condition[1])
+            ->where('orders.status', '!=', 'no_status')
+            ->where('orders.status', '!=', 'closed')
+            ->where('orders.status', '!=', 'canceled')
+            ->where('orders.status', '!=', 'pending')
+            ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->sum(DB::raw('base_grand_total'));
     }
 
@@ -255,13 +270,16 @@ class Sale extends AbstractReporting
      * @param  \Carbon\Carbon  $startDate
      * @param  \Carbon\Carbon  $endDate
      */
-    public function getTotalRefundedSales($startDate, $endDate): float
+    public function getTotalRefundedSales($startDate, $endDate, $group_condition = ['!=', 3]): float
     {
         return $this->orderRepository
             ->resetModel()
-            ->where('status', '!=', 'no_status')
-            ->whereIn('status', ['closed', 'canceled'])
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+            ->select('orders.*', 'customers.customer_group_id')
+            ->where('customers.customer_group_id', $group_condition[0], $group_condition[1])
+            ->where('orders.status', '!=', 'no_status')
+            ->whereIn('orders.status', ['closed', 'canceled'])
+            ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->sum(DB::raw('base_grand_total'));
     }
 
@@ -297,9 +315,9 @@ class Sale extends AbstractReporting
      * @param  string  $period
      * @param  bool  $includeEmpty
      */
-    public function getCurrentTotalSalesOverTime($period = 'auto', $includeEmpty = true): array
+    public function getCurrentTotalSalesOverTime($period = 'auto', $includeEmpty = true, $condition = ['!=', 3]): array
     {
-        return $this->getTotalSalesOverTime($this->startDate, $this->endDate, $period, $includeEmpty);
+        return $this->getTotalSalesOverTime($this->startDate, $this->endDate, $period, $includeEmpty, $condition);
     }
 
     /**
@@ -310,24 +328,25 @@ class Sale extends AbstractReporting
      * @param  string  $period
      * @param  bool  $includeEmpty
      */
-    public function getTotalSalesOverTime($startDate, $endDate, $period, $includeEmpty): array
+    public function getTotalSalesOverTime($startDate, $endDate, $period, $includeEmpty, $condition = ['!=', 3]): array
     {
         return $this->getOverTimeStats(
             $startDate,
             $endDate,
             'SUM(base_grand_total_invoiced - base_grand_total_refunded)',
-            $period
+            $period,
+            $condition
         );
     }
 
     /**
      * Retrieves average sales and their progress.
      */
-    public function getAverageSalesProgress(): array
+    public function getAverageSalesProgress($condition = ['!=', 3]): array
     {
         return [
-            'previous'        => $previous = $this->getAverageSales($this->lastStartDate, $this->lastEndDate),
-            'current'         => $current = $this->getAverageSales($this->startDate, $this->endDate),
+            'previous'        => $previous = $this->getAverageSales($this->lastStartDate, $this->lastEndDate, $condition),
+            'current'         => $current = $this->getAverageSales($this->startDate, $this->endDate, $condition),
             'formatted_total' => core()->formatBasePrice($current),
             'progress'        => $this->getPercentageChange($previous, $current),
         ];
@@ -340,12 +359,15 @@ class Sale extends AbstractReporting
      * @param  \Carbon\Carbon  $endDate
      * @return array
      */
-    public function getAverageSales($startDate, $endDate): ?float
+    public function getAverageSales($startDate, $endDate, $group_condition = ['!=', 3]): ?float
     {
         return $this->orderRepository
             ->resetModel()
-            ->where('status', '!=', 'no_status')
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+            ->select('orders.*', 'customers.customer_group_id')
+            ->where('customers.customer_group_id', $group_condition[0], $group_condition[1])
+            ->where('orders.status', '!=', 'no_status')
+            ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->avg(DB::raw('base_grand_total_invoiced - base_grand_total_refunded'));
     }
 
@@ -691,23 +713,36 @@ class Sale extends AbstractReporting
      * @param  string  $valueColumn
      * @param  string  $period
      */
-    public function getOverTimeStats($startDate, $endDate, $valueColumn, $period = 'auto'): array
+    public function getOverTimeStats($startDate, $endDate, $valueColumn, $period = 'auto', $group_condition = ['!=', 3]): array
     {
         $config = $this->getTimeInterval($startDate, $endDate, $period);
 
         $groupColumn = $config['group_column'];
 
-        $results = $this->orderRepository
-            ->resetModel()
-            ->where('status', '!=', 'no_status')
+        $orderSummary = $this->orderRepository
             ->select(
                 DB::raw("$groupColumn AS date"),
                 DB::raw("$valueColumn AS total"),
-                DB::raw('COUNT(*) AS count')
+                DB::raw('COUNT(*) AS count'),
+                'customer_id'
             )
+            ->where('status', '!=', 'no_status')
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy('date')
-            ->get();
+            ->groupBy('date', 'customer_id');
+
+
+        $results = $this->orderRepository
+            ->resetModel()
+            ->join('customers', 'orders.customer_id', '=', 'customers.id')
+            ->leftJoinSub($orderSummary, 'order_summary', function ($join) {
+                $join->on('customers.id', '=', 'order_summary.customer_id');
+            })
+            ->where('customers.customer_group_id', $group_condition[0], $group_condition[1])
+            ->select(
+                'order_summary.date',
+                'order_summary.total',
+                'order_summary.count'
+            )->get();
 
 
         foreach ($config['intervals'] as $interval) {

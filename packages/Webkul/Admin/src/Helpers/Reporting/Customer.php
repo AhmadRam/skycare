@@ -26,11 +26,11 @@ class Customer extends AbstractReporting
     /**
      * Retrieves total customers and their progress.
      */
-    public function getTotalCustomersProgress(): array
+    public function getTotalCustomersProgress($condition = ['!=', 3]): array
     {
         return [
-            'previous' => $previous = $this->getTotalCustomers($this->lastStartDate, $this->lastEndDate),
-            'current'  => $current = $this->getTotalCustomers($this->startDate, $this->endDate),
+            'previous' => $previous = $this->getTotalCustomers($this->lastStartDate, $this->lastEndDate, $condition),
+            'current'  => $current = $this->getTotalCustomers($this->startDate, $this->endDate, $condition),
             'progress' => $this->getPercentageChange($previous, $current),
         ];
     }
@@ -60,11 +60,11 @@ class Customer extends AbstractReporting
     /**
      * Retrieves today customers and their progress.
      */
-    public function getTodayCustomersProgress(): array
+    public function getTodayCustomersProgress($condition = ['!=', 3]): array
     {
         return [
-            'previous' => $previous = $this->getTotalCustomers(now()->subDay()->startOfDay(), now()->subDay()->endOfDay()),
-            'current'  => $current = $this->getTotalCustomers(now()->today(), now()->endOfDay()),
+            'previous' => $previous = $this->getTotalCustomers(now()->subDay()->startOfDay(), now()->subDay()->endOfDay(), $condition),
+            'current'  => $current = $this->getTotalCustomers(now()->today(), now()->endOfDay(), $condition),
             'progress' => $this->getPercentageChange($previous, $current),
         ];
     }
@@ -75,9 +75,9 @@ class Customer extends AbstractReporting
      * @param  \Carbon\Carbon  $startDate
      * @param  \Carbon\Carbon  $endDate
      */
-    public function getTotalCustomers($startDate, $endDate): int
+    public function getTotalCustomers($startDate, $endDate, $condition): int
     {
-        return $this->customerRepository->getCustomersCountByDate($startDate, $endDate);
+        return $this->customerRepository->getCustomersCountByDate($startDate, $endDate, $condition);
     }
 
     /**
@@ -121,7 +121,7 @@ class Customer extends AbstractReporting
             ->addSelect(
                 'orders.customer_id as id',
                 'orders.customer_email as email',
-                DB::raw('CONCAT('.$tablePrefix.'orders.customer_first_name, " ", '.$tablePrefix.'orders.customer_last_name) as full_name'),
+                DB::raw('CONCAT(' . $tablePrefix . 'orders.customer_first_name, " ", ' . $tablePrefix . 'orders.customer_last_name) as full_name'),
                 DB::raw('SUM(base_grand_total_invoiced - base_grand_total_refunded) as total'),
                 DB::raw('COUNT(*) as orders')
             )
@@ -146,7 +146,7 @@ class Customer extends AbstractReporting
             ->addSelect(
                 'orders.customer_id as id',
                 'orders.customer_email as email',
-                DB::raw('CONCAT('.$tablePrefix.'orders.customer_first_name, " ", '.$tablePrefix.'orders.customer_last_name) as full_name'),
+                DB::raw('CONCAT(' . $tablePrefix . 'orders.customer_first_name, " ", ' . $tablePrefix . 'orders.customer_last_name) as full_name'),
                 DB::raw('COUNT(*) as orders')
             )
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
@@ -171,13 +171,13 @@ class Customer extends AbstractReporting
             ->addSelect(
                 'customers.id as id',
                 'customers.email as email',
-                DB::raw('CONCAT('.$tablePrefix.'customers.first_name, " ", '.$tablePrefix.'customers.last_name) as full_name'),
+                DB::raw('CONCAT(' . $tablePrefix . 'customers.first_name, " ", ' . $tablePrefix . 'customers.last_name) as full_name'),
                 DB::raw('COUNT(*) as reviews')
             )
             ->whereBetween('product_reviews.created_at', [$this->startDate, $this->endDate])
             ->where('product_reviews.status', 'approved')
             ->whereNotNull('customer_id')
-            ->groupBy(DB::raw('CONCAT(email, "-", '.$tablePrefix.'customers.id)'))
+            ->groupBy(DB::raw('CONCAT(email, "-", ' . $tablePrefix . 'customers.id)'))
             ->orderByDesc('reviews')
             ->limit($limit)
             ->get();

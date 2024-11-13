@@ -43,6 +43,20 @@
 
             {!! view_render_event('bagisto.admin.dashboard.overall_detailes.after') !!}
 
+            {!! view_render_event('bagisto.admin.dashboard.wholesale_overall_detailes.before') !!}
+
+            <!-- Overall Detailes -->
+            <div class="flex flex-col gap-2">
+                <p class="text-base text-gray-600 dark:text-gray-300 font-semibold">
+                    @lang('admin::app.dashboard.index.wholesale-overall-details')
+                </p>
+
+                <!-- Over All Details Section -->
+                @include('admin::dashboard.wholesale-over-all-details')
+            </div>
+
+            {!! view_render_event('bagisto.admin.dashboard.wholesale_overall_detailes.after') !!}
+
             {!! view_render_event('bagisto.admin.dashboard.todays_detailes.before') !!}
 
             <!-- Todays Details -->
@@ -53,6 +67,20 @@
 
                 <!-- Todays Details Section -->
                 @include('admin::dashboard.todays-details')
+            </div>
+
+            {!! view_render_event('bagisto.admin.dashboard.todays_detailes.after') !!}
+
+            {!! view_render_event('bagisto.admin.dashboard.todays_detailes.before') !!}
+
+            <!-- wholesale Todays Details -->
+            <div class="flex flex-col gap-2">
+                <p class="text-base text-gray-600 dark:text-gray-300 font-semibold">
+                    @lang('admin::app.dashboard.index.wholesale-today-details')
+                </p>
+
+                <!-- Todays Details Section -->
+                @include('admin::dashboard.wholesale-todays-details')
             </div>
 
             {!! view_render_event('bagisto.admin.dashboard.todays_detailes.after') !!}
@@ -83,6 +111,9 @@
             <div class="rounded bg-white dark:bg-gray-900 box-shadow">
                 <!-- Total Sales Detailes -->
                 @include('admin::dashboard.total-sales')
+
+                <!-- Wholesale Total Sales Detailes -->
+                @include('admin::dashboard.wholesale-total-sales')
 
                 <!-- Total Visitors Detailes -->
                 @include('admin::dashboard.total-visitors')

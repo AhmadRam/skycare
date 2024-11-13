@@ -1,13 +1,13 @@
 <!-- Over Details Vue Component -->
-<v-dashboard-overall-details>
+<v-dashboard-wholesale-overall-details>
     <!-- Shimmer -->
     <x-admin::shimmer.dashboard.over-all-details />
-</v-dashboard-overall-details>
+</v-dashboard-wholesale-overall-details>
 
 @pushOnce('scripts')
     <script
         type="text/x-template"
-        id="v-dashboard-overall-details-template"
+        id="v-dashboard-wholesale-overall-details-template"
     >
         <!-- Shimmer -->
         <template v-if="isLoading">
@@ -281,8 +281,8 @@
     </script>
 
     <script type="module">
-        app.component('v-dashboard-overall-details', {
-            template: '#v-dashboard-overall-details-template',
+        app.component('v-dashboard-wholesale-overall-details', {
+            template: '#v-dashboard-wholesale-overall-details-template',
 
             data() {
                 return {
@@ -304,7 +304,7 @@
 
                     var filtets = Object.assign({}, filtets);
 
-                    filtets.type = 'over-all';
+                    filtets.type = 'wholesale-over-all';
 
                     this.$axios.get("{{ route('admin.dashboard.stats') }}", {
                             params: filtets
