@@ -24,6 +24,7 @@ use Webkul\Product\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Webkul\Admin\Http\Resources\ProductResource;
+use Webkul\Product\Exports\ProductsExport;
 use Webkul\Product\Models\ProductImage;
 
 class ProductController extends Controller
@@ -46,8 +47,7 @@ class ProductController extends Controller
         protected ProductDownloadableSampleRepository $productDownloadableSampleRepository,
         protected ProductInventoryRepository $productInventoryRepository,
         protected ProductRepository $productRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -537,5 +537,16 @@ class ProductController extends Controller
         session()->flash('success', 'تم الإستيراد بنجاح');
 
         return response()->json(['message' => 'تم الإستيراد بنجاح']);
+    }
+
+    /**
+     * export to csv file.
+     *
+     *
+     * @return bool
+     */
+    public function export()
+    {
+        return Excel::download(new ProductsExport(), 'products.xlsx');
     }
 }

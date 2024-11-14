@@ -9,6 +9,20 @@
         </p>
 
         <div class="flex gap-x-2.5 items-center">
+
+            <div
+                class="p-[6px] items-center cursor-pointer transition-all hover:bg-gray-200 dark:hover:bg-gray-800 hover:rounded-[6px]">
+                <div>
+                    <div>
+                        <a class="transparent-button hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-white"
+                            href="{{ route('admin.catalog.products.export') }}">
+                            {{-- <span class="icon-export text-xl text-gray-600"></span> --}}
+                            {{ __('admin::app.export.export') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <div
                 class="p-[6px] items-center cursor-pointer transition-all hover:bg-gray-200 dark:hover:bg-gray-800 hover:rounded-[6px]">
                 <input type="file" class="control" name="products" id="fileInput" style="display: none"
@@ -44,7 +58,9 @@
     <x-admin::datagrid src="{{ route('admin.catalog.products.index') }}" :isMultiRow="true">
         <!-- Datagrid Header -->
         @php
-            $hasPermission = bouncer()->hasPermission('catalog.products.edit') || bouncer()->hasPermission('catalog.products.delete');
+            $hasPermission =
+                bouncer()->hasPermission('catalog.products.edit') ||
+                bouncer()->hasPermission('catalog.products.delete');
         @endphp
 
         <template #header="{ columns, records, sortPage, selectAllRecords, applied, isLoading}">

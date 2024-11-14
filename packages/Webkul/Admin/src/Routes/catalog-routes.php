@@ -136,6 +136,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
             Route::get('{id}/{attribute_id}', 'download')->name('admin.catalog.products.file.download');
 
             Route::post('import', [ProductController::class, 'import'])->name('admin.catalog.products.import');
+
+            Route::get('export', [ProductController::class, 'export'])->name('admin.catalog.products.export');
         });
     });
 });
