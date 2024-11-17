@@ -71,10 +71,14 @@ class Sale extends AbstractReporting
     {
         return $this->orderRepository
             ->resetModel()
-            ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+            ->leftjoin('customers', 'orders.customer_id', '=', 'customers.id')
             ->select('orders.*', 'customers.customer_group_id')
-            ->where('customers.customer_group_id', $group_condition[0], $group_condition[1])
-            ->where('orders.status', '!=', 'no_status')
+            ->where(function ($query) use ($group_condition) {
+                $query->where('customers.customer_group_id', $group_condition[0], $group_condition[1]);
+                if ($group_condition[0] == "!=") {
+                    $query->orWhereNull('orders.customer_id');
+                }
+            })->where('orders.status', '!=', 'no_status')
             ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->count();
     }
@@ -120,8 +124,12 @@ class Sale extends AbstractReporting
             ->resetModel()
             ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
             ->select('orders.*', 'customers.customer_group_id')
-            ->where('customers.customer_group_id', $condition[0], $condition[1])
-            ->where('orders.status', '!=', 'no_status')
+            ->where(function ($query) use ($condition) {
+                $query->where('customers.customer_group_id', $condition[0], $condition[1]);
+                if ($condition[0] == "!=") {
+                    $query->orWhereNull('orders.customer_id');
+                }
+            })->where('orders.status', '!=', 'no_status')
             ->with(['addresses', 'payment', 'items'])
             ->whereBetween('orders.created_at', [now()->today(), now()->endOfDay()])
             ->get();
@@ -217,7 +225,12 @@ class Sale extends AbstractReporting
             ->resetModel()
             ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
             ->select('orders.*', 'customers.customer_group_id')
-            ->where('customers.customer_group_id', $group_condition[0], $group_condition[1])
+            ->where(function ($query) use ($group_condition) {
+                $query->where('customers.customer_group_id', $group_condition[0], $group_condition[1]);
+                if ($group_condition[0] == "!=") {
+                    $query->orWhereNull('orders.customer_id');
+                }
+            })
             ->where('orders.status', '!=', 'no_status')
             ->where('orders.status', '!=', 'closed')
             ->where('orders.status', '!=', 'canceled')
@@ -237,8 +250,12 @@ class Sale extends AbstractReporting
             ->resetModel()
             ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
             ->select('orders.*', 'customers.customer_group_id')
-            ->where('customers.customer_group_id', $group_condition[0], $group_condition[1])
-            ->where('orders.status', 'pending')
+            ->where(function ($query) use ($group_condition) {
+                $query->where('customers.customer_group_id', $group_condition[0], $group_condition[1]);
+                if ($group_condition[0] == "!=") {
+                    $query->orWhereNull('orders.customer_id');
+                }
+            })->where('orders.status', 'pending')
             ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->sum(DB::raw('base_grand_total'));
     }
@@ -255,8 +272,12 @@ class Sale extends AbstractReporting
             ->resetModel()
             ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
             ->select('orders.*', 'customers.customer_group_id')
-            ->where('customers.customer_group_id', $group_condition[0], $group_condition[1])
-            ->where('orders.status', '!=', 'no_status')
+            ->where(function ($query) use ($group_condition) {
+                $query->where('customers.customer_group_id', $group_condition[0], $group_condition[1]);
+                if ($group_condition[0] == "!=") {
+                    $query->orWhereNull('orders.customer_id');
+                }
+            })->where('orders.status', '!=', 'no_status')
             ->where('orders.status', '!=', 'closed')
             ->where('orders.status', '!=', 'canceled')
             ->where('orders.status', '!=', 'pending')
@@ -276,8 +297,12 @@ class Sale extends AbstractReporting
             ->resetModel()
             ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
             ->select('orders.*', 'customers.customer_group_id')
-            ->where('customers.customer_group_id', $group_condition[0], $group_condition[1])
-            ->where('orders.status', '!=', 'no_status')
+            ->where(function ($query) use ($group_condition) {
+                $query->where('customers.customer_group_id', $group_condition[0], $group_condition[1]);
+                if ($group_condition[0] == "!=") {
+                    $query->orWhereNull('orders.customer_id');
+                }
+            })->where('orders.status', '!=', 'no_status')
             ->whereIn('orders.status', ['closed', 'canceled'])
             ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->sum(DB::raw('base_grand_total'));
@@ -365,8 +390,12 @@ class Sale extends AbstractReporting
             ->resetModel()
             ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
             ->select('orders.*', 'customers.customer_group_id')
-            ->where('customers.customer_group_id', $group_condition[0], $group_condition[1])
-            ->where('orders.status', '!=', 'no_status')
+            ->where(function ($query) use ($group_condition) {
+                $query->where('customers.customer_group_id', $group_condition[0], $group_condition[1]);
+                if ($group_condition[0] == "!=") {
+                    $query->orWhereNull('orders.customer_id');
+                }
+            })->where('orders.status', '!=', 'no_status')
             ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->avg(DB::raw('base_grand_total_invoiced - base_grand_total_refunded'));
     }
@@ -737,8 +766,12 @@ class Sale extends AbstractReporting
             ->leftJoinSub($orderSummary, 'order_summary', function ($join) {
                 $join->on('customers.id', '=', 'order_summary.customer_id');
             })
-            ->where('customers.customer_group_id', $group_condition[0], $group_condition[1])
-            ->select(
+            ->where(function ($query) use ($group_condition) {
+                $query->where('customers.customer_group_id', $group_condition[0], $group_condition[1]);
+                if ($group_condition[0] == "!=") {
+                    $query->orWhereNull('orders.customer_id');
+                }
+            })->select(
                 'order_summary.date',
                 'order_summary.total',
                 'order_summary.count'
