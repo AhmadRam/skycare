@@ -50,13 +50,13 @@ class Dashboard
     public function getWholesaleOverAllStats(): array
     {
         return [
-            'total_customers'       => $this->customerReporting->getTotalCustomersProgress(['==', 3]),
-            'total_orders'          => $this->saleReporting->getTotalOrdersProgress(['==', 3]),
-            'total_sales'           => $this->saleReporting->getTotalSalesProgress(['==', 3]),
-            'total_unpaid_sales'    => $this->saleReporting->getTotalUnpaidSalesProgress(['==', 3]),
-            'total_paid_sales'      => $this->saleReporting->getTotalPaidSalesProgress(['==', 3]),
-            'total_refunded_sales'  => $this->saleReporting->getTotalRefundedSalesProgress(['==', 3]),
-            'avg_sales'             => $this->saleReporting->getAverageSalesProgress(['==', 3]),
+            'total_customers'       => $this->customerReporting->getTotalCustomersProgress(['=', 3]),
+            'total_orders'          => $this->saleReporting->getTotalOrdersProgress(['=', 3]),
+            'total_sales'           => $this->saleReporting->getTotalSalesProgress(['=', 3]),
+            'total_unpaid_sales'    => $this->saleReporting->getTotalUnpaidSalesProgress(['=', 3]),
+            'total_paid_sales'      => $this->saleReporting->getTotalPaidSalesProgress(['=', 3]),
+            'total_refunded_sales'  => $this->saleReporting->getTotalRefundedSalesProgress(['=', 3]),
+            'avg_sales'             => $this->saleReporting->getAverageSalesProgress(['=', 3]),
         ];
     }
 
@@ -98,7 +98,7 @@ class Dashboard
      */
     public function getWholesaleTodayStats(): array
     {
-        $orders = $this->saleReporting->getTodayOrders(['==', 3]);
+        $orders = $this->saleReporting->getTodayOrders(['=', 3]);
 
         $orders = $orders->map(function ($order) {
             return [
@@ -119,9 +119,9 @@ class Dashboard
         });
 
         return [
-            'total_sales'     => $this->saleReporting->getTodaySalesProgress(['==', 3]),
-            'total_orders'    => $this->saleReporting->getTodayOrdersProgress(['==', 3]),
-            'total_customers' => $this->customerReporting->getTodayCustomersProgress(['==', 3]),
+            'total_sales'     => $this->saleReporting->getTodaySalesProgress(['=', 3]),
+            'total_orders'    => $this->saleReporting->getTodayOrdersProgress(['=', 3]),
+            'total_customers' => $this->customerReporting->getTodayCustomersProgress(['=', 3]),
             'orders'          => $orders,
         ];
     }
@@ -168,9 +168,9 @@ class Dashboard
     public function getWholesaleSalesStats(): array
     {
         return [
-            'total_orders' => $this->saleReporting->getTotalOrdersProgress(['==', 3]),
-            'total_sales'  => $this->saleReporting->getTotalSalesProgress(['==', 3]),
-            'over_time'    => $this->saleReporting->getCurrentTotalSalesOverTime('month', true, ['==', 3]),
+            'total_orders' => $this->saleReporting->getTotalOrdersProgress(['=', 3]),
+            'total_sales'  => $this->saleReporting->getTotalSalesProgress(['=', 3]),
+            'over_time'    => $this->saleReporting->getCurrentTotalSalesOverTime('month', true, ['=', 3]),
         ];
     }
 
