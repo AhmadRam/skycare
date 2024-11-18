@@ -9,9 +9,19 @@
             @lang('admin::app.reporting.products.sales.title')
         </p>
 
+        <div class="flex gap-x-2.5 items-center">
+            <!-- Export Modal -->
+            <x-admin::datagrid.export src="{{ route('admin.reporting.product_sales_report.index', ['customer_group' => request()->customer_group]) }}" />
+        </div>
+
     </div>
 
     <div class="flex gap-4">
+
+        <a href="{{ route('admin.reporting.product_sales_report.index') }}"
+            class="text-sm text-blue-600 cursor-pointer transition-all hover:underline">
+            All
+        </a>
 
         <a href="{{ route('admin.reporting.product_sales_report.index') }}?customer_group=2"
             class="text-sm text-blue-600 cursor-pointer transition-all hover:underline">
