@@ -247,14 +247,23 @@ class CartRule
             switch ($rule->action_type) {
                 case 'by_percent':
                     $rulePercent = min(100, $rule->discount_amount);
+
                     if (isset($items_count)) {
-                        if ($items_count == 2) {
-                            $rulePercent = min(100, 15);
-                        } else if ($items_count == 3) {
-                            $rulePercent = min(100, 20);
-                        } else if ($items_count >= 4) {
-                            $rulePercent = min(100, 30);
+                        $rules = json_decode($rule->description, true);
+                        foreach ($rules as $key => $value) {
+                            if ($items_count == $key) {
+                                $rulePercent = min(100, $value);
+                                break;
+                            }
                         }
+
+                        // if ($items_count == 2) {
+                        //     $rulePercent = min(100, 15);
+                        // } else if ($items_count == 3) {
+                        //     $rulePercent = min(100, 20);
+                        // } else if ($items_count >= 4) {
+                        //     $rulePercent = min(100, 30);
+                        // }
                     }
 
                     $discountAmount = ($quantity * $item->price + $item->tax_amount - $item->discount_amount) * ($rulePercent / 100);
