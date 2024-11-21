@@ -249,11 +249,13 @@ class CartRule
                     $rulePercent = min(100, $rule->discount_amount);
 
                     if (isset($items_count)) {
-                        $rules = json_decode($rule->description, true);
-                        foreach ($rules as $key => $value) {
-                            if ($items_count == $key) {
-                                $rulePercent = min(100, $value);
-                                break;
+                        $cond_rules = json_decode($rule->description, true);
+                        if ($cond_rules != null) {
+                            foreach ($cond_rules as $key => $value) {
+                                if ($items_count == $key) {
+                                    $rulePercent = min(100, $value);
+                                    break;
+                                }
                             }
                         }
 
