@@ -35,6 +35,15 @@
             @include('admin::reporting.customers.most-orders')
         </div>
 
+        <!-- Customers With Most Sales and Customers With Most Orders Sections Container -->
+        <div class="flex justify-between gap-4 flex-1 [&>*]:flex-1 max-xl:flex-auto">
+            <!-- Customers With Most Sales Section -->
+            @include('admin::reporting.customers.wholesale-most-sales')
+
+            <!-- Customers With Most Orders Section -->
+            @include('admin::reporting.customers.wholesale-most-orders')
+        </div>
+
         <!-- Customers Traffic Section -->
         @include('admin::reporting.customers.total-traffic')
 
@@ -79,7 +88,7 @@
                     return {
                         filters: {
                             start: "{{ $startDate->format('Y-m-d') }}",
-                            
+
                             end: "{{ $endDate->format('Y-m-d') }}",
                         }
                     }

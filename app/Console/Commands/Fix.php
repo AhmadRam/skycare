@@ -10,6 +10,7 @@ use Webkul\Core\Models\CountryState;
 use Webkul\Core\Models\CountryStateCity;
 use Webkul\Sales\Jobs\CreateOdooOrder;
 use Webkul\Sales\Models\Order;
+use Webkul\Sales\Repositories\OrderRepository;
 
 class Fix extends Command
 {
@@ -36,33 +37,6 @@ class Fix extends Command
     {
         $this->info('start!');
 
-
-        CreateOdooOrder::dispatchSync(Order::get()->last()->id);
-
-        dd("asd");
-        $csvFile = 'CityDataGrid.csv';
-        $csvData = $this->csvToArray($csvFile);
-        foreach ($csvData as $row) {
-            $city_en = DB::table('country_state_city_translations')->where('default_name', $row['name_en'])->first();
-            if ($city_en) {
-                $city_ar = DB::table('country_state_city_translations')->where('country_state_city_id', $city_en->country_state_city_id)->where('locale', 'ar')->first();
-                $city_ar->update([
-                    'default_name' => $row['name_ar']
-                ]);
-            }
-        }
-
-        $csvFile = 'StateDataGrid.csv';
-        $csvData = $this->csvToArray($csvFile);
-        foreach ($csvData as $row) {
-            $state_en = DB::table('country_state_translations')->where('default_name', $row['name_en'])->first();
-            if ($state_en) {
-                $state_ar = DB::table('country_state_translations')->where('country_state_id', $state_en->country_state_id)->where('locale', 'ar')->first();
-                $state_ar->update([
-                    'default_name' => $row['name_ar']
-                ]);
-            }
-        }
         $this->info('end!');
     }
 

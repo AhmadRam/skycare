@@ -112,20 +112,31 @@ class Customer extends AbstractReporting
      *
      * @param  int  $limit
      */
-    public function getCustomersWithMostSales($limit = null): Collection
+    public function getCustomersWithMostSales($limit = null, $group_condition = ['!=', 3]): Collection
     {
         $tablePrefix = DB::getTablePrefix();
 
         return $this->orderRepository
             ->resetModel()
+            ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+            ->where(function ($query) use ($group_condition) {
+                $query->where('customers.customer_group_id', $group_condition[0], $group_condition[1]);
+                if ($group_condition[0] == "!=") {
+                    $query->orWhereNull('orders.customer_id');
+                }
+            })
             ->addSelect(
                 'orders.customer_id as id',
                 'orders.customer_email as email',
                 DB::raw('CONCAT(' . $tablePrefix . 'orders.customer_first_name, " ", ' . $tablePrefix . 'orders.customer_last_name) as full_name'),
-                DB::raw('SUM(base_grand_total_invoiced - base_grand_total_refunded) as total'),
+                // DB::raw('SUM(base_grand_total_invoiced - base_grand_total_refunded) as total'),
+                DB::raw('SUM(base_grand_total) as total'),
                 DB::raw('COUNT(*) as orders')
             )
-            ->whereBetween('created_at', [$this->startDate, $this->endDate])
+            ->whereBetween('orders.created_at', [$this->startDate, $this->endDate])
+            ->where('orders.status', '!=', 'no_status')
+            ->where('orders.status', '!=', 'closed')
+            ->where('orders.status', '!=', 'canceled')
             ->groupBy(DB::raw('CONCAT(customer_email, "-", customer_id)'))
             ->orderByDesc('total')
             ->limit($limit)
@@ -137,19 +148,29 @@ class Customer extends AbstractReporting
      *
      * @param  int  $limit
      */
-    public function getCustomersWithMostOrders($limit = null): Collection
+    public function getCustomersWithMostOrders($limit = null, $group_condition = ['!=', 3]): Collection
     {
         $tablePrefix = DB::getTablePrefix();
 
         return $this->orderRepository
             ->resetModel()
+            ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+            ->where(function ($query) use ($group_condition) {
+                $query->where('customers.customer_group_id', $group_condition[0], $group_condition[1]);
+                if ($group_condition[0] == "!=") {
+                    $query->orWhereNull('orders.customer_id');
+                }
+            })
             ->addSelect(
                 'orders.customer_id as id',
                 'orders.customer_email as email',
                 DB::raw('CONCAT(' . $tablePrefix . 'orders.customer_first_name, " ", ' . $tablePrefix . 'orders.customer_last_name) as full_name'),
                 DB::raw('COUNT(*) as orders')
             )
-            ->whereBetween('created_at', [$this->startDate, $this->endDate])
+            ->whereBetween('orders.created_at', [$this->startDate, $this->endDate])
+            ->where('orders.status', '!=', 'no_status')
+            ->where('orders.status', '!=', 'closed')
+            ->where('orders.status', '!=', 'canceled')
             ->groupBy(DB::raw('CONCAT(customer_email, "-", customer_id)'))
             ->orderByDesc('orders')
             ->limit($limit)

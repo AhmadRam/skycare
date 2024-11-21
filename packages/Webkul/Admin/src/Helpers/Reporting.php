@@ -24,8 +24,7 @@ class Reporting
         protected Product $productReporting,
         protected Customer $customerReporting,
         protected Visitor $visitorReporting
-    ) {
-    }
+    ) {}
 
     /**
      * Returns the sales statistics.
@@ -48,10 +47,12 @@ class Reporting
                     [
                         'key'   => 'label',
                         'label' => trans('admin::app.reporting.sales.index.interval'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'count',
                         'label' => trans('admin::app.reporting.sales.index.orders'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'formatted_total',
                         'label' => trans('admin::app.reporting.sales.index.total'),
                     ],
@@ -92,10 +93,12 @@ class Reporting
                     [
                         'key'   => 'label',
                         'label' => trans('admin::app.reporting.sales.index.interval'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'count',
                         'label' => trans('admin::app.reporting.sales.index.orders'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'formatted_total',
                         'label' => trans('admin::app.reporting.sales.index.total'),
                     ],
@@ -128,7 +131,8 @@ class Reporting
                     [
                         'key'   => 'label',
                         'label' => trans('admin::app.reporting.sales.index.interval'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'count',
                         'label' => trans('admin::app.reporting.sales.index.orders'),
                     ],
@@ -195,10 +199,12 @@ class Reporting
                     [
                         'key'   => 'id',
                         'label' => trans('admin::app.reporting.sales.index.id'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'name',
                         'label' => trans('admin::app.reporting.sales.index.name'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'count',
                         'label' => trans('admin::app.reporting.sales.index.count'),
                     ],
@@ -251,10 +257,12 @@ class Reporting
                     [
                         'key'   => 'label',
                         'label' => trans('admin::app.reporting.sales.index.interval'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'count',
                         'label' => trans('admin::app.reporting.sales.index.orders'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'formatted_total',
                         'label' => trans('admin::app.reporting.sales.index.total'),
                     ],
@@ -295,10 +303,12 @@ class Reporting
                     [
                         'key'   => 'label',
                         'label' => trans('admin::app.reporting.sales.index.interval'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'count',
                         'label' => trans('admin::app.reporting.sales.index.orders'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'formatted_total',
                         'label' => trans('admin::app.reporting.sales.index.total'),
                     ],
@@ -356,10 +366,12 @@ class Reporting
                     [
                         'key'   => 'label',
                         'label' => trans('admin::app.reporting.sales.index.interval'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'count',
                         'label' => trans('admin::app.reporting.sales.index.orders'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'formatted_total',
                         'label' => trans('admin::app.reporting.sales.index.total'),
                     ],
@@ -411,7 +423,7 @@ class Reporting
             $records = $records->map(function ($paymentMethod) {
                 $paymentMethod->formatted_total = core()->formatBasePrice($paymentMethod->base_total);
 
-                $paymentMethod->title = $paymentMethod->title ?? core()->getConfigData('sales.payment_methods.'.$paymentMethod->method.'.title');
+                $paymentMethod->title = $paymentMethod->title ?? core()->getConfigData('sales.payment_methods.' . $paymentMethod->method . '.title');
 
                 return $paymentMethod;
             });
@@ -421,10 +433,12 @@ class Reporting
                     [
                         'key'   => 'title',
                         'label' => trans('admin::app.reporting.sales.index.payment-method'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'total',
                         'label' => trans('admin::app.reporting.sales.index.orders'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'formatted_total',
                         'label' => trans('admin::app.reporting.sales.index.total'),
                     ],
@@ -447,7 +461,7 @@ class Reporting
 
             $paymentMethod->formatted_total = core()->formatBasePrice($paymentMethod->base_total);
 
-            $paymentMethod->title = $paymentMethod->title ?? core()->getConfigData('sales.payment_methods.'.$paymentMethod->method.'.title');
+            $paymentMethod->title = $paymentMethod->title ?? core()->getConfigData('sales.payment_methods.' . $paymentMethod->method . '.title');
         });
 
         return $paymentMethods;
@@ -466,7 +480,8 @@ class Reporting
                     [
                         'key'   => 'label',
                         'label' => trans('admin::app.reporting.customers.index.interval'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'total',
                         'label' => trans('admin::app.reporting.customers.index.customers'),
                     ],
@@ -523,10 +538,12 @@ class Reporting
                     [
                         'key'   => 'full_name',
                         'label' => trans('admin::app.reporting.customers.index.name'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'email',
                         'label' => trans('admin::app.reporting.customers.index.email'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'formatted_total',
                         'label' => trans('admin::app.reporting.customers.index.total'),
                     ],
@@ -568,10 +585,12 @@ class Reporting
                     [
                         'key'   => 'full_name',
                         'label' => trans('admin::app.reporting.customers.index.name'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'email',
                         'label' => trans('admin::app.reporting.customers.index.email'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'orders',
                         'label' => trans('admin::app.reporting.customers.index.orders'),
                     ],
@@ -584,6 +603,104 @@ class Reporting
         $totalOrders = $this->saleReporting->getTotalOrdersProgress();
 
         $customers = $this->customerReporting->getCustomersWithMostOrders(5);
+
+        $customers->map(function ($customer) use ($totalOrders) {
+            if (! $totalOrders['current']) {
+                $customer->progress = 0;
+            } else {
+                $customer->progress = ($customer->orders * 100) / $totalOrders['current'];
+            }
+        });
+
+        return $customers;
+    }
+
+    /**
+     * Returns the customers with most sales
+     *
+     * @param  string  $type
+     */
+    public function getWholesaleCustomersWithMostSales($type = 'graph'): EloquentCollection|array
+    {
+        if ($type == 'table') {
+            $records = collect($this->customerReporting->getCustomersWithMostSales(null, ['=', 3]));
+
+            $records = $records->map(function ($record) {
+                $record['formatted_total'] = core()->formatBasePrice($record['total']);
+
+                return $record;
+            });
+
+            return [
+                'columns' => [
+                    [
+                        'key'   => 'full_name',
+                        'label' => trans('admin::app.reporting.customers.index.name'),
+                    ],
+                    [
+                        'key'   => 'email',
+                        'label' => trans('admin::app.reporting.customers.index.email'),
+                    ],
+                    [
+                        'key'   => 'formatted_total',
+                        'label' => trans('admin::app.reporting.customers.index.total'),
+                    ],
+                ],
+
+                'records'  => $records,
+            ];
+        }
+
+        $totalSales = $this->saleReporting->getTotalSalesProgress(['=', 3]);
+
+        $customers = $this->customerReporting->getCustomersWithMostSales(5, ['=', 3]);
+
+        $customers->map(function ($customer) use ($totalSales) {
+            if (! $totalSales['current']) {
+                $customer->progress = 0;
+            } else {
+                $customer->progress = ($customer->total * 100) / $totalSales['current'];
+            }
+
+            $customer->formatted_total = core()->formatBasePrice($customer->total);
+        });
+
+        return $customers;
+    }
+
+    /**
+     * Returns the customers with most orders
+     *
+     * @param  string  $type
+     */
+    public function getWholesaleCustomersWithMostOrders($type = 'graph'): EloquentCollection|array
+    {
+        if ($type == 'table') {
+            $records = $this->customerReporting->getCustomersWithMostOrders(null, ['=', 3]);
+
+            return [
+                'columns' => [
+                    [
+                        'key'   => 'full_name',
+                        'label' => trans('admin::app.reporting.customers.index.name'),
+                    ],
+                    [
+                        'key'   => 'email',
+                        'label' => trans('admin::app.reporting.customers.index.email'),
+                    ],
+                    [
+                        'key'   => 'orders',
+                        'label' => trans('admin::app.reporting.customers.index.orders'),
+                    ],
+                ],
+
+                'records'  => $records,
+            ];
+        }
+
+        $totalOrders = $this->saleReporting->getTotalOrdersProgress(['=', 3]);
+
+        $customers = $this->customerReporting->getCustomersWithMostOrders(5, ['=', 3]);
 
         $customers->map(function ($customer) use ($totalOrders) {
             if (! $totalOrders['current']) {
@@ -611,10 +728,12 @@ class Reporting
                     [
                         'key'   => 'full_name',
                         'label' => trans('admin::app.reporting.customers.index.name'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'email',
                         'label' => trans('admin::app.reporting.customers.index.email'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'reviews',
                         'label' => trans('admin::app.reporting.customers.index.reviews'),
                     ],
@@ -654,7 +773,8 @@ class Reporting
                     [
                         'key'   => 'group_name',
                         'label' => trans('admin::app.reporting.customers.index.name'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'total',
                         'label' => trans('admin::app.reporting.customers.index.customers'),
                     ],
@@ -692,7 +812,8 @@ class Reporting
                     [
                         'key'   => 'label',
                         'label' => trans('admin::app.reporting.products.index.interval'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'total',
                         'label' => trans('admin::app.reporting.products.index.quantities'),
                     ],
@@ -725,7 +846,8 @@ class Reporting
                     [
                         'key'   => 'label',
                         'label' => trans('admin::app.reporting.products.index.interval'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'total',
                         'label' => trans('admin::app.reporting.products.index.total'),
                     ],
@@ -760,13 +882,16 @@ class Reporting
                     [
                         'key'   => 'id',
                         'label' => trans('admin::app.reporting.products.index.id'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'name',
                         'label' => trans('admin::app.reporting.products.index.name'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'formatted_price',
                         'label' => trans('admin::app.reporting.products.index.price'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'formatted_revenue',
                         'label' => trans('admin::app.reporting.products.index.revenue'),
                     ],
@@ -810,10 +935,12 @@ class Reporting
                     [
                         'key'   => 'id',
                         'label' => trans('admin::app.reporting.products.index.id'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'name',
                         'label' => trans('admin::app.reporting.products.index.name'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'total_qty_ordered',
                         'label' => trans('admin::app.reporting.products.index.quantities'),
                     ],
@@ -855,10 +982,12 @@ class Reporting
                     [
                         'key'   => 'product_id',
                         'label' => trans('admin::app.reporting.products.index.id'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'product_name',
                         'label' => trans('admin::app.reporting.products.index.name'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'reviews',
                         'label' => trans('admin::app.reporting.products.index.reviews'),
                     ],
@@ -898,10 +1027,12 @@ class Reporting
                     [
                         'key'   => 'visitable_id',
                         'label' => trans('admin::app.reporting.products.index.id'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'name',
                         'label' => trans('admin::app.reporting.products.index.name'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'visits',
                         'label' => trans('admin::app.reporting.products.index.visits'),
                     ],
@@ -941,19 +1072,24 @@ class Reporting
                     [
                         'key'   => 'id',
                         'label' => trans('admin::app.reporting.products.index.id'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'term',
                         'label' => trans('admin::app.reporting.products.index.search-term'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'results',
                         'label' => trans('admin::app.reporting.products.index.results'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'uses',
                         'label' => trans('admin::app.reporting.products.index.uses'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'channel_id',
                         'label' => trans('admin::app.reporting.products.index.channel'),
-                    ], [
+                    ],
+                    [
                         'key'   => 'locale',
                         'label' => trans('admin::app.reporting.products.index.locale'),
                     ],
@@ -982,8 +1118,8 @@ class Reporting
     public function getDateRange(): array
     {
         return [
-            'previous' => $this->saleReporting->getLastStartDate()->format('d M Y').' - '.$this->saleReporting->getLastEndDate()->format('d M Y'),
-            'current'  => $this->saleReporting->getStartDate()->format('d M Y').' - '.$this->saleReporting->getEndDate()->format('d M Y'),
+            'previous' => $this->saleReporting->getLastStartDate()->format('d M Y') . ' - ' . $this->saleReporting->getLastEndDate()->format('d M Y'),
+            'current'  => $this->saleReporting->getStartDate()->format('d M Y') . ' - ' . $this->saleReporting->getEndDate()->format('d M Y'),
         ];
     }
 

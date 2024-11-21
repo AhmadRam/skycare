@@ -14,6 +14,8 @@ class CustomerController extends Controller
         'customers-traffic'           => 'getCustomersTrafficStats',
         'customers-with-most-sales'   => 'getCustomersWithMostSales',
         'customers-with-most-orders'  => 'getCustomersWithMostOrders',
+        'wholesale-customers-with-most-sales'   => 'getWholesaleCustomersWithMostSales',
+        'wholesale-customers-with-most-orders'  => 'getWholesaleCustomersWithMostOrders',
         'customers-with-most-reviews' => 'getCustomersWithMostReviews',
         'top-customer-groups'         => 'getTopCustomerGroups',
     ];
