@@ -19,6 +19,8 @@ class OrderDataGrid extends DataGrid
     public function prepareQueryBuilder()
     {
         $queryBuilder = DB::table('orders')
+            ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+            ->leftJoin('customer_groups', 'customers.customer_group_id', '=', 'customer_groups.id')
             ->leftJoin('addresses as order_address_shipping', function ($leftJoin) {
                 $leftJoin->on('order_address_shipping.order_id', '=', 'orders.id')
                     ->where('order_address_shipping.address_type', OrderAddress::ADDRESS_TYPE_SHIPPING);
@@ -34,8 +36,9 @@ class OrderDataGrid extends DataGrid
                 'orders.increment_id',
                 'orders.base_grand_total',
                 'orders.created_at',
-                'channel_name',
-                'status',
+                // 'channel_name',
+                DB::raw("COALESCE(customer_groups.code, 'general') as customer_group"),
+                'orders.status',
                 'customer_email',
                 // 'orders.cart_id as image',
                 DB::raw('CONCAT(' . DB::getTablePrefix() . 'orders.customer_first_name, " ", ' . DB::getTablePrefix() . 'orders.customer_last_name) as full_name'),
@@ -49,9 +52,12 @@ class OrderDataGrid extends DataGrid
             $queryBuilder->where('orders.status', '!=', 'no_status');
         }
 
+        $queryBuilder->groupBy('orders.id');
+
         $this->addFilter('increment_id', 'orders.increment_id');
         $this->addFilter('full_name', DB::raw('CONCAT(' . DB::getTablePrefix() . 'orders.customer_first_name, " ", ' . DB::getTablePrefix() . 'orders.customer_last_name)'));
         $this->addFilter('phone', DB::raw('COALESCE(order_address_shipping.phone, order_address_billing.phone)'));
+        $this->addFilter('customer_group', 'customer_groups.code');
         $this->addFilter('created_at', 'orders.created_at');
 
 
@@ -168,12 +174,12 @@ class OrderDataGrid extends DataGrid
         ]);
 
         $this->addColumn([
-            'index'      => 'channel_name',
-            'label'      => trans('admin::app.sales.orders.index.datagrid.channel-name'),
+            'index'      => 'customer_group',
+            'label'      => trans('admin::app.sales.orders.view.customer-group'),
             'type'       => 'string',
-            'searchable' => false,
+            'searchable' => true,
             'filterable' => true,
-            'sortable'   => false,
+            'sortable'   => true,
         ]);
 
         $this->addColumn([

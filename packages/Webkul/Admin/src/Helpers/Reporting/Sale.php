@@ -358,7 +358,8 @@ class Sale extends AbstractReporting
         return $this->getOverTimeStats(
             $startDate,
             $endDate,
-            'SUM(base_grand_total_invoiced - base_grand_total_refunded)',
+            // 'SUM(base_grand_total_invoiced - base_grand_total_refunded)',
+            'SUM(base_grand_total)',
             $period,
             $condition
         );
@@ -744,45 +745,67 @@ class Sale extends AbstractReporting
      */
     public function getOverTimeStats($startDate, $endDate, $valueColumn, $period = 'auto', $group_condition = ['!=', 3]): array
     {
-        $config = $this->getTimeInterval($startDate, $endDate, $period);
+        $config = $this->getTimeInterval($startDate, $endDate, $period, 'orders.');
 
         $groupColumn = $config['group_column'];
 
-        $orderSummary = $this->orderRepository
-            ->select(
-                DB::raw("$groupColumn AS date"),
-                DB::raw("$valueColumn AS total"),
-                DB::raw('COUNT(*) AS count'),
-                'customer_id'
-            )
-            ->where('status', '!=', 'no_status')
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy('date', 'customer_id');
-
-
         $results = $this->orderRepository
             ->resetModel()
-            ->join('customers', 'orders.customer_id', '=', 'customers.id')
-            ->leftJoinSub($orderSummary, 'order_summary', function ($join) {
-                $join->on('customers.id', '=', 'order_summary.customer_id');
-            })
+            ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
             ->where(function ($query) use ($group_condition) {
                 $query->where('customers.customer_group_id', $group_condition[0], $group_condition[1]);
                 if ($group_condition[0] == "!=") {
                     $query->orWhereNull('orders.customer_id');
                 }
-            })->select(
-                'order_summary.date',
-                'order_summary.total',
-                'order_summary.count'
-            )->get();
+            })
+            ->select(
+                DB::raw("$groupColumn AS date"),
+                DB::raw("$valueColumn AS total"),
+                DB::raw('COUNT(*) AS count'),
+                // DB::raw("AVG(total/count) AS avg"),
+            )
+            ->where('orders.status', '!=', 'no_status')
+            ->where('orders.status', '!=', 'closed')
+            ->where('orders.status', '!=', 'canceled')
+            ->whereBetween('orders.created_at', [$startDate, $endDate])
+            ->groupBy('date')
+            ->get();
+
+        // $orderSummary = $this->orderRepository
+        //     ->select(
+        //         DB::raw("$groupColumn AS date"),
+        //         DB::raw("$valueColumn AS total"),
+        //         DB::raw('COUNT(*) AS count'),
+        //         'customer_id'
+        //     )
+        //     ->where('status', '!=', 'no_status')
+        //     ->whereBetween('created_at', [$startDate, $endDate])
+        //     ->groupBy('date', 'customer_id');
+
+
+        // $results = $this->orderRepository
+        //     ->resetModel()
+        //     ->join('customers', 'orders.customer_id', '=', 'customers.id')
+        //     ->leftJoinSub($orderSummary, 'order_summary', function ($join) {
+        //         $join->on('customers.id', '=', 'order_summary.customer_id');
+        //     })
+        //     ->where(function ($query) use ($group_condition) {
+        //         $query->where('customers.customer_group_id', $group_condition[0], $group_condition[1]);
+        //         if ($group_condition[0] == "!=") {
+        //             $query->orWhereNull('orders.customer_id');
+        //         }
+        //     })->select(
+        //         'order_summary.date',
+        //         'order_summary.total',
+        //         'order_summary.count'
+        //     )->get();
 
 
         foreach ($config['intervals'] as $interval) {
             $total = $results->where('date', $interval['filter'])->first();
-
             $stats[] = [
                 'label' => $interval['start'],
+                // 'avg' => ($total?->total ?? 1) / ($total?->count ?? 1),
                 'total' => $total?->total ?? 0,
                 'count' => $total?->count ?? 0,
             ];

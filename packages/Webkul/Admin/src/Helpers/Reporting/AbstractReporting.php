@@ -166,7 +166,7 @@ abstract class AbstractReporting
      * @param  string  $period
      * @return array
      */
-    public function getTimeInterval($startDate, $endDate, $period)
+    public function getTimeInterval($startDate, $endDate, $period, $table = null)
     {
         if ($period == 'auto') {
             $totalMonths = $startDate->diffInMonths($endDate) + 1;
@@ -178,7 +178,7 @@ abstract class AbstractReporting
 
             if (! empty($intervals)) {
                 return [
-                    'group_column' => 'MONTH(created_at)',
+                    'group_column' => "MONTH({$table}created_at)",
                     'intervals'    => $intervals,
                 ];
             }
@@ -190,7 +190,7 @@ abstract class AbstractReporting
 
             if (! empty($intervals)) {
                 return [
-                    'group_column' => 'WEEK(created_at)',
+                    'group_column' => "WEEK({$table}created_at)",
                     'intervals'    => $intervals,
                 ];
             }
@@ -199,7 +199,7 @@ abstract class AbstractReporting
              * If the difference between the start and end date is less than 6 weeks
              */
             return [
-                'group_column' => 'DAYOFYEAR(created_at)',
+                'group_column' => "DAYOFYEAR({$table}created_at)",
                 'intervals'    => $this->getDaysInterval($startDate, $endDate),
             ];
         } else {
@@ -213,7 +213,7 @@ abstract class AbstractReporting
                 $formatter = '?-?-?';
             }
 
-            $groupColumn = 'DATE_FORMAT(created_at, "'.Str::replaceArray('?', ['%Y', '%m', '%d'], $formatter).'")';
+            $groupColumn = 'DATE_FORMAT(' . $table . 'created_at, "' . Str::replaceArray('?', ['%Y', '%m', '%d'], $formatter) . '")';
 
             $intervals = [];
 
@@ -285,9 +285,9 @@ abstract class AbstractReporting
     {
         $intervals = [];
 
-        $startWeekDay = Carbon::createFromTimeString(core()->xWeekRange($startDate, 0).' 00:00:01');
+        $startWeekDay = Carbon::createFromTimeString(core()->xWeekRange($startDate, 0) . ' 00:00:01');
 
-        $endWeekDay = Carbon::createFromTimeString(core()->xWeekRange($endDate, 1).' 23:59:59');
+        $endWeekDay = Carbon::createFromTimeString(core()->xWeekRange($endDate, 1) . ' 23:59:59');
 
         $totalWeeks = $startWeekDay->diffInWeeks($endWeekDay);
 
@@ -305,11 +305,11 @@ abstract class AbstractReporting
 
             $start = $i == 0
                 ? $startDate
-                : Carbon::createFromTimeString(core()->xWeekRange($intervalStartDate, 0).' 00:00:01');
+                : Carbon::createFromTimeString(core()->xWeekRange($intervalStartDate, 0) . ' 00:00:01');
 
             $end = ($totalWeeks - 1 == $i)
                 ? $endDate
-                : Carbon::createFromTimeString(core()->xWeekRange($intervalStartDate->subDay(), 1).' 23:59:59');
+                : Carbon::createFromTimeString(core()->xWeekRange($intervalStartDate->subDay(), 1) . ' 23:59:59');
 
             $intervals[] = [
                 'filter' => $start->week,
