@@ -648,9 +648,11 @@ class CartRule
             ->orderBy('sort_order', 'asc')->get();
 
         foreach ($catalog_rules as $catalog_rule) {
-            foreach ($catalog_rule->conditions as $condition) {
-                if ($condition['attribute'] == "product|sku" && $condition['operator'] == "==") {
-                    $skus[] = $condition['value'];
+            if ($catalog_rule->conditions != null) {
+                foreach ($catalog_rule->conditions as $condition) {
+                    if ($condition['attribute'] == "product|sku" && $condition['operator'] == "==") {
+                        $skus[] = $condition['value'];
+                    }
                 }
             }
         }
