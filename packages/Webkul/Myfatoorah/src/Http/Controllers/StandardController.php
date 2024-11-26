@@ -6,6 +6,7 @@ use Webkul\Checkout\Facades\Cart;
 use Webkul\Sales\Repositories\OrderRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Webkul\Checkout\Models\Cart as ModelsCart;
 use Webkul\Customer\Models\RegisterDevice;
 use Webkul\Customer\Repositories\CustomerActivityRepository;
@@ -59,6 +60,7 @@ class StandardController extends Controller
         $prepareDataForOrder['status'] = 'no_status';
         $order = $this->orderRepository->create($prepareDataForOrder);
         $payment_method_id = request()->paymentMethodId;
+        Log::info('myfatoorahRedirect: paymentMethodId ' . $payment_method_id);
         $data = [
             'PaymentMethodId'    => (int) $payment_method_id,
             'CustomerName'       => "$billingAddress->first_name $billingAddress->last_name",
@@ -102,12 +104,16 @@ class StandardController extends Controller
 
         $json = json_decode((string) $res);
         if ($curlError) {
+            Log::error('myfatoorahRedirect: open payment gateway error increment_id : ' .  $order->increment_id . ' order id : ' .  $order->id);
+
             session()->flash('error', $curlError);
 
             return redirect()->route('shop.checkout.cart.index');
         } else {
 
             if ($json->IsSuccess == false) {
+                Log::error('myfatoorahRedirect: open payment gateway error 2 increment_id : ' .  $order->increment_id . ' order id : ' .  $order->id);
+
                 session()->flash('error', $json->ValidationErrors[0]->Error);
 
                 return redirect()->route('shop.checkout.cart.index');
@@ -119,6 +125,8 @@ class StandardController extends Controller
             //     'customer_name' =>  $cart->customer_first_name . ' ' .  $cart->customer_last_name,
             //     'customer_id' =>  $cart->customer_id ?? null,
             // ]);
+
+            Log::info('myfatoorahRedirect: open payment gateway increment_id : ' .  $order->increment_id . ' order id : ' .  $order->id);
 
             $redirectUrl = $json->Data->PaymentURL;
 
@@ -133,6 +141,8 @@ class StandardController extends Controller
      */
     public function cancel()
     {
+        Log::error('myfatoorahCancel:' . request()->order_id);
+
         session()->flash('error', trans('shop::app.checkout.cart.myfatoorah-payment-canceled'));
 
         return redirect()->route('shop.checkout.cart.index');
@@ -156,8 +166,11 @@ class StandardController extends Controller
 
             // $order = $this->orderRepository->create($prepareDataForOrder);
             $order = $this->orderRepository->find(request()->order_id);
+            Log::info('myfatoorahCallback: increment_id : ' .  ($order->increment_id ?? null) . ' order id : ' .  ($order->id ?? request()->order_id) . ' start');
+
             if ($order->status == 'no_status') {
                 $this->orderRepository->update(['status' => 'processing'], $order->id);
+                Log::info('myfatoorahCallback:' . request()->order_id . ' update order status');
 
                 if ($order->canInvoice()) {
                     $this->invoiceRepository->create($this->prepareInvoiceData($order));
@@ -187,6 +200,7 @@ class StandardController extends Controller
 
             return redirect()->route('shop.checkout.onepage.success');
         }
+        Log::error('myfatoorahCallbackError:' . request()->order_id);
 
         session()->flash('error', 'Something went wrong in payment processing, Please try again.');
 
