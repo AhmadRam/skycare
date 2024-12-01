@@ -3,6 +3,7 @@
 namespace Webkul\Shop\Http\Middleware;
 
 use Closure;
+use Stevebauman\Location\Facades\Location;
 use Webkul\Core\Repositories\CurrencyRepository;
 
 class Currency
@@ -12,9 +13,7 @@ class Currency
      *
      * @return void
      */
-    public function __construct(protected CurrencyRepository $currencyRepository)
-    {
-    }
+    public function __construct(protected CurrencyRepository $currencyRepository) {}
 
     /**
      * Handle an incoming request.
@@ -34,7 +33,23 @@ class Currency
             if ($currencyCode = session()->get('currency')) {
                 core()->setCurrentCurrency($currencyCode);
             } else {
-                core()->setCurrentCurrency(core()->getChannelBaseCurrencyCode());
+
+                $currencyMap = [
+                    'SA' => 'SAR', // Saudi Arabia
+                    'QA' => 'QAR', // Qatar
+                    'AE' => 'AED', // UAE
+                    'BH' => 'BHD', // Bahrain
+                    'OM' => 'OMR', // Oman
+                    'KW' => 'KWD', // Kuwait
+                ];
+
+                $userLocation = Location::get();
+                if ($userLocation && isset($currencyMap[$userLocation->countryCode])) {
+                    $currency = $currencyMap[$userLocation->countryCode];
+                    core()->setCurrentCurrency($currency);
+                } else {
+                    core()->setCurrentCurrency(core()->getChannelBaseCurrencyCode());
+                }
             }
         }
 
