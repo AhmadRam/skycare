@@ -193,7 +193,7 @@
                                 ::name="'extra_qty[' + item.id + ']'"
                                 ::value="item.additional['extra_qty'] ?? 0"
                                 class="w-max gap-x-4 rounded-l px-4 py-1"
-                                @change="updateItem(item, $event)"
+                                @change="updateItemExtra(item, $event)"
                             />
                         </div>
                     </div>
@@ -510,7 +510,7 @@
                         });
                 },
 
-                updateItem(item, extra_qty) {
+                updateItemExtra(item, extra_qty) {
                     this.isUpdating = true;
 
                     let params = {
