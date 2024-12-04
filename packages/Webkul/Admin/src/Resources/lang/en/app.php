@@ -226,6 +226,7 @@ return [
                     'items' => [
                         'add-product'       => 'Add Product',
                         'amount-per-unit'   => ':amount Per Unit x :qty Quantity',
+                        'extra-qty'         => ':qty Extra Quantity',
                         'delete'            => 'Delete',
                         'empty-description' => 'No items found in your cart.',
                         'empty-title'       => 'Empty Cart Items',
@@ -640,6 +641,7 @@ return [
                 'price'             => 'Price',
                 'product-name'      => 'Product Name',
                 'qty'               => 'Quantity',
+                'extra-qty'         => 'Extra Quantity',
                 'ship-to'           => 'Ship to',
                 'shipping-handling' => 'Shipping Handling',
                 'shipping-method'   => 'Shipping Method',

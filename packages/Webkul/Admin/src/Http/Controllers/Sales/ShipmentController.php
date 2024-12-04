@@ -19,8 +19,7 @@ class ShipmentController extends Controller
         protected OrderRepository $orderRepository,
         protected OrderItemRepository $orderItemRepository,
         protected ShipmentRepository $shipmentRepository
-    ) {
-    }
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -113,24 +112,29 @@ class ShipmentController extends Controller
             if ((int) $qty) {
                 $orderItem = $this->orderItemRepository->find($itemId);
 
-                if ($orderItem->qty_to_ship < $qty) {
+                $qty_to_ship = $orderItem->qty_to_ship + ($orderItem->additional['extra_qty'] ?? 0);
+                $qty_ordered = $orderItem->qty_ordered + ($orderItem->additional['extra_qty'] ?? 0);
+                if ($qty_to_ship  < $qty) {
                     return false;
                 }
 
                 if ($orderItem->getTypeInstance()->isComposite()) {
                     foreach ($orderItem->children as $child) {
+
                         if (! $child->qty_ordered) {
                             continue;
                         }
 
-                        $finalQty = ($child->qty_ordered / $orderItem->qty_ordered) * $qty;
+                        $child_qty_to_ship = $child->qty_to_ship + ($child->additional['extra_qty'] ?? 0);
+                        $child_qty_ordered = $child->qty_ordered + ($child->additional['extra_qty'] ?? 0);
+                        $finalQty = ($child_qty_ordered / $qty_ordered) * $qty;
 
                         $availableQty = $child->product->inventories()
                             ->where('inventory_source_id', $inventorySourceId)
                             ->sum('qty');
 
                         if (
-                            $child->qty_to_ship < $finalQty
+                            $child_qty_to_ship < $finalQty
                             || $availableQty < $finalQty
                         ) {
                             return false;
@@ -142,7 +146,7 @@ class ShipmentController extends Controller
                         ->sum('qty');
 
                     if (
-                        $orderItem->qty_to_ship < $qty
+                        $qty_to_ship < $qty
                         || $availableQty < $qty
                     ) {
                         return false;

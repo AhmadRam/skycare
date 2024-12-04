@@ -126,6 +126,12 @@
                                                 ])
                                             </p>
 
+                                            <p class="text-gray-600 dark:text-gray-300">
+                                                @lang('admin::app.sales.orders.create.cart.items.extra-qty', [
+                                                    'qty' => $item->additional['extra_qty'] ?? 0,
+                                                ])
+                                            </p>
+
                                             @if (isset($item->additional['attributes']))
                                                 <p class="text-gray-600 dark:text-gray-300">
                                                     @foreach ($item->additional['attributes'] as $attribute)
@@ -140,9 +146,9 @@
                                             </p>
 
                                             <p class="text-gray-600 dark:text-gray-300">
-                                                {{ $item->qty_ordered ? trans('admin::app.sales.orders.view.item-ordered', ['qty_ordered' => $item->qty_ordered]) : '' }}
+                                                {{ $item->qty_ordered ? trans('admin::app.sales.orders.view.item-ordered', ['qty_ordered' => $item->qty_ordered + ($item->additional['extra_qty'] ?? 0)]) : '' }}
 
-                                                {{ $item->qty_invoiced ? trans('admin::app.sales.orders.view.item-invoice', ['qty_invoiced' => $item->qty_invoiced]) : '' }}
+                                                {{ $item->qty_invoiced ? trans('admin::app.sales.orders.view.item-invoice', ['qty_invoiced' => $item->qty_invoiced + ($item->additional['extra_qty'] ?? 0)]) : '' }}
 
                                                 {{ $item->qty_shipped ? trans('admin::app.sales.orders.view.item-shipped', ['qty_shipped' => $item->qty_shipped]) : '' }}
 

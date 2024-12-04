@@ -111,6 +111,10 @@
                                     @{{ "@lang('admin::app.sales.orders.create.cart.items.amount-per-unit', ['amount' => ':replaceAmount', 'qty' => ':replaceQty'])".replace(':replaceAmount', item.formatted_price).replace(':replaceQty', item.quantity) }}
                                 </p>
 
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    @{{ "@lang('admin::app.sales.orders.create.cart.items.extra-qty', ['qty' => ':replaceQty'])".replace(':replaceQty', item.additional['extra_qty']) }}
+                                </p>
+
                                 <!-- Item Options -->
                                 <div
                                     class="grid select-none gap-x-2.5 gap-y-1.5"
@@ -181,6 +185,13 @@
                             <x-admin::quantity-changer
                                 ::name="'qty[' + item.id + ']'"
                                 ::value="item.quantity"
+                                class="w-max gap-x-4 rounded-l px-4 py-1"
+                                @change="updateItem(item, $event)"
+                            />
+                            @lang('admin::app.sales.invoices.invoice-pdf.extra-qty')
+                            <x-admin::quantity-changer
+                                ::name="'extra_qty[' + item.id + ']'"
+                                ::value="item.additional['extra_qty'] ?? 0"
                                 class="w-max gap-x-4 rounded-l px-4 py-1"
                                 @change="updateItem(item, $event)"
                             />
@@ -480,6 +491,32 @@
                             [item.id]: qty
                         },
                         price: {}
+                    };
+
+                    this.$axios.put("{{ route('admin.sales.cart.items.update', $cart->id) }}", params)
+                        .then(response => {
+                            this.$emit('cart-item-updated', response.data.data);
+
+                            this.$emitter.emit('add-flash', {
+                                type: 'success',
+                                message: response.data.message
+                            });
+
+                            this.isUpdating = false;
+
+                        })
+                        .catch(error => {
+                            this.isUpdating = false;
+                        });
+                },
+
+                updateItem(item, extra_qty) {
+                    this.isUpdating = true;
+
+                    let params = {
+                        extra_qty: {
+                            [item.id]: extra_qty
+                        }
                     };
 
                     this.$axios.put("{{ route('admin.sales.cart.items.update', $cart->id) }}", params)

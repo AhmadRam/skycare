@@ -45,134 +45,134 @@ class InvoiceRepository extends Repository
         // DB::beginTransaction();
 
         // try {
-            Event::dispatch('sales.invoice.save.before', $data);
+        Event::dispatch('sales.invoice.save.before', $data);
 
-            $order = $this->orderRepository->find($data['order_id']);
+        $order = $this->orderRepository->find($data['order_id']);
 
-            $totalQty = array_sum($data['invoice']['items']);
+        $totalQty = array_sum($data['invoice']['items']);
 
-            if (isset($invoiceState)) {
-                $state = $invoiceState;
-            } else {
-                $state = 'paid';
+        if (isset($invoiceState)) {
+            $state = $invoiceState;
+        } else {
+            $state = 'paid';
+        }
+
+        $invoice = $this->model->create([
+            'increment_id'          => $this->generateIncrementId(),
+            'order_id'              => $order->id,
+            'total_qty'             => $totalQty,
+            'state'                 => $state,
+            'base_currency_code'    => $order->base_currency_code,
+            'channel_currency_code' => $order->channel_currency_code,
+            'order_currency_code'   => $order->order_currency_code,
+            'order_address_id'      => $order->billing_address->id,
+        ]);
+
+        foreach ($data['invoice']['items'] as $itemId => $qty) {
+            if (! $qty) {
+                continue;
             }
 
-            $invoice = $this->model->create([
-                'increment_id'          => $this->generateIncrementId(),
-                'order_id'              => $order->id,
-                'total_qty'             => $totalQty,
-                'state'                 => $state,
-                'base_currency_code'    => $order->base_currency_code,
-                'channel_currency_code' => $order->channel_currency_code,
-                'order_currency_code'   => $order->order_currency_code,
-                'order_address_id'      => $order->billing_address->id,
+            $orderItem = $this->orderItemRepository->find($itemId);
+
+            if ($qty > $orderItem->qty_to_invoice) {
+                $qty = $orderItem->qty_to_invoice;
+            }
+
+            $invoiceItem = $this->invoiceItemRepository->create([
+                'invoice_id'           => $invoice->id,
+                'order_item_id'        => $orderItem->id,
+                'name'                 => $orderItem->name,
+                'sku'                  => $orderItem->sku,
+                'qty'                  => $qty,
+                'price'                => $orderItem->price,
+                'base_price'           => $orderItem->base_price,
+                'total'                => $orderItem->price * $qty,
+                'base_total'           => $orderItem->base_price * $qty,
+                'tax_amount'           => (($orderItem->tax_amount / $orderItem->qty_ordered) * $qty),
+                'base_tax_amount'      => (($orderItem->base_tax_amount / $orderItem->qty_ordered) * $qty),
+                'discount_amount'      => (($orderItem->discount_amount / $orderItem->qty_ordered) * $qty),
+                'base_discount_amount' => (($orderItem->base_discount_amount / $orderItem->qty_ordered) * $qty),
+                'product_id'           => $orderItem->product_id,
+                'product_type'         => $orderItem->product_type,
+                'additional'           => $orderItem->additional,
             ]);
 
-            foreach ($data['invoice']['items'] as $itemId => $qty) {
-                if (! $qty) {
-                    continue;
-                }
+            if ($orderItem->getTypeInstance()->isComposite()) {
+                foreach ($orderItem->children as $childOrderItem) {
+                    $finalQty = $childOrderItem->qty_ordered
+                        ? ($childOrderItem->qty_ordered / $orderItem->qty_ordered) * $qty
+                        : $orderItem->qty_ordered;
 
-                $orderItem = $this->orderItemRepository->find($itemId);
-
-                if ($qty > $orderItem->qty_to_invoice) {
-                    $qty = $orderItem->qty_to_invoice;
-                }
-
-                $invoiceItem = $this->invoiceItemRepository->create([
-                    'invoice_id'           => $invoice->id,
-                    'order_item_id'        => $orderItem->id,
-                    'name'                 => $orderItem->name,
-                    'sku'                  => $orderItem->sku,
-                    'qty'                  => $qty,
-                    'price'                => $orderItem->price,
-                    'base_price'           => $orderItem->base_price,
-                    'total'                => $orderItem->price * $qty,
-                    'base_total'           => $orderItem->base_price * $qty,
-                    'tax_amount'           => (($orderItem->tax_amount / $orderItem->qty_ordered) * $qty),
-                    'base_tax_amount'      => (($orderItem->base_tax_amount / $orderItem->qty_ordered) * $qty),
-                    'discount_amount'      => (($orderItem->discount_amount / $orderItem->qty_ordered) * $qty),
-                    'base_discount_amount' => (($orderItem->base_discount_amount / $orderItem->qty_ordered) * $qty),
-                    'product_id'           => $orderItem->product_id,
-                    'product_type'         => $orderItem->product_type,
-                    'additional'           => $orderItem->additional,
-                ]);
-
-                if ($orderItem->getTypeInstance()->isComposite()) {
-                    foreach ($orderItem->children as $childOrderItem) {
-                        $finalQty = $childOrderItem->qty_ordered
-                            ? ($childOrderItem->qty_ordered / $orderItem->qty_ordered) * $qty
-                            : $orderItem->qty_ordered;
-
-                        $this->invoiceItemRepository->create([
-                            'invoice_id'           => $invoice->id,
-                            'order_item_id'        => $childOrderItem->id,
-                            'parent_id'            => $invoiceItem->id,
-                            'name'                 => $childOrderItem->name,
-                            'sku'                  => $childOrderItem->sku,
-                            'qty'                  => $finalQty,
-                            'price'                => $childOrderItem->price,
-                            'base_price'           => $childOrderItem->base_price,
-                            'total'                => $childOrderItem->price * $finalQty,
-                            'base_total'           => $childOrderItem->base_price * $finalQty,
-                            'tax_amount'           => 0,
-                            'base_tax_amount'      => 0,
-                            'discount_amount'      => 0,
-                            'base_discount_amount' => 0,
-                            'product_id'           => $childOrderItem->product_id,
-                            'product_type'         => $childOrderItem->product_type,
-                            'additional'           => $childOrderItem->additional,
-                        ]);
-
-                        if (
-                            $childOrderItem->product
-                            && ! $childOrderItem->getTypeInstance()->isStockable()
-                            && $childOrderItem->getTypeInstance()->showQuantityBox()
-                        ) {
-                            $this->invoiceItemRepository->updateProductInventory([
-                                'invoice'   => $invoice,
-                                'product'   => $childOrderItem->product,
-                                'qty'       => $finalQty,
-                                'vendor_id' => $data['vendor_id'] ?? 0,
-                            ]);
-                        }
-
-                        $this->orderItemRepository->collectTotals($childOrderItem);
-                    }
-                } elseif (
-                    $orderItem->product
-                    && ! $orderItem->getTypeInstance()->isStockable()
-                    && $orderItem->getTypeInstance()->showQuantityBox()
-                ) {
-                    $this->invoiceItemRepository->updateProductInventory([
-                        'invoice'   => $invoice,
-                        'product'   => $orderItem->product,
-                        'qty'       => $qty,
-                        'vendor_id' => $data['vendor_id'] ?? 0,
+                    $this->invoiceItemRepository->create([
+                        'invoice_id'           => $invoice->id,
+                        'order_item_id'        => $childOrderItem->id,
+                        'parent_id'            => $invoiceItem->id,
+                        'name'                 => $childOrderItem->name,
+                        'sku'                  => $childOrderItem->sku,
+                        'qty'                  => $finalQty,
+                        'price'                => $childOrderItem->price,
+                        'base_price'           => $childOrderItem->base_price,
+                        'total'                => $childOrderItem->price * $finalQty,
+                        'base_total'           => $childOrderItem->base_price * $finalQty,
+                        'tax_amount'           => 0,
+                        'base_tax_amount'      => 0,
+                        'discount_amount'      => 0,
+                        'base_discount_amount' => 0,
+                        'product_id'           => $childOrderItem->product_id,
+                        'product_type'         => $childOrderItem->product_type,
+                        'additional'           => $childOrderItem->additional,
                     ]);
+
+                    if (
+                        $childOrderItem->product
+                        && ! $childOrderItem->getTypeInstance()->isStockable()
+                        && $childOrderItem->getTypeInstance()->showQuantityBox()
+                    ) {
+                        $this->invoiceItemRepository->updateProductInventory([
+                            'invoice'   => $invoice,
+                            'product'   => $childOrderItem->product,
+                            'qty'       => $finalQty,
+                            'vendor_id' => $data['vendor_id'] ?? 0,
+                        ]);
+                    }
+
+                    $this->orderItemRepository->collectTotals($childOrderItem);
                 }
-
-                $this->orderItemRepository->collectTotals($orderItem);
-
-                $this->downloadableLinkPurchasedRepository->updateStatus($orderItem, 'available');
+            } elseif (
+                $orderItem->product
+                && ! $orderItem->getTypeInstance()->isStockable()
+                && $orderItem->getTypeInstance()->showQuantityBox()
+            ) {
+                $this->invoiceItemRepository->updateProductInventory([
+                    'invoice'   => $invoice,
+                    'product'   => $orderItem->product,
+                    'qty'       => $qty,
+                    'vendor_id' => $data['vendor_id'] ?? 0,
+                ]);
             }
 
-            $this->collectTotals($invoice);
+            $this->orderItemRepository->collectTotals($orderItem);
 
-            $this->orderRepository->collectTotals($order);
+            $this->downloadableLinkPurchasedRepository->updateStatus($orderItem, 'available');
+        }
 
-            if (isset($orderState)) {
-                $this->orderRepository->updateOrderStatus($order, $orderState);
-            } else {
-                $this->orderRepository->updateOrderStatus($order);
-            }
+        $this->collectTotals($invoice);
 
-            /**
-             * Temporary property has been used to avoid request helper usage in listener.
-             */
-            $invoice->can_create_transaction = request()->has('can_create_transaction') && request()->input('can_create_transaction') == '1';
+        $this->orderRepository->collectTotals($order);
 
-            Event::dispatch('sales.invoice.save.after', $invoice);
+        if (isset($orderState)) {
+            $this->orderRepository->updateOrderStatus($order, $orderState);
+        } else {
+            $this->orderRepository->updateOrderStatus($order);
+        }
+
+        /**
+         * Temporary property has been used to avoid request helper usage in listener.
+         */
+        $invoice->can_create_transaction = request()->has('can_create_transaction') && request()->input('can_create_transaction') == '1';
+
+        Event::dispatch('sales.invoice.save.after', $invoice);
         // } catch (\Exception $e) {
         //     DB::rollBack();
 
@@ -206,7 +206,7 @@ class InvoiceRepository extends Repository
         foreach ($data['invoice']['items'] as $itemId => $qty) {
             $orderItem = $this->orderItemRepository->find($itemId);
 
-            if ($qty > $orderItem->qty_to_invoice) {
+            if ($qty > ($orderItem->qty_to_invoice + ($orderItem->additional['extra_qty'] ?? 0))) {
                 return false;
             }
         }

@@ -127,9 +127,9 @@ class OrderItemRepository extends Repository
                     ->first();
 
                 if (isset($item->qty_ordered)) {
-                    $qty = $item->qty_ordered;
+                    $qty = $item->qty_ordered + ($item->additional['extra_qty'] ?? 0);
                 } else {
-                    $qty = $item?->parent?->qty_ordered ?? 1;
+                    $qty = ($item?->parent?->qty_ordered ?? 1) + ($item?->parent?->additional['extra_qty'] ?? 0);
                 }
 
                 if ($orderedInventory) {

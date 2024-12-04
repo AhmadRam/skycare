@@ -226,6 +226,7 @@ return [
                     'items' => [
                         'add-product'       => 'إضافة منتج',
                         'amount-per-unit'   => ':amount للوحدة × :qty الكمية',
+                        'extra-qty'         => ':qty كمية اضافية',
                         'delete'            => 'حذف',
                         'empty-description' => 'لا توجد عناصر في سلة التسوق الخاصة بك.',
                         'empty-title'       => 'عناصر السلة فارغة',
@@ -640,6 +641,7 @@ return [
                 'price'             => 'السعر',
                 'product-name'      => 'اسم المنتج',
                 'qty'               => 'الكمية',
+                'extra-qty'         => 'كمية اضافية',
                 'ship-to'           => 'شحن إلى',
                 'shipping-handling' => 'الشحن والتسليم',
                 'shipping-method'   => 'طريقة الشحن',

@@ -301,6 +301,39 @@ class Cart
      */
     public function updateItems($data)
     {
+        if (isset($data['extra_qty'])) {
+            foreach ($data['extra_qty'] as $itemId => $extra_qty) {
+                $item = $this->cartItemRepository->find($itemId);
+
+                if (!$item) {
+                    continue;
+                }
+
+                if (!$item->product->status) {
+                    throw new \Exception(__('shop::app.checkout.cart.item.inactive'));
+                }
+
+                if ($extra_qty <= 0) {
+                    throw new \Exception(__('shop::app.checkout.cart.illegal'));
+                }
+
+                $item->quantity = $item->quantity + $extra_qty;
+
+                if (!$this->isItemHaveQuantity($item)) {
+                    throw new \Exception(__('shop::app.checkout.cart.inventory-warning'));
+                }
+
+                $additional = $item->additional;
+                $additional['extra_qty'] = $extra_qty;
+
+                $this->cartItemRepository->update([
+                    'additional'          => $additional,
+                ], $itemId);
+
+            }
+        }
+
+
         if (isset($data['qty'])) {
 
             foreach ($data['qty'] as $itemId => $quantity) {
@@ -342,7 +375,6 @@ class Cart
 
                 Event::dispatch('checkout.cart.update.after', $item);
             }
-
         }
 
         if (isset($data['price'])) {
@@ -364,7 +396,6 @@ class Cart
                     "base_total" => $price * $item->quantity,
                 ], $itemId);
             }
-
         }
 
         $this->collectTotals();

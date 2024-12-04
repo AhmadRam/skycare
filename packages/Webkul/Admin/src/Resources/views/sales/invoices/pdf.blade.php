@@ -380,9 +380,15 @@
                 <table>
                     <thead>
                         <tr>
-                            @foreach (['sku', 'product-name', 'price', 'qty', 'subtotal', 'tax-amount', 'grand-total'] as $item)
-                                <th class="text-center table-header">@lang('admin::app.sales.invoices.invoice-pdf.' . $item)</th>
-                            @endforeach
+                            @if (isset($invoice->items->first()->additional['extra_qty']))
+                                @foreach (['sku', 'product-name', 'price', 'qty', 'extra-qty', 'subtotal', 'tax-amount', 'grand-total'] as $item)
+                                    <th class="text-center table-header">@lang('admin::app.sales.invoices.invoice-pdf.' . $item)</th>
+                                @endforeach
+                            @else
+                                @foreach (['sku', 'product-name', 'price', 'qty', 'subtotal', 'tax-amount', 'grand-total'] as $item)
+                                    <th class="text-center table-header">@lang('admin::app.sales.invoices.invoice-pdf.' . $item)</th>
+                                @endforeach
+                            @endif
                         </tr>
                     </thead>
 
@@ -409,7 +415,9 @@
                                 <td class="text-center">{!! core()->formatBasePrice($item->base_price, true) !!}</td>
 
                                 <td class="text-center">{{ $item->qty }}</td>
-
+                                @if (isset($invoice->items->first()->additional['extra_qty']))
+                                    <td class="text-center">{{ $item->additional['extra_qty'] ?? 0 }}</td>
+                                @endif
                                 <td class="text-center">{!! core()->formatBasePrice($item->base_total, true) !!}</td>
 
                                 <td class="text-center">{!! core()->formatBasePrice($item->base_tax_amount, true) !!}</td>

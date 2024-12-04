@@ -174,6 +174,11 @@
                                         <p class="text-gray-600 dark:text-gray-300">
                                             @lang('admin::app.sales.invoices.view.qty', ['qty' => $item->qty])
                                         </p>
+
+                                        <p class="text-gray-600 dark:text-gray-300">
+                                            @lang('admin::app.sales.orders.create.cart.items.extra-qty', ['qty' =>  $item->additional['extra_qty'] ?? 0 ])
+                                        </p>
+
                                     </div>
                                 </div>
                             </div>
