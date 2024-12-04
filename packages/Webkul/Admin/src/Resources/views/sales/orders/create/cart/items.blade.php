@@ -189,7 +189,7 @@
                                 @change="updateItem(item, $event)"
                             />
                             @lang('admin::app.sales.invoices.invoice-pdf.extra-qty')
-                            <x-admin::quantity-changer
+                            <x-admin::extra-quantity-changer
                                 ::name="'extra_qty[' + item.id + ']'"
                                 ::value="item.additional['extra_qty'] ?? 0"
                                 class="w-max gap-x-4 rounded-l px-4 py-1"

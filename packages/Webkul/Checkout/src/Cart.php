@@ -313,7 +313,7 @@ class Cart
                     throw new \Exception(__('shop::app.checkout.cart.item.inactive'));
                 }
 
-                if ($extra_qty <= 0) {
+                if ($extra_qty < 0) {
                     throw new \Exception(__('shop::app.checkout.cart.illegal'));
                 }
 
