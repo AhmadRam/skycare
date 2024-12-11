@@ -48,9 +48,9 @@
                                 @else
                                     <div class="w-full h-[60px] max-w-[60px] max-h-[60px] relative border border-dashed border-gray-300 dark:border-gray-800 rounded dark:invert dark:mix-blend-exclusion">
                                         <img src="{{ bagisto_asset('images/product-placeholders/front.svg') }}">
-                                        
-                                        <p class="absolute w-full bottom-1.5 text-[6px] text-gray-400 text-center font-semibold"> 
-                                            @lang('admin::app.sales.invoices.view.product-image') 
+
+                                        <p class="absolute w-full bottom-1.5 text-[6px] text-gray-400 text-center font-semibold">
+                                            @lang('admin::app.sales.invoices.view.product-image')
                                         </p>
                                     </div>
                                 @endif
@@ -80,6 +80,10 @@
                                     <!-- Product QTY -->
                                     <p class="text-gray-600 dark:text-gray-300">
                                         @lang('admin::app.sales.refunds.view.qty', ['qty' => $item->qty])
+                                    </p>
+
+                                    <p class="text-gray-600 dark:text-gray-300">
+                                        @lang('admin::app.sales.orders.create.cart.items.extra-qty', ['qty' =>  $item->additional['extra_qty'] ?? 0 ])
                                     </p>
                                 </div>
                             </div>
@@ -215,7 +219,7 @@
                             @lang('admin::app.sales.refunds.view.account-information')
                         </p>
                     </x-slot>
-                
+
                     <x-slot:content>
                         <!-- Account Info -->
                         <div class="flex flex-col pb-4">
@@ -240,7 +244,7 @@
                                     @lang('admin::app.sales.refunds.view.billing-address')
                                 </p>
                             </div>
-        
+
                             @include ('admin::sales.address', ['address' => $order->billing_address])
                         @endif
 
@@ -259,7 +263,7 @@
                     </x-slot>
                 </x-admin::accordion>
             @endif
-            
+
             <!-- Order Information -->
             <x-admin::accordion>
                 <x-slot:header>
@@ -267,7 +271,7 @@
                         @lang('admin::app.sales.refunds.view.order-information')
                     </p>
                 </x-slot>
-            
+
                 <x-slot:content>
                     <div class="flex w-full gap-2.5">
                         <!-- Order Info Left Section  -->
@@ -276,7 +280,7 @@
                                 <p class="text-gray-600 dark:text-gray-300 font-semibold">
                                     @lang('admin::app.sales.refunds.view.' . $item)
                                 </p>
-                            @endforeach    
+                            @endforeach
                         </div>
 
                         <!-- Order Info Right Section  -->
@@ -313,7 +317,7 @@
                         @lang('admin::app.sales.refunds.view.payment-information')
                     </p>
                 </x-slot>
-            
+
                 <x-slot:content>
                     <div class="flex w-full gap-2.5">
                         <!-- Payment Information Left Section  -->

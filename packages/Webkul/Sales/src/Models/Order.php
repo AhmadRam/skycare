@@ -370,7 +370,7 @@ class Order extends Model implements OrderContract
     {
         foreach ($this->items as $item) {
             if (
-                $item->qty_to_refund > 0
+                ($item->qty_to_refund + ($item->additional['extra_qty'] ?? 0)) > 0
                 && !in_array($item->order->status, [
                     self::STATUS_CLOSED,
                     self::STATUS_FRAUD,
