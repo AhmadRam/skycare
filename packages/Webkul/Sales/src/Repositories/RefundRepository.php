@@ -216,16 +216,18 @@ class RefundRepository extends Repository
             }
 
             $orderItem = $this->orderItemRepository->find($orderItemId);
-
-            if ($qty > ($orderItem->qty_to_refund + ($orderItem->additional['extra_qty'] ?? 0))) {
+            $total_qty = $orderItem->qty_to_refund + ($orderItem->additional['extra_qty'] ?? 0);
+            if ($qty > $total_qty) {
                 return false;
             }
 
-            $summary['subtotal']['price'] += $orderItem->base_price * $qty;
+            $returned_qty = ($orderItem->additional['extra_qty'] ?? 0) - $qty;
 
-            $summary['discount']['price'] += ($orderItem->base_discount_amount / $orderItem->qty_ordered) * $qty;
+            $summary['subtotal']['price'] += $orderItem->base_price * $returned_qty;
 
-            $summary['tax']['price'] += ($orderItem->tax_amount / $orderItem->qty_ordered) * $qty;
+            $summary['discount']['price'] += ($orderItem->base_discount_amount / $orderItem->qty_ordered) * $returned_qty;
+
+            $summary['tax']['price'] += ($orderItem->tax_amount / $orderItem->qty_ordered) * $returned_qty;
         }
 
         $summary['shipping']['price'] += $order->base_shipping_invoiced - $order->base_shipping_refunded - $order->base_shipping_discount_amount;
