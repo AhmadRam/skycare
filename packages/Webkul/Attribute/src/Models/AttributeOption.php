@@ -15,13 +15,16 @@ class AttributeOption extends TranslatableModel implements AttributeOptionContra
 
     public $timestamps = false;
 
-    public $translatedAttributes = ['label'];
+    public $translatedAttributes = ['label', 'meta_title', 'meta_description', 'meta_keywords'];
 
     protected $fillable = [
         'admin_name',
         'swatch_value',
         'sort_order',
         'attribute_id',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
     ];
 
     /**
@@ -50,7 +53,7 @@ class AttributeOption extends TranslatableModel implements AttributeOptionContra
             $this->swatch_value
             && $this->attribute->swatch_type == 'image'
         ) {
-            return url('cache/small/'.$this->swatch_value);
+            return url('cache/small/' . $this->swatch_value);
         }
 
         return null;

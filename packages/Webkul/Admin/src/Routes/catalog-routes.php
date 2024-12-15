@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Webkul\Admin\Http\Controllers\Catalog\AttributeController;
 use Webkul\Admin\Http\Controllers\Catalog\AttributeFamilyController;
+use Webkul\Admin\Http\Controllers\Catalog\BrandController;
 use Webkul\Admin\Http\Controllers\Catalog\CategoryController;
 use Webkul\Admin\Http\Controllers\Catalog\Product\BundleController;
 use Webkul\Admin\Http\Controllers\Catalog\Product\ConfigurableController;
@@ -37,7 +38,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
 
             Route::post('attribute/import', 'import')->name('admin.catalog.attributes.import');
 
-            Route::get('brands', 'brandIndex')->name('admin.catalog.brands.index');
+            // Route::get('brands', 'brandIndex')->name('admin.catalog.brands.index');
         });
 
         /**
@@ -138,6 +139,25 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
             Route::post('import', [ProductController::class, 'import'])->name('admin.catalog.products.import');
 
             Route::get('export', [ProductController::class, 'export'])->name('admin.catalog.products.export');
+        });
+
+        /**
+         * Brands routes.
+         */
+        Route::controller(BrandController::class)->prefix('brands')->group(function () {
+            Route::get('', 'index')->name('admin.catalog.brands.index');
+
+            Route::get('create', 'create')->name('admin.catalog.brands.create');
+
+            Route::post('create', 'store')->name('admin.catalog.brands.store');
+
+            Route::get('edit/{id}', 'edit')->name('admin.catalog.brands.edit');
+
+            Route::put('edit/{id}', 'update')->name('admin.catalog.brands.update');
+
+            Route::delete('edit/{id}', 'destroy')->name('admin.catalog.brands.delete');
+
+            Route::get('products/{id}',  'products')->name('admin.catalog.brands.products');
         });
     });
 });

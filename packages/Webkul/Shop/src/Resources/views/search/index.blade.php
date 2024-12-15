@@ -18,6 +18,8 @@
 
 <!-- SEO Meta Content -->
 @push('meta')
+    <meta name="title" content="{{ $title }}" />
+
     <meta name="description" content="{{ $title }}" />
 
     <meta name="keywords" content="{{ $title }}" />

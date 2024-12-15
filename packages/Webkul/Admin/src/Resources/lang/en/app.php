@@ -1352,6 +1352,24 @@ return [
             'update-success'          => 'Family updated successfully.',
             'user-define-error'       => 'Can not delete system Attribute family',
         ],
+
+        'brands' => [
+            'index'=>[
+                'title' => 'Brands',
+                'add-btn' => 'Add Brand',
+            ],
+            'create'=>[
+                'title' => 'Create Brand',
+                'edit-title' => 'Edit Brand',
+                'save-btn' => 'Save Brand',
+                'general' => 'General',
+                'admin_name' => 'Admin name',
+                'name' => 'Name',
+            ],
+            'name_en' => "English Name",
+            'name_ar' => "Arabic Name",
+            'sort_order' => "Sort order",
+        ]
     ],
 
     'customers' => [

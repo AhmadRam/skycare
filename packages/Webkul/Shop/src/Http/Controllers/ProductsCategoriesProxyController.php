@@ -139,9 +139,9 @@ class ProductsCategoriesProxyController extends Controller
         if ($brand) {
 
             $brand->id = 2;
-            $brand->position = 1;
+            $brand->position = $brand->sort_order;
             $brand->logo_path = "";
-            $brand->status = 1;
+            $brand->status = $brand->status;
             $brand->display_mode = "products_and_description";
             $brand->_lft = 0;
             $brand->_rgt = 0;
@@ -151,12 +151,12 @@ class ProductsCategoriesProxyController extends Controller
             $brand->name = $brand->label;
             $brand->description = '';
             $brand->slug = strtolower($brand->label);
-            $brand->meta_title = $brand->label;
-            $brand->meta_description = $brand->label;
-            $brand->meta_keywords = '';
+            $brand->meta_title = $brand->meta_title;
+            $brand->meta_description = $brand->meta_description;
+            $brand->meta_keywords = $brand->meta_keywords;
             $brand->is_brand = true;
 
-            visitor()->visit($brand);
+            // visitor()->visit($brand);
 
             return view('shop::categories.view', [
                 'category' => $brand,

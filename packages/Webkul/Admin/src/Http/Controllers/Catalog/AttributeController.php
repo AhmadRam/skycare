@@ -288,16 +288,16 @@ class AttributeController extends Controller
         return response()->json(['message' => 'تم الإستيراد بنجاح']);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     *
-     * @return \Illuminate\View\View
-     */
-    public function brandIndex()
-    {
-        $attribute = $this->attributeRepository->getAttributeByCode('brand');
+    // /**
+    //  * Show the form for editing the specified resource.
+    //  *
+    //  *
+    //  * @return \Illuminate\View\View
+    //  */
+    // public function brandIndex()
+    // {
+    //     $attribute = $this->attributeRepository->getAttributeByCode('brand');
 
-        return view('admin::catalog.attributes.edit', compact('attribute'));
-    }
+    //     return view('admin::catalog.attributes.edit', compact('attribute'));
+    // }
 }

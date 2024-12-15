@@ -9,5 +9,5 @@ class AttributeOptionTranslation extends Model implements AttributeOptionTransla
 {
     public $timestamps = false;
 
-    protected $fillable = ['label'];
+    protected $fillable = ['label', 'meta_title', 'meta_description', 'meta_keywords'];
 }
