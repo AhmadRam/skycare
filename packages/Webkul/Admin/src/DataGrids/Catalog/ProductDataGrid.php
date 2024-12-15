@@ -83,12 +83,12 @@ class ProductDataGrid extends DataGrid
             )
             ->addSelect(DB::raw('COUNT(DISTINCT '.$tablePrefix.'product_images.id) as images_count'))
             ->distinct()
-            ->whereIn('product_flat.locale', $whereInLocales)
+            // ->whereIn('product_flat.locale', $whereInLocales)
             ->whereIn('product_flat.channel', $whereInChannels)
             ->groupBy(
                 'product_flat.product_id',
-                'product_flat.locale',
-                'product_flat.channel'
+                // 'product_flat.locale',
+                // 'product_flat.channel'
             );
 
         $this->addFilter('product_id', 'product_flat.product_id');

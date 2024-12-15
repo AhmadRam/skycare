@@ -27,7 +27,11 @@
     </style>
 @endpush
 @push('meta')
-    <meta name="description"
+
+    <meta name="title"
+        content="{{ trim($category->meta_title) != '' ? $category->meta_title : $category->name }}" />
+
+        <meta name="description"
         content="{{ trim($category->meta_description) != '' ? $category->meta_description : \Illuminate\Support\Str::limit(strip_tags($category->description), 120, '') }}" />
 
     <meta name="keywords" content="{{ $category->meta_keywords }}" />
