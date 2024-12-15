@@ -96,7 +96,7 @@ class BrandDataGrid extends DataGrid
             'sortable'   => true,
             'filterable' => true,
             'closure'    => function ($row) {
-                $image = Storage::url($row->image);
+                $image = url('cache/small/' . $row->image);
                 return "<div class='d-flex'>" .
                     "<picture style='margin-inline-end: 10px;'><source srcset='{$image}' type='image/webp'><img src='{$image}' width='50px' height='50px'></picture>" .
                     "</div>";
@@ -158,6 +158,5 @@ class BrandDataGrid extends DataGrid
                 return route('admin.catalog.brands.delete', $row->id);
             },
         ]);
-
     }
 }
