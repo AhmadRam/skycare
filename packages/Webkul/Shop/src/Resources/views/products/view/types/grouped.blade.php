@@ -17,23 +17,20 @@
                                 </p>
 
                                 <p class="text-[#6E6E6E] mt-1.5">
-                                    {{ $groupedProduct->associated_product->name . ' + ' . core()->currency($groupedProduct->associated_product->getTypeInstance()->getFinalPrice()) }}
+                                    {{-- {{ $groupedProduct->associated_product->name . ' + ' . core()->currency($groupedProduct->associated_product->getTypeInstance()->getFinalPrice()) }} --}}
+                                    {{ $groupedProduct->associated_product->name }}
                                 </p>
 
                             </div>
 
-                            <x-shop::quantity-changer
-                                name="qty[{{$groupedProduct->associated_product_id}}]"
-                                :value="$groupedProduct->qty"
-                                class="gap-x-4 py-2.5 px-3 rounded-xl"
-                                @change="updateItem($event)"
-                            />
+                            <x-shop::quantity-changer name="qty[{{ $groupedProduct->associated_product_id }}]"
+                                :value="0 ?? $groupedProduct->qty" class="gap-x-4 py-2.5 px-3 rounded-xl" @change="updateItem($event)" />
                         </div>
                     @endif
                 @endforeach
             </div>
         @endif
-        
+
     </div>
 
     {!! view_render_event('bagisto.shop.products.view.grouped_products.before', ['product' => $product]) !!}
