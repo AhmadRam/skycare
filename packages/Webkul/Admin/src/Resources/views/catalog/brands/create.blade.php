@@ -81,6 +81,34 @@
 
                 {!! view_render_event('bagisto.admin.catalog.brands.create.card.general.after') !!}
 
+                {!! view_render_event('bagisto.admin.catalog.categories.create.card.description_images.before') !!}
+
+                <!-- Description and images -->
+                <div class="p-4 bg-white dark:bg-gray-900 rounded box-shadow">
+                    <p class="mb-4 text-base text-gray-800 dark:text-white font-semibold">
+                        @lang('admin::app.catalog.categories.create.description-and-images')
+                    </p>
+
+                    <div class="flex pt-5">
+
+                        <!-- Add Banner -->
+                        <div class="flex flex-col gap-2 w-3/5">
+                            <p class="text-gray-800 dark:text-white font-medium">
+                                @lang('admin::app.catalog.categories.create.banner')
+                            </p>
+
+                            <p class="text-xs text-gray-500">
+                                @lang('admin::app.catalog.categories.create.banner-size')
+                            </p>
+
+                            <x-admin::media.images name="swatch_value" width="220px" />
+                        </div>
+                    </div>
+                </div>
+
+                {!! view_render_event('bagisto.admin.catalog.categories.create.card.description_images.after') !!}
+
+
                 {!! view_render_event('bagisto.admin.catalog.brands.create.card.seo.before') !!}
 
                 <!-- SEO Deatils -->

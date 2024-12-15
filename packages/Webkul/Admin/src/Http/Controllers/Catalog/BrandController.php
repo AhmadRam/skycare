@@ -86,7 +86,7 @@ class BrandController extends Controller
             }
         }
 
-        $params["swatch_value"] = $params["swatch_value"]['image_0'] ?? null;
+        $params["swatch_value"] = $params["swatch_value"][0] ?? null;
         if ($params["swatch_value"] == null) {
             unset($params["swatch_value"]);
         }
@@ -129,7 +129,7 @@ class BrandController extends Controller
         ]);
 
         $params = request()->all();
-        $params["swatch_value"] = $params["swatch_value"]['image_0'] ?? null;
+        $params["swatch_value"] = $params["swatch_value"][0] ?? null;
         // $params['channels'] = implode(',', $params['channels']);
 
         if ($params["swatch_value"] == null) {

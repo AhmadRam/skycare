@@ -11,6 +11,8 @@
 
 <!-- SEO Meta Content -->
 @push('meta')
+    <meta name="title" content="{{ trim($product->meta_title) != '' ? $product->meta_title : $product->title }}" />
+
     <meta name="description"
         content="{{ trim($product->meta_description) != '' ? $product->meta_description : \Illuminate\Support\Str::limit(strip_tags($product->description), 120, '') }}" />
 

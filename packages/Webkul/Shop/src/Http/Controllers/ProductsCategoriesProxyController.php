@@ -3,6 +3,7 @@
 namespace Webkul\Shop\Http\Controllers;
 
 use Illuminate\Http\Request;
+use stdClass;
 use Webkul\Attribute\Repositories\AttributeOptionRepository;
 use Webkul\Attribute\Repositories\AttributeRepository;
 use Webkul\Category\Repositories\CategoryRepository;
@@ -137,29 +138,29 @@ class ProductsCategoriesProxyController extends Controller
         $brand = $this->attributeOptionsRepository->where('admin_name', $slugOrURLKey)->first();
 
         if ($brand) {
-
-            $brand->id = 2;
-            $brand->position = $brand->sort_order;
-            $brand->logo_path = "";
-            $brand->status = $brand->status;
-            $brand->display_mode = "products_and_description";
-            $brand->_lft = 0;
-            $brand->_rgt = 0;
-            $brand->parent_id = 1;
-            $brand->additional = null;
-            $brand->banner_path = null;
-            $brand->name = $brand->label;
-            $brand->description = '';
-            $brand->slug = strtolower($brand->label);
-            $brand->meta_title = $brand->meta_title;
-            $brand->meta_description = $brand->meta_description;
-            $brand->meta_keywords = $brand->meta_keywords;
-            $brand->is_brand = true;
+            $new_brand = new stdClass();
+            $new_brand->id = 6;
+            $new_brand->position = $brand->sort_order;
+            $new_brand->logo_path = "";
+            $new_brand->status = $brand->status;
+            $new_brand->display_mode = "products_and_description";
+            $new_brand->_lft = 0;
+            $new_brand->_rgt = 0;
+            $new_brand->parent_id = 1;
+            $new_brand->additional = null;
+            $new_brand->banner_path = null;
+            $new_brand->name = $brand->label;
+            $new_brand->description = '';
+            $new_brand->slug = strtolower($brand->label);
+            $new_brand->meta_title = $brand->meta_title;
+            $new_brand->meta_description = $brand->meta_description;
+            $new_brand->meta_keywords = $brand->meta_keywords;
+            $new_brand->is_brand = true;
 
             // visitor()->visit($brand);
 
             return view('shop::categories.view', [
-                'category' => $brand,
+                'category' => $new_brand,
                 'params'   => [
                     'sort'  => request()->query('sort'),
                     'limit' => request()->query('limit'),
