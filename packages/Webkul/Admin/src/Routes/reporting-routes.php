@@ -38,6 +38,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
             Route::get('view', 'view')->name('admin.reporting.products.view');
 
             Route::get('view/stats', 'viewStats')->name('admin.reporting.products.view.stats');
+
+            Route::get('quantities', 'productQuantities')->name('admin.reporting.products.view.product-quantities');
         });
 
         /**

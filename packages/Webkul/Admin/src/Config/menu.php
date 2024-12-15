@@ -297,10 +297,17 @@ return [
         'icon'       => '',
     ],
     [
+        'key'        => 'reporting.product_quantities_report',
+        'name'       => 'admin::app.reporting.products.quantities.title',
+        'route'      => 'admin.reporting.products.view.product-quantities',
+        'sort'       => 5,
+        'icon'       => '',
+    ],
+    [
         'key'        => 'reporting.coupon_codes_report',
         'name'       => 'admin::app.marketing.promotions.cart-rules.edit.coupon-code',
         'route'      => 'admin.reporting.coupon_codes_report.index',
-        'sort'       => 5,
+        'sort'       => 6,
         'icon'       => '',
     ],
 

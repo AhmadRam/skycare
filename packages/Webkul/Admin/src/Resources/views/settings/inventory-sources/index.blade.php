@@ -9,14 +9,23 @@
             @lang('admin::app.settings.inventory-sources.index.title')
         </p>
 
-        <!-- Create Button -->
-        @if (bouncer()->hasPermission('settings.inventory_sources.create'))
-            <a href="{{ route('admin.settings.inventory_sources.create') }}">
+        <div class="flex gap-x-2.5 items-center">
+            <!-- Create Button -->
+            @if (bouncer()->hasPermission('settings.inventory_sources.create'))
+                <a href="{{ route('admin.settings.inventory_sources.create') }}">
+                    <div class="primary-button">
+                        @lang('admin::app.settings.inventory-sources.index.create-btn')
+                    </div>
+                </a>
+            @endif
+
+            <a href="{{ route('admin.settings.inventory_sources.index_transfer') }}">
                 <div class="primary-button">
-                    @lang('admin::app.settings.inventory-sources.index.create-btn')
+                    @lang('admin::app.settings.inventory-sources.transfer.transfer-title')
                 </div>
             </a>
-        @endif
+
+        </div>
     </div>
 
     {!! view_render_event('bagisto.admin.settings.inventory_sources.list.before') !!}

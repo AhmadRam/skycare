@@ -2629,6 +2629,19 @@ return [
                 'title'          => 'Inventory Sources',
             ],
 
+            'transfer' => [
+                'transfer-title' => 'Transfer',
+                'general'        => 'General',
+                'back-btn'       => 'Back',
+                'select-from'    => 'Select Inventory',
+                'from'           => 'From Inventory',
+                'select-to'      => 'Select Inventory',
+                'to'             => 'To Inventory',
+                'qty'            => 'Qty',
+                'save-btn'       => 'Transfer',
+                'title'          => 'Inventory Sources',
+            ],
+
             'edit' => [
                 'back-btn'       => 'Back',
                 'city'           => 'City',
@@ -3195,6 +3208,10 @@ return [
                 'total_qty' => 'Total Qty',
                 'total_cost' => 'Total Cost',
                 'profit' => 'Total Profit',
+            ],
+
+            'quantities' => [
+                'title' => 'Product Quantities',
             ]
         ],
 

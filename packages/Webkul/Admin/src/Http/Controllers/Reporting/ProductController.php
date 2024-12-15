@@ -2,6 +2,8 @@
 
 namespace Webkul\Admin\Http\Controllers\Reporting;
 
+use Webkul\Admin\DataGrids\Catalog\ProductQuantitiesDataGrid;
+
 class ProductController extends Controller
 {
     /**
@@ -45,5 +47,20 @@ class ProductController extends Controller
             'startDate' => $this->reportingHelper->getStartDate(),
             'endDate'   => $this->reportingHelper->getEndDate(),
         ]);
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function productQuantities()
+    {
+        if (request()->ajax()) {
+            return app(ProductQuantitiesDataGrid::class)->toJson();
+        }
+
+        return view('admin::reporting.products.product-quantities');
     }
 }

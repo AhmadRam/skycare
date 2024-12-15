@@ -3,11 +3,17 @@
 namespace Webkul\Admin\Http\Controllers\Settings;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
 use Webkul\Admin\DataGrids\Settings\InventorySourcesDataGrid;
+use Webkul\Admin\DataGrids\Settings\InventoryTransfersDataGrid;
 use Webkul\Admin\Http\Controllers\Controller;
 use Webkul\Admin\Http\Requests\InventorySourceRequest;
+use Webkul\Inventory\Models\InventoryTransfer;
 use Webkul\Inventory\Repositories\InventorySourceRepository;
+use Webkul\Product\Helpers\Indexers\Inventory;
+use Webkul\Product\Repositories\ProductInventoryRepository;
+use Webkul\Product\Repositories\ProductRepository;
 
 class InventorySourceController extends Controller
 {
@@ -16,9 +22,11 @@ class InventorySourceController extends Controller
      *
      * @return void
      */
-    public function __construct(protected InventorySourceRepository $inventorySourceRepository)
-    {
-    }
+    public function __construct(
+        protected InventorySourceRepository $inventorySourceRepository,
+        protected ProductInventoryRepository $productInventoryRepository,
+        protected ProductRepository $productRepository,
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -162,5 +170,72 @@ class InventorySourceController extends Controller
         return new JsonResponse([
             'message' => trans('admin::app.settings.inventory-sources.delete-failed', ['name' => 'admin::app.settings.inventory_sources.index.title']),
         ], 500);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function indexTransfer()
+    {
+        if (request()->ajax()) {
+            return app(InventoryTransfersDataGrid::class)->toJson();
+        }
+
+        return view('admin::settings.inventory-sources.index_transfer');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function transfer()
+    {
+        $inventories = $this->inventorySourceRepository->get();
+
+        return view('admin::settings.inventory-sources.transfer', compact('inventories'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function storeTransfer(Request $request)
+    {
+        $params = $request->all();
+
+        $product = $this->productRepository->find($params['products'][0]);
+
+        $from_qty = $product->inventory_source_qty($params['from']);
+        if ($from_qty == 0) {
+            session()->flash('error', "No quantity");
+
+            return redirect()->back();
+        }
+
+        $to_qty = $product->inventory_source_qty($params['to']);
+
+        $data['inventories'] = [
+            $params['from']  => $from_qty - $params['qty'],
+            $params['to']  => $to_qty + $params['qty']
+        ];
+
+        $this->productInventoryRepository->saveInventories($data, $product);
+
+        app(Inventory::class)->reindexRows([$product]);
+
+        InventoryTransfer::create([
+            'from_inventory_id' => $params['from'],
+            'to_inventory_id' => $params['to'],
+            'quantity' => $params['qty'],
+            'product_id' => $params['products'][0],
+        ]);
+
+        session()->flash('success', trans('admin::app.settings.inventory-sources.update-success'));
+
+        return redirect()->route('admin.settings.inventory_sources.index_transfer');
     }
 }

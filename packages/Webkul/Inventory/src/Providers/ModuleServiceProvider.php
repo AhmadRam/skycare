@@ -8,5 +8,6 @@ class ModuleServiceProvider extends CoreModuleServiceProvider
 {
     protected $models = [
         \Webkul\Inventory\Models\InventorySource::class,
+        \Webkul\Inventory\Models\InventoryTransfer::class,
     ];
 }
