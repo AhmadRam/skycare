@@ -139,6 +139,9 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
             Route::post('import', [ProductController::class, 'import'])->name('admin.catalog.products.import');
 
             Route::get('export', [ProductController::class, 'export'])->name('admin.catalog.products.export');
+
+            Route::get('seo-export', [ProductController::class, 'seoExport'])->name('admin.catalog.products.seo-export');
+
         });
 
         /**

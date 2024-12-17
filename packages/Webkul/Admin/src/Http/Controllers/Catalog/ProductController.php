@@ -25,6 +25,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Webkul\Admin\Http\Resources\ProductResource;
 use Webkul\Product\Exports\ProductsExport;
+use Webkul\Product\Exports\ProductsSeoExport;
 use Webkul\Product\Models\ProductImage;
 
 class ProductController extends Controller
@@ -548,5 +549,16 @@ class ProductController extends Controller
     public function export()
     {
         return Excel::download(new ProductsExport(), 'products.xlsx');
+    }
+
+    /**
+     * seo export to csv file.
+     *
+     *
+     * @return bool
+     */
+    public function seoExport(Request $request)
+    {
+        return Excel::download(new ProductsSeoExport($request->locale), 'seo-products.xlsx');
     }
 }

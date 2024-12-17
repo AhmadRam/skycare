@@ -1,3 +1,10 @@
+@php
+    $currentChannel = core()->getRequestedChannel();
+
+    $currentLocale = core()->getRequestedLocale();
+@endphp
+
+
 <x-admin::layouts>
     <x-slot:title>
         @lang('admin::app.catalog.products.index.title')
@@ -22,6 +29,28 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Locale Switcher -->
+            <x-admin::dropdown :class="$currentChannel->locales->count() <= 1 ? 'hidden' : ''">
+                <!-- Dropdown Toggler -->
+                <x-slot:toggle>
+                    <button type="button"
+                        class="transparent-button px-1 py-1.5 hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 dark:text-white">
+                        Seo Export
+                        <span class="icon-sort-down text-2xl"></span>
+                    </button>
+                </x-slot>
+
+                <!-- Dropdown Content -->
+                <x-slot:content class="!p-0">
+                    @foreach ($currentChannel->locales->sortBy('name') as $locale)
+                        <a href="{{ route('admin.catalog.products.seo-export') }}?locale={{ $locale->code }}"
+                            class="flex gap-2.5 px-5 py-2 text-base  cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-950 dark:text-white">
+                            {{ $locale->name }}
+                        </a>
+                    @endforeach
+                </x-slot>
+            </x-admin::dropdown>
 
             <div
                 class="p-[6px] items-center cursor-pointer transition-all hover:bg-gray-200 dark:hover:bg-gray-800 hover:rounded-[6px]">
