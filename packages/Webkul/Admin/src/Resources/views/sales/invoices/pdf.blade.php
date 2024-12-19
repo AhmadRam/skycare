@@ -167,23 +167,27 @@
 <body style="background-image: none; background-color: #fff;">
     <div class="container">
         <div class="row">
-            <div class="col-12 header">
-                {{-- @if (core()->getConfigData('sales.invoice_settings.invoice_slip_design.logo')) --}}
-                <div class="image"
-                    style="display:inline-block; vertical-align: middle; margin: -30px;padding-inline-start: 20px;">
-                    {{-- <img class="logo" src="{{ Storage::url(core()->getConfigData('sales.invoice_settings.invoice_slip_design.logo')) }}" alt=""/> --}}
-                    <img style="width: 140px;height: 140px;"
+            <div class="col-12 header" style="display: flex; justify-content: space-between; align-items: center;">
+                <!-- Left Image -->
+                <div class="image" style="margin-left: 20px;">
+                    <img style="width: 140px; height: 140px;"
                         src="{{ asset('themes/shop/default/build/assets/skycare_' . app()->getLocale() . '.png') }}"
                         alt="" />
                 </div>
-                {{-- @else
-                        <div class="without_logo" style="display:inline-block; vertical-align: middle; padding-top:8px">
-                        </div>
-                    @endif --}}
-                <div class="invoice-text">
-                    <span>{{ strtoupper(__('admin::app.sales.invoices.invoice-pdf.invoice')) }}</span>
+
+                <!-- Invoice Text in the Middle -->
+                <div class="invoice-text" style="text-align: center;">
+                    <span>{{ strtoupper(__('admin::app.sales.invoices.invoice-pdf.invoice')) }}</span><br><br>
+                    <span style="color: #000">شركة دار الوفاء لتجارة االجملة والتجزئة</span>
+                </div>
+
+                <!-- Right Image -->
+                <div class="image" style="margin-right: 20px;">
+                    <img style="height: 140px;"
+                        src="{{ asset('themes/admin/default/build/assets/daralwafaa_logo.png') }}" alt="" />
                 </div>
             </div>
+
         </div>
 
         <div class="row" style="padding: 5px">
