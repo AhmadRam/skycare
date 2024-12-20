@@ -178,7 +178,17 @@
                                     name="unit_price"
                                     ::value="item.price"
                                     placeholder="unit price"
+                                    ::id="item.id"
                                     @change="updateItemPrice(item, $event.target.value)"
+                                />
+
+                                @lang('admin::app.emails.orders.discount')
+                                <x-admin::form.control-group.control
+                                    type="text"
+                                    name="discount"
+                                    value="0"
+                                    placeholder="discount"
+                                    @change="updateItemPriceDiscount(item, $event.target.value)"
                                 />
                             </p>
 
@@ -188,6 +198,7 @@
                                 class="w-max gap-x-4 rounded-l px-4 py-1"
                                 @change="updateItem(item, $event)"
                             />
+
                             @lang('admin::app.sales.invoices.invoice-pdf.extra-qty')
                             <x-admin::extra-quantity-changer
                                 ::name="'extra_qty[' + item.id + ']'"
@@ -542,6 +553,32 @@
                     let params = {
                         price: {
                             [item.id]: price
+                        }
+                    };
+
+                    this.$axios.put("{{ route('admin.sales.cart.items.update', $cart->id) }}", params)
+                        .then(response => {
+                            this.$emit('cart-item-updated', response.data.data);
+
+                            this.$emitter.emit('add-flash', {
+                                type: 'success',
+                                message: response.data.message
+                            });
+
+                            this.isUpdating = false;
+
+                        })
+                        .catch(error => {
+                            this.isUpdating = false;
+                        });
+                },
+
+                updateItemPriceDiscount(item, discount) {
+                    this.isUpdating = true;
+
+                    let params = {
+                        discount: {
+                            [item.id]: discount
                         }
                     };
 

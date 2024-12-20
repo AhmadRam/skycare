@@ -1,10 +1,6 @@
 {!! view_render_event('bagisto.admin.sales.order.create.cart.summary.before') !!}
 
-<v-cart-summary
-    :cart="cart"
-    @coupon-applied="setCart"
-    @coupon-removed="setCart"
-></v-cart-summary>
+<v-cart-summary :cart="cart" @coupon-applied="setCart" @coupon-removed="setCart"></v-cart-summary>
 
 {!! view_render_event('bagisto.admin.sales.order.create.cart.summary.after') !!}
 
@@ -51,7 +47,7 @@
                                 @{{ cart.formatted_sub_total }}
                             </p>
                         </div>
-                        
+
                         <div class="row grid grid-cols-2 grid-rows-1 justify-between gap-4 text-right">
                             <p class="text-base font-medium text-gray-600 dark:text-gray-300">
                                 @lang('admin::app.sales.orders.create.cart.summary.sub-total-incl-tax')
@@ -122,7 +118,7 @@
                                 @{{ cart.formatted_shipping_amount }}
                             </p>
                         </div>
-                        
+
                         <div class="row grid grid-cols-2 grid-rows-1 justify-between gap-4 text-right">
                             <p class="text-base font-medium text-gray-600 dark:text-gray-300">
                                 @lang('admin::app.sales.orders.create.cart.summary.shipping-amount-incl-tax')
@@ -140,9 +136,17 @@
                                 @lang('admin::app.sales.orders.create.cart.summary.shipping-amount')
                             </p>
 
-                            <p class="text-base font-medium text-gray-600 dark:text-gray-300">
+                            {{-- <p class="text-base font-medium text-gray-600 dark:text-gray-300">
                                 @{{ cart.formatted_shipping_amount }}
-                            </p>
+                            </p> --}}
+
+                               <!-- Convert to Input -->
+                               <input
+                               type="text"
+                               class="text-base text-blue-600 border rounded p-1"
+                               value="0"
+                               @input="handlePriceInput($event.target.value)"
+                           />
                         </div>
                     </template>
 
@@ -170,7 +174,7 @@
 
 
                     <!-- Discount -->
-                    {!! view_render_event('bagisto.admin.sales.order.create.left_component.summary.coupon.before') !!}
+                    {{-- {!! view_render_event('bagisto.admin.sales.order.create.left_component.summary.coupon.before') !!}
 
                     <div class="row grid grid-cols-2 grid-rows-1 justify-items-end gap-4 text-right">
                         <p class="text-base font-medium text-gray-600 dark:text-gray-300">
@@ -201,7 +205,7 @@
                         </template>
                     </div>
 
-                    {!! view_render_event('bagisto.admin.sales.order.create.left_component.summary.coupon.after') !!}
+                    {!! view_render_event('bagisto.admin.sales.order.create.left_component.summary.coupon.after') !!} --}}
 
                     {!! view_render_event('bagisto.admin.sales.order.create.left_component.summary.coupon.after') !!}
 
@@ -292,10 +296,10 @@
                         prices: "{{ core()->getConfigData('sales.taxes.shopping_cart.display_prices') }}",
 
                         subtotal: "{{ core()->getConfigData('sales.taxes.shopping_cart.display_subtotal') }}",
-                        
+
                         shipping: "{{ core()->getConfigData('sales.taxes.shopping_cart.display_shipping_amount') }}",
                     },
-                    
+
                     isStoring: false,
 
                     isPlacingOrder: false,
@@ -303,7 +307,9 @@
             },
 
             methods: {
-                applyCoupon(params, { resetForm }) {
+                applyCoupon(params, {
+                    resetForm
+                }) {
                     this.isStoring = true;
 
                     this.$axios.post("{{ route('admin.sales.cart.store_coupon', $cart->id) }}", params)
@@ -311,8 +317,11 @@
                             this.isStoring = false;
 
                             this.$emit('coupon-applied', response.data.data);
-                  
-                            this.$emitter.emit('add-flash', { type: 'success', message: response.data.message });
+
+                            this.$emitter.emit('add-flash', {
+                                type: 'success',
+                                message: response.data.message
+                            });
 
                             this.$refs.couponModel.toggle();
 
@@ -324,14 +333,20 @@
                             this.$refs.couponModel.toggle();
 
                             if ([400, 422].includes(error.response.request.status)) {
-                                this.$emitter.emit('add-flash', { type: 'warning', message: error.response.data.message });
+                                this.$emitter.emit('add-flash', {
+                                    type: 'warning',
+                                    message: error.response.data.message
+                                });
 
                                 resetForm();
 
                                 return;
                             }
 
-                            this.$emitter.emit('add-flash', { type: 'error', message: error.response.data.message });
+                            this.$emitter.emit('add-flash', {
+                                type: 'error',
+                                message: error.response.data.message
+                            });
                         });
                 },
 
@@ -342,7 +357,10 @@
                         .then((response) => {
                             this.$emit('coupon-removed', response.data.data);
 
-                            this.$emitter.emit('add-flash', { type: 'success', message: response.data.message });
+                            this.$emitter.emit('add-flash', {
+                                type: 'success',
+                                message: response.data.message
+                            });
                         })
                         .catch(error => console.log(error));
                 },
@@ -363,9 +381,28 @@
                         .catch(error => {
                             this.isPlacingOrder = false
 
-                            this.$emitter.emit('add-flash', { type: 'error', message: error.response.data.message });
+                            this.$emitter.emit('add-flash', {
+                                type: 'error',
+                                message: error.response.data.message
+                            });
                         });
-                }
+                },
+                handlePriceInput(newValue) {
+                    this.$axios.post("{{ route('admin.sales.cart.shipping_methods.update-price') }}", {
+                            price: newValue,
+                        })
+                        .then(response => {
+                            this.$emitter.emit('add-flash', {
+                                type: 'success',
+                                message: response.data.message
+                            });
+
+                            this.$emit('coupon-applied', response.data.data);
+                        })
+                        .catch(error => {
+
+                        });
+                },
             }
         });
     </script>

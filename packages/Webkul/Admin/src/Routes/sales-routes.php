@@ -99,6 +99,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
 
             Route::post('{id}/shipping-methods', 'storeShippingMethod')->name('admin.sales.cart.shipping_methods.store');
 
+            Route::post('shipping-methods/update_price', 'ShippingMethodUpdatePrice')->name('admin.sales.cart.shipping_methods.update-price');
+
             Route::post('{id}/payment-methods', 'storePaymentMethod')->name('admin.sales.cart.payment_methods.store');
 
             Route::post('{id}/coupon', 'storeCoupon')->name('admin.sales.cart.store_coupon');

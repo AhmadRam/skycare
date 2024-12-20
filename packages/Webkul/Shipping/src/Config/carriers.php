@@ -28,4 +28,13 @@ return [
         'default_rate' => '1',
         'class'        => 'Webkul\Shipping\Carriers\Internal',
     ],
+
+    'custom' => [
+        'code'         => 'custom',
+        'title'        => 'custom Shipping',
+        'description'  => 'custom Shipping',
+        'active'       => true,
+        'default_rate' => '1',
+        'class'        => 'Webkul\Shipping\Carriers\Custom',
+    ],
 ];

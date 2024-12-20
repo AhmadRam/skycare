@@ -30,21 +30,29 @@ class Shipping
         $ratesList = [];
 
         $shippingCarriers = Config::get('carriers');
-
-        if ($cart->billing_address) {
-            if ($cart->billing_address->country == "KW") {
-                if ($cart->base_sub_total > 5) {
-                    unset($shippingCarriers['flatrate']);
-                    unset($shippingCarriers['internal']);
+        if (auth('admin')->check()) {
+            unset($shippingCarriers['flatrate']);
+            unset($shippingCarriers['internal']);
+            unset($shippingCarriers['free']);
+        } else {
+            unset($shippingCarriers['custom']);
+            if ($cart->billing_address) {
+                if ($cart->billing_address->country == "KW") {
+                    if ($cart->base_sub_total > 5) {
+                        unset($shippingCarriers['flatrate']);
+                        unset($shippingCarriers['internal']);
+                    } else {
+                        unset($shippingCarriers['flatrate']);
+                        unset($shippingCarriers['free']);
+                    }
                 } else {
-                    unset($shippingCarriers['flatrate']);
                     unset($shippingCarriers['free']);
+                    unset($shippingCarriers['internal']);
                 }
-            } else {
-                unset($shippingCarriers['free']);
-                unset($shippingCarriers['internal']);
             }
         }
+
+
 
         foreach ($shippingCarriers as $shippingMethod) {
             $object = new $shippingMethod['class'];

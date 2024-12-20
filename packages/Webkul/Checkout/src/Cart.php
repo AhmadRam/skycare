@@ -329,10 +329,8 @@ class Cart
                 $this->cartItemRepository->update([
                     'additional'          => $additional,
                 ], $itemId);
-
             }
         }
-
 
         if (isset($data['qty'])) {
 
@@ -397,6 +395,38 @@ class Cart
                 ], $itemId);
             }
         }
+
+        if (isset($data['discount'])) {
+            foreach ($data['discount'] as $itemId => $discount) {
+                $item = $this->cartItemRepository->find($itemId);
+
+                if (!$item) {
+                    continue;
+                }
+
+                if ($discount < 0) {
+                    throw new \Exception(__('shop::app.checkout.cart.illegal'));
+                }
+
+                $discountPercent = min(100, $discount);
+                $quantity = $item->quantity;
+
+                $discountAmount = ($quantity * $item->price + $item->tax_amount) * ($discountPercent / 100);
+                $baseDiscountAmount = ($quantity * $item->base_price + $item->base_tax_amount) * ($discountPercent / 100);
+
+                $additional = $item->additional;
+                $additional['discount_amount'] = $discountAmount;
+                $additional['discount_percent'] = $discountPercent;
+
+                $this->cartItemRepository->update([
+                    'discount_amount'           => $discountAmount,
+                    'base_discount_amount'      => $baseDiscountAmount,
+                    'discount_percent'          => $discountPercent,
+                    'additional'                => $additional,
+                ], $itemId);
+            }
+        }
+
 
         $this->collectTotals();
 
@@ -643,6 +673,11 @@ class Cart
         $quantities = 0;
 
         foreach ($cart->items as $item) {
+            if (isset($item->additional['discount_amount'])) {
+                $item->discount_amount = $item->additional['discount_amount'];
+                $item->base_discount_amount = $item->additional['discount_amount'];
+                $item->discount_percent = $item->additional['discount_percent'];
+            }
 
             $cart->discount_amount += $item->discount_amount;
             $cart->base_discount_amount += $item->base_discount_amount;

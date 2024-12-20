@@ -236,6 +236,6 @@ class InventorySourceController extends Controller
 
         session()->flash('success', trans('admin::app.settings.inventory-sources.update-success'));
 
-        return redirect()->route('admin.settings.inventory_sources.index_transfer');
+        return redirect()->back();
     }
 }

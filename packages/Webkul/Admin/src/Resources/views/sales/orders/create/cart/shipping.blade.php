@@ -1,10 +1,6 @@
 {!! view_render_event('bagisto.admin.sales.order.create.cart.shipping.before') !!}
 
-<v-cart-shipping-methods
-    :methods="shippingMethods"
-    @processing="stepForward"
-    @processed="stepProcessed"
->
+<v-cart-shipping-methods :methods="shippingMethods" @processing="stepForward" @processed="stepProcessed">
     <!-- Shipping Method Shimmer Effect -->
     <x-admin::shimmer.sales.orders.create.cart.shipping />
 </v-cart-shipping-methods>
@@ -61,6 +57,7 @@
                                 <p class="text-base text-blue-600">
                                     @{{ rate.base_formatted_price }}
                                 </p>
+
                             </div>
 
                             <p class="text-base text-gray-600 dark:text-gray-400">
@@ -93,7 +90,7 @@
                 store(selectedMethod) {
                     this.$emit('processing', 'payment');
 
-                    this.$axios.post("{{ route('admin.sales.cart.shipping_methods.store', $cart->id) }}", {    
+                    this.$axios.post("{{ route('admin.sales.cart.shipping_methods.store', $cart->id) }}", {
                             shipping_method: selectedMethod,
                         })
                         .then(response => {

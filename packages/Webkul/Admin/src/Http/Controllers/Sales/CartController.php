@@ -11,6 +11,7 @@ use Webkul\Admin\Http\Resources\CartResource;
 use Webkul\CartRule\Repositories\CartRuleCouponRepository;
 use Webkul\Checkout\Facades\Cart;
 use Webkul\Checkout\Repositories\CartRepository;
+use Webkul\Core\Models\CoreConfig;
 use Webkul\Customer\Repositories\CustomerRepository;
 use Webkul\Payment\Facades\Payment;
 use Webkul\Product\Repositories\ProductRepository;
@@ -321,6 +322,23 @@ class CartController extends Controller
         return new JsonResource([
             'data'     => new CartResource(Cart::getCart()),
             'message'  => trans('admin::app.sales.orders.create.coupon-remove'),
+        ]);
+    }
+
+    /**
+     * update shipping price.
+     */
+    public function ShippingMethodUpdatePrice(): JsonResource
+    {
+        $cart = Cart::getCart();
+        $shipping = $cart->selected_shipping_rate;
+        $shipping->price = request()->input('price');
+        $shipping->base_price = request()->input('price');
+        $shipping->save();
+        Cart::collectTotals();
+        return new JsonResource([
+            'data'     => new CartResource(Cart::getCart()),
+            'message'  => 'shipping price updated!',
         ]);
     }
 }

@@ -204,7 +204,6 @@ class CartRule
             if (in_array($item->sku, $catalog_rule_skus)) {
                 continue;
             }
-
             if ($rule->discount_amount == 0) {
                 if (isset($item->additional['bundle_options'])) {
                     $items_count = sizeOf($item->additional['bundle_options'][1]);
@@ -226,7 +225,6 @@ class CartRule
                     }
                 }
             }
-
 
             if (!$this->canProcessRule($rule)) {
                 continue;

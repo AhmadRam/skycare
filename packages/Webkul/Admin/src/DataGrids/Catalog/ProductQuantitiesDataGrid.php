@@ -47,29 +47,26 @@ class ProductQuantitiesDataGrid extends DataGrid
 
         $tablePrefix = DB::getTablePrefix();
 
-        /**
-         * Query Builder to fetch records from `product_flat` table
-         */
         $queryBuilder = DB::table('product_flat')
             ->leftJoin('product_inventories', 'product_flat.product_id', '=', 'product_inventories.product_id')
             ->select(
                 'product_flat.product_id',
                 'product_flat.sku',
                 'product_flat.name',
-                DB::raw('SUM(DISTINCT ' . $tablePrefix . 'product_inventories.qty) as quantity')
+                DB::raw('SUM(CASE WHEN product_inventories.inventory_source_id = 1 THEN product_inventories.qty ELSE 0 END) as inventory_1_qty'),
+                DB::raw('SUM(CASE WHEN product_inventories.inventory_source_id = 2 THEN product_inventories.qty ELSE 0 END) as inventory_2_qty')
             )
             ->whereIn('product_flat.locale', $whereInLocales)
             ->whereIn('product_flat.channel', $whereInChannels)
             ->groupBy(
                 'product_flat.product_id',
-                'product_flat.locale',
-                'product_flat.channel'
+                'product_flat.sku',
+                'product_flat.name'
             );
 
         $this->addFilter('product_id', 'product_flat.product_id');
         $this->addFilter('sku', 'product_flat.sku');
         $this->addFilter('name', 'product_flat.name');
-        $this->addFilter('quantity', 'SUM(DISTINCT ' . $tablePrefix . 'product_inventories.qty)');
 
         return $queryBuilder;
     }
@@ -109,8 +106,17 @@ class ProductQuantitiesDataGrid extends DataGrid
         ]);
 
         $this->addColumn([
-            'index'      => 'quantity',
-            'label'      => trans('admin::app.catalog.products.index.datagrid.qty'),
+            'index'      => 'inventory_1_qty',
+            'label'      => "Default",
+            'type'       => 'integer',
+            'searchable' => false,
+            'filterable' => false,
+            'sortable'   => true,
+        ]);
+
+        $this->addColumn([
+            'index'      => 'inventory_2_qty',
+            'label'      => "MAIN STORE KABID",
             'type'       => 'integer',
             'searchable' => false,
             'filterable' => false,
