@@ -178,7 +178,7 @@
                 <!-- Invoice Text in the Middle -->
                 <div class="invoice-text" style="text-align: center;">
                     <span>{{ strtoupper(__('admin::app.sales.invoices.invoice-pdf.invoice')) }}</span><br><br>
-                    <span style="color: #000">شركة دار الوفاء لتجارة االجملة والتجزئة</span>
+                    <span style="color: #000;font-size:18px">شركة دار الوفاء لتجارة الجملة والتجزئة</span>
                 </div>
 
                 <!-- Right Image -->
