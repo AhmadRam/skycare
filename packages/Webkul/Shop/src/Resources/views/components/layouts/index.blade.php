@@ -17,6 +17,8 @@
     <meta name="currency-code" content="{{ core()->getCurrentCurrencyCode() }}">
     <meta http-equiv="content-language" content="{{ app()->getLocale() }}">
 
+    <link rel="canonical" href="{{ url()->current() }}" />
+
     @stack('meta')
 
     <link rel="icon" sizes="16x16"
