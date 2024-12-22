@@ -24,8 +24,8 @@
                     class="w-full max-w-full max-h-full transition-transform duration-300 ease-in-out select-none aspect-[2.743/1]"
                     ::lazy="true"
                     ::src="image.image"
-                    ::srcset="image.image + ' 1920w, ' + image.image.replace('storage', 'cache/large') + ' 1280w,' + image.image.replace('storage', 'cache/medium') + ' 1024w, ' + image.image.replace('storage', 'cache/small') + ' 525w'"
-                    sizes="(max-width: 600px) 525px, (max-width: 1024px) 1024px, (max-width: 1920px) 1280px, 1920px"
+                    {{-- ::srcset="image.image + ' 1920w, ' + image.image.replace('storage', 'cache/large') + ' 1280w,' + image.image.replace('storage', 'cache/medium') + ' 1024w, ' + image.image.replace('storage', 'cache/small') + ' 525w'"
+                    sizes="(max-width: 600px) 525px, (max-width: 1024px) 1024px, (max-width: 1920px) 1280px, 1920px" --}}
                     ::alt="image?.title"
                     />
                 </div>
