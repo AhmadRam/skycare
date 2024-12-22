@@ -10,7 +10,7 @@
     <script type="text/x-template" id="v-carousel-template">
         <div class="flex w-full relative m-auto overflow-hidden">
             <!-- Slider -->
-            <div 
+            <div
                 class="inline-flex translate-x-0 will-change-transform transition-transform duration-700 ease-out cursor-pointer"
                 ref="sliderContainer"
             >
@@ -21,11 +21,12 @@
                     ref="slide"
                 >
                     <x-shop::media.images.lazy
-                        class="w-full max-w-full max-h-full transition-transform duration-300 ease-in-out select-none aspect-[2.743/1]"
-                        ::lazy="false"
-                        ::src="image.image"
-                        ::srcset="image.image + ' 1920w, ' + image.image.replace('storage', 'cache/large') + ' 1280w,' + image.image.replace('storage', 'cache/medium') + ' 1024w, ' + image.image.replace('storage', 'cache/small') + ' 525w'"
-                        ::alt="image?.title"
+                    class="w-full max-w-full max-h-full transition-transform duration-300 ease-in-out select-none aspect-[2.743/1]"
+                    ::lazy="true"
+                    ::src="image.image"
+                    ::srcset="image.image + ' 1920w, ' + image.image.replace('storage', 'cache/large') + ' 1280w,' + image.image.replace('storage', 'cache/medium') + ' 1024w, ' + image.image.replace('storage', 'cache/small') + ' 525w'"
+                    sizes="(max-width: 600px) 525px, (max-width: 1024px) 1024px, (max-width: 1920px) 1280px, 1920px"
+                    ::alt="image?.title"
                     />
                 </div>
             </div>
@@ -98,8 +99,8 @@
                 this.slider = this.$refs.sliderContainer;
 
                 if (
-                    this.$refs.slide
-                    && typeof this.$refs.slide[Symbol.iterator] === 'function'
+                    this.$refs.slide &&
+                    typeof this.$refs.slide[Symbol.iterator] === 'function'
                 ) {
                     this.slides = Array.from(this.$refs.slide);
                 }
@@ -118,7 +119,8 @@
                     }
 
                     this.slides.forEach((slide, index) => {
-                        slide.querySelector('img')?.addEventListener('dragstart', (e) => e.preventDefault());
+                        slide.querySelector('img')?.addEventListener('dragstart', (e) => e
+                            .preventDefault());
 
                         slide.addEventListener('pointerdown', this.pointerDown(index));
 
@@ -143,7 +145,7 @@
                 },
 
                 pointerMove(event) {
-                    if (! this.isDragging) {
+                    if (!this.isDragging) {
                         return;
                     }
 
@@ -163,22 +165,22 @@
 
                     if (this.direction == 'ltr') {
                         if (
-                            movedBy < -100
-                            && this.currentIndex < this.slides.length - 1
+                            movedBy < -100 &&
+                            this.currentIndex < this.slides.length - 1
                         ) {
                             this.currentIndex += 1;
                         }
 
                         if (
-                            movedBy > 100
-                            && this.currentIndex > 0
+                            movedBy > 100 &&
+                            this.currentIndex > 0
                         ) {
                             this.currentIndex -= 1;
                         }
                     } else {
                         if (
-                            movedBy > 100
-                            && this.currentIndex < this.slides.length - 1
+                            movedBy > 100 &&
+                            this.currentIndex < this.slides.length - 1
                         ) {
                             if (Math.abs(this.currentIndex) != this.slides.length - 1) {
                                 this.currentIndex -= 1;
@@ -186,8 +188,8 @@
                         }
 
                         if (
-                            movedBy < -100
-                            && this.currentIndex < 0
+                            movedBy < -100 &&
+                            this.currentIndex < 0
                         ) {
                             this.currentIndex += 1;
                         }
@@ -219,7 +221,7 @@
                 },
 
                 visitLink(image) {
-                    if (! image.link) {
+                    if (!image.link) {
                         return;
                     }
 
@@ -245,9 +247,9 @@
                 },
 
                 prev() {
-                    this.currentIndex = this.direction == 'ltr'
-                        ? this.currentIndex > 0 ? this.currentIndex - 1 : 0
-                        : this.currentIndex < 0 ? this.currentIndex + 1 : 0;
+                    this.currentIndex = this.direction == 'ltr' ?
+                        this.currentIndex > 0 ? this.currentIndex - 1 : 0 :
+                        this.currentIndex < 0 ? this.currentIndex + 1 : 0;
                 },
 
                 navigateByPagination(index) {
