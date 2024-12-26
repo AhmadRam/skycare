@@ -32,7 +32,7 @@ class Shipping
 
         $shippingCarriers = Config::get('carriers');
 
-        $routeName = Route::currentRouteName();
+        $routeName = request()->route()->getName();
         if (auth('admin')->check() && str_contains($routeName, 'admin')) {
             unset($shippingCarriers['flatrate']);
             unset($shippingCarriers['internal']);
