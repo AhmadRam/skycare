@@ -2,6 +2,7 @@
 
 namespace Webkul\Shipping;
 
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Config;
 use Webkul\Checkout\Facades\Cart;
 
@@ -30,7 +31,9 @@ class Shipping
         $ratesList = [];
 
         $shippingCarriers = Config::get('carriers');
-        if (auth('admin')->check()) {
+
+        $routeName = Route::currentRouteName();
+        if (auth('admin')->check() && str_contains($routeName, 'admin')) {
             unset($shippingCarriers['flatrate']);
             unset($shippingCarriers['internal']);
             unset($shippingCarriers['free']);
