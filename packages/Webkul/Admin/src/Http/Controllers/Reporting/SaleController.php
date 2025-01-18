@@ -70,11 +70,13 @@ class SaleController extends Controller
         $attributeId = 25;
 
         $orderItems = DB::table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
             ->join('product_flat', 'order_items.product_id', '=', 'product_flat.product_id')
             ->join('product_attribute_values', 'product_flat.product_id', '=', 'product_attribute_values.product_id')
             ->join('attribute_options', 'product_attribute_values.integer_value', '=', 'attribute_options.id')
             ->where('product_attribute_values.attribute_id', $attributeId)
             ->where('order_items.discount_amount', '!=', 0)
+            ->whereIn('orders.id', $orders)
             ->groupBy('product_attribute_values.integer_value', 'attribute_options.admin_name')
             ->select(
                 'product_attribute_values.integer_value as attribute_value_id',
