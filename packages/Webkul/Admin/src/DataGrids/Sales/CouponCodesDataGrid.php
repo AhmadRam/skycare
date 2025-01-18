@@ -141,5 +141,14 @@ class CouponCodesDataGrid extends DataGrid
                 return route('admin.marketing.promotions.cart_rules.edit', $row->id);
             },
         ]);
+
+        $this->addAction([
+            'icon'   => 'icon-view',
+            'title'  => trans('admin::app.sales.orders.index.datagrid.view'),
+            'method' => 'GET',
+            'url'    => function ($row) {
+                return route('admin.reporting.coupon_codes_report.view', $row->id);
+            },
+        ]);
     }
 }
