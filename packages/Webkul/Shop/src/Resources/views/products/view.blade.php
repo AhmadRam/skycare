@@ -81,19 +81,20 @@
             </x-shop::tabs.item>
 
             {!! view_render_event('bagisto.shop.products.view.description.after', ['product' => $product]) !!}
+            @if ($product->how_to_use != null)
+                <!-- How To Use Tab -->
+                {!! view_render_event('bagisto.shop.products.view.how_to_use.before', ['product' => $product]) !!}
 
-            <!-- How To Use Tab -->
-            {!! view_render_event('bagisto.shop.products.view.how_to_use.before', ['product' => $product]) !!}
+                <x-shop::tabs.item class="container mt-[60px] !p-0 max-1180:hidden" :title="trans('shop::app.products.view.how_to_use')" :is-selected="false">
+                    <div class="container mt-[60px] max-1180:px-5">
+                        <p class="text-[#6E6E6E] text-lg max-1180:text-sm">
+                            {!! $product->how_to_use !!}
+                        </p>
+                    </div>
+                </x-shop::tabs.item>
 
-            <x-shop::tabs.item class="container mt-[60px] !p-0 max-1180:hidden" :title="trans('shop::app.products.view.how_to_use')" :is-selected="false">
-                <div class="container mt-[60px] max-1180:px-5">
-                    <p class="text-[#6E6E6E] text-lg max-1180:text-sm">
-                        {!! $product->how_to_use !!}
-                    </p>
-                </div>
-            </x-shop::tabs.item>
-
-            {!! view_render_event('bagisto.shop.products.view.how_to_use.after', ['product' => $product]) !!}
+                {!! view_render_event('bagisto.shop.products.view.how_to_use.after', ['product' => $product]) !!}
+            @endif
 
 
             <!-- Additional Information Tab -->
