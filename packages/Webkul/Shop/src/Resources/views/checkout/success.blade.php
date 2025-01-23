@@ -1,6 +1,7 @@
 @push('meta')
     <script>
         fbq('track', 'Purchase', {
+            order_id: '{{ $order->increment_id }}',
             value: '{{ $order->grand_total }}',
             currency: '{{ $order->order_currency_code }}',
             contents: @json($order->items->map(fn($item) => ['id' => $item->product_id, 'quantity' => $item->qty_ordered])),
