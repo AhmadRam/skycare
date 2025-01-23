@@ -47,7 +47,8 @@
         "spatie/laravel-responsecache": "^7.4",
         "spatie/laravel-sitemap": "^6.2",
         "stevebauman/location": "^7.4",
-        "twilio/sdk": "^8.3"
+        "twilio/sdk": "^8.3",
+        "webbycrown/blog-for-bagisto": "dev-main"
     },
     "require-dev": {
         "bagisto/laravel-datafaker": "dev-master",
