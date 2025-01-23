@@ -409,6 +409,15 @@
                             if (response.data.message) {
                                 this.$emitter.emit('update-mini-cart', response.data.data);
 
+                                fbq('track', 'AddToCart', {
+                                    content_name: this.product.name,
+                                    content_ids: [this.product.id],
+                                    content_type: 'product',
+                                    value: this.product.price,
+                                    currency: '{{ core()->getCurrentCurrency()->code }}'
+                                });
+
+
                                 this.$emitter.emit('add-flash', {
                                     type: 'success',
                                     message: response.data.message

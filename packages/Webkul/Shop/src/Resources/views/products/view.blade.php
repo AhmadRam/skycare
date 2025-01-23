@@ -45,6 +45,17 @@
     <meta property="og:description" content="{!! htmlspecialchars(trim(strip_tags($product->description))) !!}" />
 
     <meta property="og:url" content="{{ route('shop.product_or_category.index', $product->url_key) }}" />
+
+    <script>
+        fbq('track', 'ViewContent', {
+            content_name: '{{ $product->name }}',
+            content_category: '{{ $product->categories->first()->name ?? 'Uncategorized' }}',
+            content_ids: ['{{ $product->id }}'],
+            content_type: 'product',
+            value: `{{ $product->getTypeInstance()->getFinalPrice() }}`,
+            currency: '{{ core()->getCurrentCurrency()->code }}'
+        });
+    </script>
 @endPush
 
 <!-- Page Layout -->
@@ -459,6 +470,14 @@
                                     this.$emitter.emit('add-flash', {
                                         type: 'success',
                                         message: response.data.message
+                                    });
+
+                                    fbq('track', 'AddToCart', {
+                                        content_name: '{{ $product->name }}',
+                                        content_ids: ['{{ $product->id }}'],
+                                        content_type: 'product',
+                                        value: `{{ $product->getTypeInstance()->getFinalPrice() }}`,
+                                        currency: '{{ core()->getCurrentCurrency()->code }}'
                                     });
 
                                     if (response.data.redirect) {
