@@ -134,6 +134,8 @@
 
             data() {
                 return {
+                    cart: null,
+
                     paymentMethods: [],
 
                     isShowPaymentMethods: false,
@@ -161,7 +163,7 @@
                         })
                         .then(response => {
                             this.$emitter.emit('after-payment-method-selected', selectedPaymentMethod);
-
+                            this.cart = response.data.cart;
                             if (response.data.cart) {
                                 this.$emitter.emit('can-place-order', true);
                                 this.isShowPlaceOrder = true;
@@ -175,6 +177,13 @@
 
                     this.$axios.post('{{ route('shop.checkout.onepage.orders.store') }}')
                         .then(response => {
+
+                            fbq('track', 'InitiateCheckout', {
+                                value: this.cart.grand_total,
+                                currency: '{{ core()->getCurrentCurrency()->code }}',
+                                num_items: this.cart.items_count
+                            });
+
                             if (response.data.data.redirect) {
                                 window.location.href = response.data.data.redirect_url;
                             } else {

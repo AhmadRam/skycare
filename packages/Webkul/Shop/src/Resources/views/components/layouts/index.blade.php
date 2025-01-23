@@ -18,33 +18,6 @@
     <meta http-equiv="content-language" content="{{ app()->getLocale() }}">
 
     <link rel="canonical" href="{{ url()->current() }}" />
-
-    @stack('meta')
-
-    <link rel="icon" sizes="16x16"
-        href="{{ asset('themes/shop/default/build/assets/skycare_' . app()->getLocale() . '.png') }}"
-        {{-- href="{{ core()->getCurrentChannel()->favicon_url ?? bagisto_asset('images/favicon.ico') }}" --}} />
-
-    @bagistoVite(['src/Resources/assets/css/app.css', 'src/Resources/assets/js/app.js'])
-
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-        as="style">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
-
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" as="style">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap">
-
-    @stack('styles')
-
-    <style>
-        {!! core()->getConfigData('general.content.custom_scripts.custom_css') !!}
-    </style>
-
-    {!! view_render_event('bagisto.shop.layout.head') !!}
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
     <!-- Meta Pixel Code -->
     <script>
         ! function(f, b, e, v, n, t, s) {
@@ -71,6 +44,32 @@
     <noscript><img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=1051569896344943&ev=PageView&noscript=1" /></noscript>
     <!-- End Meta Pixel Code -->
+
+    @stack('meta')
+
+    <link rel="icon" sizes="16x16"
+        href="{{ asset('themes/shop/default/build/assets/skycare_' . app()->getLocale() . '.png') }}"
+        {{-- href="{{ core()->getCurrentChannel()->favicon_url ?? bagisto_asset('images/favicon.ico') }}" --}} />
+
+    @bagistoVite(['src/Resources/assets/css/app.css', 'src/Resources/assets/js/app.js'])
+
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        as="style">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
+
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" as="style">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap">
+
+    @stack('styles')
+
+    <style>
+        {!! core()->getConfigData('general.content.custom_scripts.custom_css') !!}
+    </style>
+
+    {!! view_render_event('bagisto.shop.layout.head') !!}
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
     <!-- Google Tag Manager -->
     <script>
