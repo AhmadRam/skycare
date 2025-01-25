@@ -2,9 +2,11 @@
 
 namespace Webkul\Shop\Http\Controllers\API;
 
+use Webkul\Shop\Jobs\SendFacebookEventJob;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Http;
 use Webkul\Checkout\Facades\Cart;
 use Webkul\Customer\Repositories\CustomerRepository;
 use Webkul\Payment\Facades\Payment;
@@ -24,8 +26,7 @@ class OnepageController extends APIController
     public function __construct(
         protected OrderRepository $orderRepository,
         protected CustomerRepository $customerRepository
-    ) {
-    }
+    ) {}
 
     /**
      * Return cart summary.
@@ -166,6 +167,9 @@ class OnepageController extends APIController
         $this->validateOrder();
 
         $cart = Cart::getCart();
+
+        dispatch(new SendFacebookEventJob('InitiateCheckout', auth()->user(), $cart));
+
 
         if ($redirectUrl = Payment::getRedirectUrl($cart)) {
             return new JsonResource([

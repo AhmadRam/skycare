@@ -159,6 +159,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'facebook_access_token' => env('FACEBOOK_ACCESS_TOKEN'),
+    'facebook_pixel_id' => env('FACEBOOK_PIXEL_ID'),
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

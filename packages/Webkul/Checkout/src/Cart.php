@@ -2,8 +2,10 @@
 
 namespace Webkul\Checkout;
 
+use Webkul\Shop\Jobs\SendFacebookEventJob;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Http;
 use Webkul\Checkout\Contracts\CartAddress as CartAddressContract;
 use Webkul\Checkout\Exceptions\BillingAddressNotFoundException;
 use Webkul\Checkout\Models\CartAddress;
@@ -200,6 +202,8 @@ class Cart
         if (!$product->status) {
             return ['info' => __('shop::app.checkout.cart.item.inactive-add')];
         }
+
+        dispatch(new SendFacebookEventJob('AddToCart', auth()->user(), $product));
 
         $cartProducts = $product->getTypeInstance()->prepareForCart($data);
 

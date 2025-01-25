@@ -5,6 +5,7 @@ namespace Webkul\Shop\Http\Middleware;
 use Closure;
 use Stevebauman\Location\Facades\Location;
 use Webkul\Core\Repositories\CurrencyRepository;
+use Webkul\Shop\Jobs\SendFacebookEventJob;
 
 class Currency
 {
@@ -54,6 +55,7 @@ class Currency
         }
 
         unset($request['currency']);
+        dispatch(new SendFacebookEventJob('PageView', auth()->user(), null));
 
         return $next($request);
     }

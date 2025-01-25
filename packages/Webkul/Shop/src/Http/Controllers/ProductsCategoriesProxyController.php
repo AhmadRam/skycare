@@ -2,7 +2,9 @@
 
 namespace Webkul\Shop\Http\Controllers;
 
+use Webkul\Shop\Jobs\SendFacebookEventJob;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use stdClass;
 use Webkul\Attribute\Repositories\AttributeOptionRepository;
 use Webkul\Attribute\Repositories\AttributeRepository;
@@ -31,8 +33,7 @@ class ProductsCategoriesProxyController extends Controller
         protected ThemeCustomizationRepository $themeCustomizationRepository,
         protected URLRewriteRepository $urlRewriteRepository,
         protected AttributeOptionRepository $attributeOptionsRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * Show product or category view. If neither category nor product matches, abort with code 404.
@@ -92,6 +93,8 @@ class ProductsCategoriesProxyController extends Controller
             }
 
             visitor()->visit($product);
+
+            dispatch(new SendFacebookEventJob('ViewContent', auth()->user(), $product));
 
             return view('shop::products.view', compact('product'));
         }
