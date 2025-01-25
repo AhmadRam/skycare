@@ -3819,6 +3819,7 @@ return [
                 'catalog'                  => 'Catalog',
                 'categories'               => 'Categories',
                 'brands'                   => 'Brands',
+                'blog'                     => 'Sky Care Tips',
                 'channels'                 => 'Channels',
                 'cms'                      => 'CMS',
                 'collapse'                 => 'Collapse',

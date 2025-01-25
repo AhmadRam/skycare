@@ -22,8 +22,7 @@ class CategoryController extends APIController
         protected AttributeRepository $attributeRepository,
         protected CategoryRepository $categoryRepository,
         protected ProductRepository $productRepository
-    ) {
-    }
+    ) {}
 
     /**
      * Get all categories.
@@ -96,6 +95,17 @@ class CategoryController extends APIController
         }
 
         $categories->push($parentObject);
+
+        $blogObject = new stdClass;
+        $blogObject->id = 13546;
+        $blogObject->parent_id = 1;
+        $blogObject->name = __('admin::app.components.layouts.sidebar.blog');
+        $blogObject->slug = 'blog';
+        $blogObject->url = 'blog';
+        $blogObject->status = true;
+        $blogObject->children = [];
+
+        $categories->push($blogObject);
 
         return CategoryTreeResource::collection($categories);
     }
