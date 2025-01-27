@@ -234,11 +234,11 @@
 
                     this.$axios.post('{{ route('shop.checkout.onepage.orders.store') }}')
                         .then(response => {
-                            console.log(this.cart);
+
                             fbq('track', 'InitiateCheckout', {
                                 value: this.cart.grand_total,
                                 currency: '{{ core()->getCurrentCurrency()->code }}',
-                                num_items: this.cart.items.count()
+                                num_items: this.cart.items_count
                             });
 
                             if (response.data.data.redirect) {
