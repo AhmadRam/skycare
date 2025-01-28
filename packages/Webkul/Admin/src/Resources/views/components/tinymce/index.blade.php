@@ -180,7 +180,7 @@
     <script type="module">
         app.component('v-tinymce', {
             template: '#v-tinymce-template',
-                
+
             props: ['selector', 'field', 'prompt'],
 
             data() {
@@ -224,9 +224,9 @@
                         initTinyMCE: function(extraConfiguration) {
                             let self2 = this;
 
-                            let config = {  
+                            let config = {
                                 relative_urls: false,
-                                menubar: false,
+                                menubar: true,
                                 remove_script_host: false,
                                 document_base_url: '{{ asset('/') }}',
                                 uploadRoute: '{{ route('admin.tinymce.upload') }}',

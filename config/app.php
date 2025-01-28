@@ -228,6 +228,7 @@ return [
         Webkul\Theme\Providers\ThemeServiceProvider::class,
         Webkul\User\Providers\UserServiceProvider::class,
         Webkul\Myfatoorah\Providers\MyfatoorahServiceProvider::class,
+        Webkul\Blog\Providers\BlogServiceProvider::class,
     ])->toArray(),
 
     /*

@@ -47,8 +47,7 @@
         "spatie/laravel-responsecache": "^7.4",
         "spatie/laravel-sitemap": "^6.2",
         "stevebauman/location": "^7.4",
-        "twilio/sdk": "^8.3",
-        "webbycrown/blog-for-bagisto": "dev-main"
+        "twilio/sdk": "^8.3"
     },
     "require-dev": {
         "bagisto/laravel-datafaker": "dev-master",
@@ -98,7 +97,8 @@
             "Webkul\\Tax\\": "packages/Webkul/Tax/src",
             "Webkul\\Theme\\": "packages/Webkul/Theme/src",
             "Webkul\\User\\": "packages/Webkul/User/src",
-            "Webkul\\Myfatoorah\\": "packages/Webkul/Myfatoorah/src"
+            "Webkul\\Myfatoorah\\": "packages/Webkul/Myfatoorah/src",
+            "Webkul\\Blog\\": "packages/Webkul/Blog/src"
         }
     },
     "autoload-dev": {
