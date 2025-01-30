@@ -27,7 +27,7 @@ Route::group([
         'view' => 'blog::shop.category.index',
     ])->name('shop.blog.category.index');
 
-    Route::get('/{slug}/{blog_slug?}', 'Webkul\Blog\Http\Controllers\Shop\BlogController@view')->defaults('_config', [
+    Route::get('/{blog_slug?}', 'Webkul\Blog\Http\Controllers\Shop\BlogController@view')->defaults('_config', [
         'view' => 'blog::shop.velocity.view',
     ])->name('shop.article.view');
 

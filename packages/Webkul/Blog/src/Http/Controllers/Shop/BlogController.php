@@ -108,12 +108,12 @@ class BlogController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  string  $slug
+     * @param  string  $blog_slug
      * @return \Illuminate\View\View
      */
-    public function view($blog_slug, $slug)
+    public function view($blog_slug)
     {
-        $blog = Blog::where('slug', $slug)->firstOrFail();
+        $blog = Blog::where('slug', $blog_slug)->firstOrFail();
 
         $blog_id = ( $blog && !empty($blog) && !is_null($blog) ) ? (int)$blog->id : 0;
 
