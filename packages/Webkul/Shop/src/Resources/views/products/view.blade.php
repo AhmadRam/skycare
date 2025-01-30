@@ -143,9 +143,9 @@
             </x-shop::tabs.item>
 
             <!-- Reviews Tab -->
-            <x-shop::tabs.item class="container mt-[60px] !p-0 max-1180:hidden" :title="trans('shop::app.products.view.review')" :is-selected="false">
+            {{-- <x-shop::tabs.item class="container mt-[60px] !p-0 max-1180:hidden" :title="trans('shop::app.products.view.review')" :is-selected="false">
                 @include('shop::products.view.reviews')
-            </x-shop::tabs.item>
+            </x-shop::tabs.item> --}}
         </x-shop::tabs>
     </div>
 
@@ -205,7 +205,7 @@
         </x-shop::accordion>
 
         <!-- Reviews Accordion -->
-        <x-shop::accordion class="bg-gray-100" :is-active="false">
+        {{-- <x-shop::accordion class="bg-gray-100" :is-active="false">
             <x-slot:header>
                 <p class="text-base font-medium 1180:hidden">
                     @lang('shop::app.products.view.review')
@@ -215,7 +215,7 @@
             <x-slot:content>
                 @include('shop::products.view.reviews')
             </x-slot>
-        </x-shop::accordion>
+        </x-shop::accordion> --}}
     </div>
 
     <!-- Featured Products -->
@@ -292,11 +292,11 @@
                                         :is-editable=false
                                     />
 
-                                    <div class="flex gap-4 items-center">
+                                    {{-- <div class="flex gap-4 items-center">
                                         <p class="text-[#6E6E6E] text-sm">
                                             ({{ $product->approvedReviews->count() }} @lang('reviews'))
                                         </p>
-                                    </div>
+                                    </div> --}}
                                 </div>
 
                                 {!! view_render_event('bagisto.shop.products.rating.after', ['product' => $product]) !!}
