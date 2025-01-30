@@ -23,11 +23,11 @@ Route::group([
 
     });
 
-    Route::get('/{slug}', 'Webkul\Blog\Http\Controllers\Shop\CategoryController@index')->defaults('_config', [
+    Route::get('category/{slug}', 'Webkul\Blog\Http\Controllers\Shop\CategoryController@index')->defaults('_config', [
         'view' => 'blog::shop.category.index',
     ])->name('shop.blog.category.index');
 
-    Route::get('/{blog_slug?}', 'Webkul\Blog\Http\Controllers\Shop\BlogController@view')->defaults('_config', [
+    Route::get('/{blog_slug}', 'Webkul\Blog\Http\Controllers\Shop\BlogController@view')->defaults('_config', [
         'view' => 'blog::shop.velocity.view',
     ])->name('shop.article.view');
 
