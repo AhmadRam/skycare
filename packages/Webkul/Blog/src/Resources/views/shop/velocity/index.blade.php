@@ -31,7 +31,7 @@
                         <div id="blog" class="container mt-5">
                             <div class="full-content-wrapper">
                                 <div class="col-lg-12">
-                                    <h1 class="mb-3 page-title">Our Blog</h1>
+                                    <h1 class="mb-3 page-title">{{ __('blog::app.home.our-blog') }}</h1>
                                 </div>
                                 <div class="flex flex-wrap grid-wrap">
 
@@ -55,14 +55,65 @@
                                                                     </h2>
                                                                     <div class="post-meta">
                                                                         <p>
-                                                                            {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $blog->created_at)->format('M j, Y') }}
-                                                                            by
-                                                                            @if ((int) $show_author_page == 1)
+                                                                            @php
+                                                                                $date = \Carbon\Carbon::createFromFormat(
+                                                                                    'Y-m-d H:i:s',
+                                                                                    $blog->created_at,
+                                                                                );
+                                                                                $locale = app()->getLocale(); // Get the current locale
+
+                                                                                if ($locale === 'ar') {
+                                                                                    // Format for Arabic
+                                                                                    $formattedDate = $date->format(
+                                                                                        'j M, Y',
+                                                                                    );
+                                                                                    $formattedDate = str_replace(
+                                                                                        [
+                                                                                            'Jan',
+                                                                                            'Feb',
+                                                                                            'Mar',
+                                                                                            'Apr',
+                                                                                            'May',
+                                                                                            'Jun',
+                                                                                            'Jul',
+                                                                                            'Aug',
+                                                                                            'Sep',
+                                                                                            'Oct',
+                                                                                            'Nov',
+                                                                                            'Dec',
+                                                                                        ],
+                                                                                        [
+                                                                                            'يناير',
+                                                                                            'فبراير',
+                                                                                            'مارس',
+                                                                                            'أبريل',
+                                                                                            'مايو',
+                                                                                            'يونيو',
+                                                                                            'يوليو',
+                                                                                            'أغسطس',
+                                                                                            'سبتمبر',
+                                                                                            'أكتوبر',
+                                                                                            'نوفمبر',
+                                                                                            'ديسمبر',
+                                                                                        ],
+                                                                                        $formattedDate,
+                                                                                    );
+                                                                                } else {
+                                                                                    // Format for English
+                                                                                    $formattedDate = $date->format(
+                                                                                        'M j, Y',
+                                                                                    );
+                                                                                }
+                                                                            @endphp
+                                                                            {{ $formattedDate }}
+                                                                            {{ __('blog::app.home.by') }}
+                                                                            {{ __('blog::app.home.skycare') }}
+                                                                            {{-- @if ((int) $show_author_page == 1)
                                                                                 <a
                                                                                     href="{{ route('shop.blog.author.index', [$blog->author_id]) }}">{{ $blog->author }}</a>
                                                                             @else
                                                                                 <a>{{ $blog->author }}</a>
-                                                                            @endif
+                                                                            @endif --}}
                                                                         </p>
                                                                     </div>
 
@@ -83,7 +134,7 @@
                                                                 </div>
                                                                 <div class="card-footer">
                                                                     <a href="{{ route('shop.article.view', [$blog->slug]) }}"
-                                                                        class="text-uppercase btn-text-link">Read more
+                                                                        class="text-uppercase btn-text-link">{{ __('blog::app.home.read-more') }}
                                                                         ></a>
                                                                 </div>
                                                             </div>
@@ -97,7 +148,8 @@
 
                                             </div>
                                         @else
-                                            <div class="post-not-available">No post published yet!!</div>
+                                            <div class="post-not-available">
+                                                {{ __('blog::app.home.no-post-published') }}</div>
 
                                         @endif
 
@@ -106,7 +158,7 @@
                                     <div class=" column-3 blog-sidebar">
                                         <div class="row">
                                             <div class="col-lg-12 mb-4 categories">
-                                                <h3>Categories</h3>
+                                                <h3>{{ __('blog::app.home.categories') }}</h3>
                                                 <ul class="list-group">
                                                     @foreach ($categories as $category)
                                                         <li><a href="{{ route('shop.blog.category.index', [$category->slug]) }}"
@@ -121,7 +173,7 @@
                                                 </ul>
 
                                                 <div class="tags-part">
-                                                    <h3>Tags</h3>
+                                                    <h3>{{ __('blog::app.home.tags') }}</h3>
                                                     <div class="tag-list">
                                                         @foreach ($tags as $tag)
                                                             <a href="{{ route('shop.blog.tag.index', [$tag->slug]) }}"

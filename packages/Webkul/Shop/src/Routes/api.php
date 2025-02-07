@@ -35,6 +35,8 @@ Route::group(['middleware' => ['locale', 'theme', 'currency'], 'prefix' => 'api'
 
         Route::get('{id}/related', 'relatedProducts')->name('shop.api.products.related.index');
 
+        Route::get('related/blog', 'relatedProductsBlog')->name('shop.api.products.related.blog');
+
         Route::get('{id}/up-sell', 'upSellProducts')->name('shop.api.products.up-sell.index');
     });
 

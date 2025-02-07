@@ -28,6 +28,7 @@ return [
         'description-and-images'        => 'الوصف والصور',
         'short_description'             => 'وصف قصير',
         'description'                   => 'الوصف',
+        'cover'                         => 'الغلاف',
         'image'                         => 'الصورة',
         'add-image'                     => 'إضافة صورة',
         'search_engine_optimization'    => 'تحسين محركات البحث',
@@ -38,6 +39,11 @@ return [
         'updated-fault'                 => 'حدث خطأ أثناء تحديث المقال.',
         'delete-success'                => 'تم حذف المقال بنجاح',
         'delete-failure'                => 'لا يمكن حذف المقال',
+        'read-more' => 'اقرأ المزيد',
+        'comments-are-turned-off' => 'التعليقات معطلة.',
+        'click' => 'اضغط',
+        'here' => 'هنا',
+        'to-login' => 'لتسجيل الدخول.',
     ],
 
     'category' => [
@@ -63,6 +69,9 @@ return [
         'updated-fault'                 => 'حدث خطأ أثناء تحديث الفئة.',
         'delete-success'                => 'تم حذف الفئة بنجاح',
         'delete-failure'                => 'لا يمكن حذف الفئة',
+        'categories' => 'الفئات',
+        'blogs' => 'المقالات',
+        'tags' => 'العلامات',
     ],
 
     'tag' => [
@@ -88,6 +97,9 @@ return [
         'updated-fault'                 => 'حدث خطأ أثناء تحديث العلامة.',
         'delete-success'                => 'تم حذف العلامة بنجاح',
         'delete-failure'                => 'لا يمكن حذف العلامة',
+        'categories' => 'الفئات',
+        'blogs' => 'المقالات',
+        'tags' => 'العلامات',
     ],
 
     'comment' => [
@@ -106,6 +118,10 @@ return [
         'comment'                       => 'التعليق',
         'delete-success'                => 'تم حذف التعليق بنجاح',
         'delete-failure'                => 'لا يمكن حذف التعليق',
+        'comments-are-turned-off' => 'التعليقات معطلة.',
+        'click' => 'اضغط',
+        'here' => 'هنا',
+        'to-login' => 'لتسجيل الدخول.',
     ],
 
     'datagrid' => [
@@ -125,4 +141,25 @@ return [
         'delete'                        => 'حذف',
         'view'                          => 'عرض',
     ],
+
+    'home' => [
+        'tags' => 'العلامات',
+        'related-blog' => 'المقالات المتعلقة',
+        'categories' => 'الفئات',
+        'blogs' => 'المقالات',
+        'comments-are-turned-off' => 'التعليقات معطلة.',
+        'click' => 'اضغط',
+        'here' => 'هنا',
+        'to-login' => 'لتسجيل الدخول.',
+        'our-blog' => 'مقالاتنا',
+        'by' => 'بواسطة',
+        'read-more' => 'اقرأ المزيد',
+        'skycare' => 'سكاي كير',
+    ],
+
+    'velocity' => [
+        'tags' => 'العلامات',
+        'related-blog' => 'المقالات المتعلقة',
+    ],
+    
 ];

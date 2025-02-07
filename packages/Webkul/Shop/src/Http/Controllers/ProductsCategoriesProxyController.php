@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 use stdClass;
 use Webkul\Attribute\Repositories\AttributeOptionRepository;
 use Webkul\Attribute\Repositories\AttributeRepository;
+use Webkul\Blog\Models\Blog;
 use Webkul\Category\Repositories\CategoryRepository;
 use Webkul\Marketing\Repositories\URLRewriteRepository;
 use Webkul\Product\Repositories\ProductRepository;
@@ -96,7 +97,9 @@ class ProductsCategoriesProxyController extends Controller
 
             dispatch(new SendFacebookEventJob('ViewContent', auth()->user(), $product));
 
-            return view('shop::products.view', compact('product'));
+            $related_blogs = Blog::orderBy('id', 'desc')->where('status', 1)->paginate(10);
+
+            return view('shop::products.view', compact('product', 'related_blogs'));
         }
 
         /**

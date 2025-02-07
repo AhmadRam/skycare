@@ -77,4 +77,16 @@ class ProductController extends APIController
 
         return ProductResource::collection($upSellProducts);
     }
+
+    /**
+     * Related product listings.
+     *
+     * @param  int  $id
+     */
+    public function relatedProductsBlog()
+    {
+        $products = $this->productRepository->get()->random(10);
+
+        return ProductResource::collection($products);
+    }
 }

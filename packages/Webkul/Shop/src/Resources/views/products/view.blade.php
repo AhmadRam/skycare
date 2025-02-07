@@ -224,6 +224,120 @@
     <!-- Upsell Products -->
     <x-shop::products.carousel :title="trans('shop::app.products.view.up-sell-title')" :src="route('shop.api.products.up-sell.index', ['id' => $product->id])" />
 
+    <div class="row col-12 remove-padding-margin">
+        <div id="home-right-bar-container" class="col-12 no-padding content">
+            <div id="blog" class="container mt-5">
+                <div id="comment-list" class="column-12 comment-part related-bolg-part">
+                    <div class="col-lg-12">
+                        <h1 class="mb-3 page-title">{{ __('admin::app.components.layouts.sidebar.blog') }}</h1>
+                    </div>
+                    <div class="flex flex-wrap blog-grid-list">
+                        @push('styles')
+                            @include ('blog::custom-css.custom-css')
+                        @endpush
+
+                        @foreach ($related_blogs as $related_blog)
+                            <div class="related-blog-post-item">
+                                <div class="blog-post-box">
+                                    <div class="card mb-5">
+                                        <div class="blog-grid-img"><img
+                                                src="{{ '/storage/' . (isset($related_blog->src) && !empty($related_blog->src) && !is_null($related_blog->src) ? $related_blog->src : 'placeholder-thumb.jpg') }}"
+                                                alt="{{ $related_blog->name }}" class="card-img-top">
+                                        </div>
+                                        <div class="card-body">
+                                            <h2 class="card-title"><a
+                                                    href="{{ route('shop.article.view', [$related_blog->slug]) }}">{{ $related_blog->name }}</a>
+                                            </h2>
+                                            <div class="post-meta">
+                                                <p>
+                                                    @php
+                                                        $date = \Carbon\Carbon::createFromFormat(
+                                                            'Y-m-d H:i:s',
+                                                            $related_blog->created_at,
+                                                        );
+                                                        $locale = app()->getLocale(); // Get the current locale
+
+                                                        if ($locale === 'ar') {
+                                                            // Format for Arabic
+                                                            $formattedDate = $date->format('j M, Y');
+                                                            $formattedDate = str_replace(
+                                                                [
+                                                                    'Jan',
+                                                                    'Feb',
+                                                                    'Mar',
+                                                                    'Apr',
+                                                                    'May',
+                                                                    'Jun',
+                                                                    'Jul',
+                                                                    'Aug',
+                                                                    'Sep',
+                                                                    'Oct',
+                                                                    'Nov',
+                                                                    'Dec',
+                                                                ],
+                                                                [
+                                                                    'يناير',
+                                                                    'فبراير',
+                                                                    'مارس',
+                                                                    'أبريل',
+                                                                    'مايو',
+                                                                    'يونيو',
+                                                                    'يوليو',
+                                                                    'أغسطس',
+                                                                    'سبتمبر',
+                                                                    'أكتوبر',
+                                                                    'نوفمبر',
+                                                                    'ديسمبر',
+                                                                ],
+                                                                $formattedDate,
+                                                            );
+                                                        } else {
+                                                            // Format for English
+                                                            $formattedDate = $date->format('M j, Y');
+                                                        }
+                                                    @endphp
+                                                    {{ $formattedDate }} {{ __('blog::app.home.by') }}
+                                                    {{ __('blog::app.home.skycare') }}
+                                                    {{-- @if ((int) $show_author_page == 1)
+                                            <a
+                                                href="{{ route('shop.blog.author.index', [$related_blog->author_id]) }}">{{ $related_blog->author }}</a>
+                                        @else
+                                            <a>{{ $blog->author }}</a>
+                                        @endif --}}
+                                                </p>
+                                            </div>
+
+                                            @if (!empty($related_blog->assign_categorys) && count($related_blog->assign_categorys) > 0)
+                                                <div class="post-categories">
+                                                    <p>
+                                                        @foreach ($related_blog->assign_categorys as $assign_category)
+                                                            <a href="{{ route('shop.blog.category.index', [$assign_category->slug]) }}"
+                                                                class="cat-link">{{ $assign_category->name }}</a>
+                                                        @endforeach
+                                                    </p>
+                                                </div>
+                                            @endif
+
+                                            <div class="card-text text-justify">
+                                                {!! $related_blog->short_description !!}
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <a href="{{ route('shop.article.view', [$related_blog->slug]) }}"
+                                                class="text-uppercase btn-text-link">{{ __('blog::app.home.read-more') }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     {!! view_render_event('bagisto.shop.products.view.after', ['product' => $product]) !!}
 
     @pushOnce('scripts')
@@ -285,19 +399,19 @@
 
                                 <!-- Rating -->
                                 {!! view_render_event('bagisto.shop.products.rating.before', ['product' => $product]) !!}
-
+{{-- 
                                 <div class="flex gap-4 items-center mt-4">
                                     <x-shop::products.star-rating
                                         :value="$avgRatings"
                                         :is-editable=false
                                     />
 
-                                    {{-- <div class="flex gap-4 items-center">
+                                    <div class="flex gap-4 items-center">
                                         <p class="text-[#6E6E6E] text-sm">
                                             ({{ $product->approvedReviews->count() }} @lang('reviews'))
                                         </p>
-                                    </div> --}}
-                                </div>
+                                    </div>
+                                </div> --}}
 
                                 {!! view_render_event('bagisto.shop.products.rating.after', ['product' => $product]) !!}
 

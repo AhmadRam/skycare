@@ -44,6 +44,8 @@ class BlogRepository extends Repository
 
         $this->uploadImages($data, $blog);
 
+        $this->uploadImages($data, $blog, 'cover');
+
         Event::dispatch('admin.blogs.create.after', $blog);
 
         return true;
@@ -69,6 +71,8 @@ class BlogRepository extends Repository
         $blog = $this->update($update_data, $id);
 
         $this->uploadImages($data, $blog);
+
+        $this->uploadImages($data, $blog, 'cover');
 
         Event::dispatch('admin.blogs.update.after', $blog);
 
@@ -131,6 +135,10 @@ class BlogRepository extends Repository
         $blogItemImage = $blogItem->src;
 
         Storage::delete($blogItemImage);
+
+        $blogItemCover = $blogItem->cover;
+
+        Storage::delete($blogItemCover);
 
         return $this->model->destroy($id);
     }

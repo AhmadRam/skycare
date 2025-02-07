@@ -27,6 +27,7 @@ class Blog extends Model implements BlogContract
         'categorys',
         'tags',
         'src',
+        'cover',
         'status',
         'locale',
         'allow_comments',
@@ -41,7 +42,7 @@ class Blog extends Model implements BlogContract
      *
      * @var array
      */
-    protected $appends = ['src_url', 'assign_categorys'];
+    protected $appends = ['src_url', 'assign_categorys', 'cover_url'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
@@ -73,6 +74,24 @@ class Blog extends Model implements BlogContract
         return Storage::url($this->src);
     }
 
+    /**
+     * Get the cover url.
+     *
+     * @return string
+     */
+    public function getCoverUrlAttribute()
+    {
+        if (! $this->cover) {
+            return;
+        }
+        return Storage::url($this->cover);
+    }
+
+    /**
+     * Get the assign categorys.
+     *
+     * @return array
+     */
     public function getAssignCategorysAttribute()
     {
         $categorys = array();

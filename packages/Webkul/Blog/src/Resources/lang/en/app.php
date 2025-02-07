@@ -29,6 +29,7 @@ return [
         'short_description'             => 'Short Description',
         'description'                   => 'Description',
         'image'                         => 'Image',
+        'cover'                         => 'Cover',
         'add-image'                     => 'Add Image',
         'search_engine_optimization'    => 'Search Engine Optimization',
         'meta_title'                    => 'Meta Title',
@@ -38,6 +39,9 @@ return [
         'updated-fault'                 => 'An error occurred while updating the blog.',
         'delete-success'                => 'Blog deleted successfully',
         'delete-failure'                => 'Blog cannot be deleted',
+        'blogs' => 'Blogs',
+        'related-blog' => 'Related Blog',
+        'tags' => 'Tags',
     ],
 
     'category' => [
@@ -63,6 +67,9 @@ return [
         'updated-fault'                 => 'An error occurred while updating the category.',
         'delete-success'                => 'Category deleted successfully',
         'delete-failure'                => 'Category cannot be deleted',
+        'categories' => 'Categories',
+        'related-blog' => 'Related Blog',
+        'tags' => 'Tags',
     ],
 
     'tag' => [
@@ -88,6 +95,8 @@ return [
         'updated-fault'                 => 'An error occurred while updating the tag.',
         'delete-success'                => 'Tag deleted successfully',
         'delete-failure'                => 'Tag cannot be deleted',
+        'tags' => 'Tags',
+
     ],
 
     'comment' => [
@@ -106,6 +115,10 @@ return [
         'comment'                       => 'Comment',
         'delete-success'                => 'Comment deleted successfully',
         'delete-failure'                => 'Comment cannot be deleted',
+        'comments-are-turned-off' => 'Comments are turned off.',
+        'click' => 'Click',
+        'here' => 'here',
+        'to-login' => 'to login.',
     ],
 
     'datagrid' => [
@@ -124,5 +137,21 @@ return [
         'edit'                          => 'Edit',
         'delete'                        => 'Delete',
         'view'                          => 'View',
+    ],
+
+    'home' => [
+        'tags' => 'Tags',
+        'related-blog' => 'Related Blog',
+        'our-blog' => 'Our Blog',
+        'by' => 'By',
+        'read-more' => 'Read More',
+        'categories' => 'Categories',
+        'blogs' => 'Blogs',
+        'skycare' => 'Skycare',
+    ],
+
+    'velocity' => [
+        'tags' => 'Tags',
+        'related-blog' => 'Related Blog',
     ],
 ];

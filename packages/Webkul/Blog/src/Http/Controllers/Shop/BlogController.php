@@ -122,9 +122,12 @@ class BlogController extends Controller
         $paginate = $this->getConfigByKey('blog_post_maximum_related');
         $paginate = ( isset($paginate) && !empty($paginate) && is_null($paginate) ) ? (int)$paginate : 4;
 
-        $blog_category_ids = array_merge( explode(',', $blog->default_category), explode(',', $blog->categorys) );
-
+        $blog_category_ids = array_merge( explode(',', ($blog->default_category != "0" ? $blog->default_category : null)), explode(',', ($blog->categorys != "" ? $blog->categorys : null)) );
+        $blog_category_ids = array_filter($blog_category_ids, function($value) {
+            return $value !== null && $value !== '';
+        });
         $related_blogs = Blog::orderBy('id', 'desc')->where('status', 1)->whereNotIn('id', [$blog_id]);
+
         if ( is_array($blog_category_ids) && !empty($blog_category_ids) && count($blog_category_ids) > 0 ) {
             $related_blogs = $related_blogs->whereIn('default_category', $blog_category_ids)->where(
             function ($query) use ($blog_category_ids) {

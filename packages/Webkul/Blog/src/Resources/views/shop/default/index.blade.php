@@ -1,13 +1,13 @@
 @extends('shop::layouts.master')
 
 @section('page_title')
-    Package Article
+    {{ __('blog::app.home.package-article') }}
 @stop
 
 @section('content-wrapper')
 
     <div class="main">
-        Package Article
+        {{ __('blog::app.home.package-article') }}
     </div>
 
 @stop
