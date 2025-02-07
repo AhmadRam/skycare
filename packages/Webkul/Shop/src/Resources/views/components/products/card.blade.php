@@ -35,23 +35,30 @@
                 <div class="action-items bg-black">
                     <p
                         class="inline-block absolute top-2.5 ltr:left-3 rtl:right-3 px-2.5  bg-[#E51A1A] rounded-[44px] text-white text-sm"
-                        v-if="product.on_sale"
+                        v-if="product.on_sale && !product.is_out_of_stock"
                     >
                         @lang('shop::app.components.products.card.sale')
                     </p>
 
                     <p
                         class="inline-block absolute top-2.5 ltr:left-3 rtl:right-3 px-2.5 bg-navyBlue rounded-[44px] text-white text-sm"
-                        v-else-if="product.is_new"
+                        v-else-if="product.is_new && !product.is_out_of_stock"
                     >
                         @lang('shop::app.components.products.card.new')
                     </p>
 
                     <p
                         class="inline-block absolute top-2.5 ltr:right-3 rtl:left-3 px-2.5 bg-[#FEA82B] rounded-[44px] text-white text-sm"
-                        v-if="product.is_top_sell"
+                        v-if="product.is_top_sell && !product.is_out_of_stock"
                     >
                         @lang('shop::app.components.products.card.top_sell')
+                    </p>
+
+                    <p
+                        class="inline-block absolute top-2.5 ltr:right-3 rtl:left-3 px-2.5 bg-[#E51A1A] rounded-[44px] text-white text-sm"
+                        v-if="product.is_out_of_stock"
+                    >
+                        @lang('shop::app.components.products.card.out-of-stock')
                     </p>
 
                     <div class="group-hover:bottom-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
@@ -121,7 +128,7 @@
 
                 <button style="margin-inline-start: auto;margin-inline-end: auto;"
                     class="relative py-3 px-11 bg-gray-200 rounded-xl text-navyBlue text-xs font-medium"
-                    :disabled="! product.is_saleable"
+                    :disabled="! product.is_saleable || product.is_out_of_stock"
                     @click="addToCart()"
                     ref="addToCartButton"
                 >

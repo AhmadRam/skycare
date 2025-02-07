@@ -443,6 +443,7 @@ return [
                 'review-description'     => 'كن أول من يقيم هذا المنتج',
                 'sale'                   => 'تخفيض',
                 'top_sell'               => 'الأكثر مبيعاً',
+                'out-of-stock'           => 'غير متوفر في المخزون',
             ],
 
             'carousel' => [

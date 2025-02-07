@@ -443,6 +443,7 @@ return [
                 'review-description'          => 'Be the first to review this product',
                 'sale'                        => 'Sale',
                 'top_sell'                    => 'Top Selling',
+                'out-of-stock'                => 'Out of Stock',
             ],
 
             'carousel' => [

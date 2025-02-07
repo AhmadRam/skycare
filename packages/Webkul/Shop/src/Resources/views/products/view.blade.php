@@ -397,6 +397,14 @@
 
                                 {!! view_render_event('bagisto.shop.products.name.before', ['product' => $product]) !!}
 
+                                <div class="flex gap-4 items-center mt-4">
+                                    @if ($product->totalQuantity() <= 0)
+                                        <h1 class="text-3xl font-medium max-sm:text-xl text-red-500 text-sm">
+                                            {{ __('shop::app.components.products.card.out-of-stock') }}
+                                        </h1>
+                                    @endif
+                                </div>
+
                                 <!-- Rating -->
                                 {!! view_render_event('bagisto.shop.products.rating.before', ['product' => $product]) !!}
 {{-- 
@@ -484,7 +492,7 @@
                                         button-type="secondary-button"
                                         :loading="false"
                                         :title="trans('shop::app.products.view.add-to-cart')"
-                                        :disabled="! $product->isSaleable(1)"
+                                        :disabled="! $product->isSaleable(1) || $product->totalQuantity() <= 0"
                                         ref="addToCartButton"
                                     />
 
@@ -500,7 +508,7 @@
                                         class="primary-button w-full max-w-[470px] mt-5"
                                         button-type="secondary-button"
                                         :title="trans('shop::app.products.view.buy-now')"
-                                        :disabled="! $product->isSaleable(1)"
+                                        :disabled="! $product->isSaleable(1) || $product->totalQuantity() <= 0"
                                         :loading="false"
                                         ref="buyNowButton"
                                         @click="is_buy_now=1;"
