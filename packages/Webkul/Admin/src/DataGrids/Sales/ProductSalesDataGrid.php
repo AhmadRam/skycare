@@ -37,6 +37,7 @@ class ProductSalesDataGrid extends DataGrid
                 DB::raw('SUM((base_total_invoiced - base_amount_refunded) - (pav.float_value * (qty_invoiced - qty_refunded))) as profit')
             )
             ->whereNull('order_items.parent_id')
+            ->where('orders.status', 'completed')
             ->whereBetween('order_items.created_at', [$start_date, $end_date]);
 
 
