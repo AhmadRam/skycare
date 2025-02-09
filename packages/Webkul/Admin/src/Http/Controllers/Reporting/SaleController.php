@@ -79,6 +79,7 @@ class SaleController extends Controller
             ->where('product_attribute_values.attribute_id', $attributeId)
             ->where('order_items.discount_amount', '!=', 0)
             ->where('orders.status', 'completed')
+            ->where('product_flat.locale', 'en')
             ->whereIn('orders.id', $orders)
             ->groupBy('product_attribute_values.integer_value', 'attribute_options.admin_name')
             ->select(
