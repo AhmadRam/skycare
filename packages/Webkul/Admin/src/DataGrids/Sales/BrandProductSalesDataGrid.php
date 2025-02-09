@@ -36,7 +36,7 @@ class BrandProductSalesDataGrid extends DataGrid
                     ->join('customer_groups', 'customers.customer_group_id', '=', 'customer_groups.id')
                     ->where(function ($query) use ($group_condition) {
                         $query->where('customers.customer_group_id', $group_condition[0], $group_condition[1]);
-                        if ($group_condition[1] == "2" || $group_condition[1] == 2) {
+                        if ($group_condition[1] != "3") {
                             $query->orWhereNull('orders.customer_id');
                         }
                     });
