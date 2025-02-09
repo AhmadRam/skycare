@@ -78,6 +78,7 @@ class SaleController extends Controller
             ->join('attribute_options', 'product_attribute_values.integer_value', '=', 'attribute_options.id')
             ->where('product_attribute_values.attribute_id', $attributeId)
             ->where('order_items.discount_amount', '!=', 0)
+            ->where('orders.status', 'completed')
             ->whereIn('orders.id', $orders)
             ->groupBy('product_attribute_values.integer_value', 'attribute_options.admin_name')
             ->select(
