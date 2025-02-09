@@ -24,16 +24,17 @@ class BrandProductSalesDataGrid extends DataGrid
 
         $queryBuilder = DB::table('order_items')
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
-            ->join('product_flat', 'order_items.product_id', '=', 'product_flat.product_id')
-            ->join('product_attribute_values', 'product_flat.product_id', '=', 'product_attribute_values.product_id')
+            // ->join('product_flat', 'order_items.product_id', '=', 'product_flat.product_id')
+            ->join('product_attribute_values', 'order_items.product_id', '=', 'product_attribute_values.product_id')
             ->join('attribute_options', 'product_attribute_values.integer_value', '=', 'attribute_options.id')
             ->where('product_attribute_values.attribute_id', $attributeId)
+            ->where('orders.status', 'completed')
             ->where('product_attribute_values.integer_value', $attributeValueId)
             ->whereBetween('orders.created_at', [$start_date, $end_date])
-            ->groupBy('product_flat.product_id')
+            ->groupBy('order_items.id')
             ->select(
-                'product_flat.product_id',
                 'order_items.id',
+                'orders.increment_id',
                 'order_items.sku',
                 'order_items.name',
                 'order_items.coupon_code',
@@ -49,6 +50,7 @@ class BrandProductSalesDataGrid extends DataGrid
             );
 
         $this->addFilter('sku', 'order_items.sku');
+        $this->addFilter('order_id', 'orders.increment_id');
         $this->addFilter('name', 'order_items.name');
         $this->addFilter('coupon_code', 'order_items.coupon_code');
         $this->addFilter('qty_ordered', 'order_items.qty_ordered');
@@ -74,6 +76,15 @@ class BrandProductSalesDataGrid extends DataGrid
         $this->addColumn([
             'index'      => 'id',
             'label'      => trans('admin::app.reporting.sales.index.id'),
+            'type'       => 'string',
+            'searchable' => false,
+            'sortable'   => true,
+            'filterable' => true,
+        ]);
+
+        $this->addColumn([
+            'index'      => 'increment_id',
+            'label'      => "Order Id",
             'type'       => 'string',
             'searchable' => false,
             'sortable'   => true,
@@ -186,7 +197,7 @@ class BrandProductSalesDataGrid extends DataGrid
             'searchable' => false,
             'sortable'   => true,
             'filterable' => true,
-        ]); 
+        ]);
     }
 
     /**
@@ -194,8 +205,5 @@ class BrandProductSalesDataGrid extends DataGrid
      *
      * @return void
      */
-    public function prepareActions()
-    {
-
-    }
+    public function prepareActions() {}
 }

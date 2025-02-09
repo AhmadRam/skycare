@@ -21,25 +21,26 @@ class BrandsSalesDataGrid extends DataGrid
 
         $attributeId = 25;
 
-        $queryBuilder = DB::table('order_items')
+        $queryBuilder = DB::table('attribute_options')
+            ->join('product_attribute_values', 'attribute_options.id', '=', 'product_attribute_values.integer_value')
+            ->join('order_items', 'product_attribute_values.product_id', '=', 'order_items.product_id')
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
-            ->join('product_flat', 'order_items.product_id', '=', 'product_flat.product_id')
-            ->join('product_attribute_values', 'product_flat.product_id', '=', 'product_attribute_values.product_id')
-            ->join('attribute_options', 'product_attribute_values.integer_value', '=', 'attribute_options.id')
-            ->where('product_attribute_values.attribute_id', $attributeId)
-            ->whereBetween('orders.created_at', [$start_date, $end_date])
-            ->groupBy('product_attribute_values.integer_value', 'attribute_options.admin_name')
+            ->where('orders.status', 'completed')
+            ->where('attribute_options.attribute_id', $attributeId)
+            ->whereBetween('order_items.created_at', [$start_date, $end_date])
+            // ->where('product_attribute_values.integer_value', 15)
+            ->groupBy('attribute_options.id')
             ->select(
                 'product_attribute_values.integer_value as id',
                 'attribute_options.admin_name as name',
                 DB::raw('SUM(order_items.base_total) as base_total'),
-                DB::raw('SUM(order_items.qty_ordered) as total_quantity'),
+                DB::raw('SUM(order_items.qty_ordered) as total_quantity')
             );
 
         $this->addFilter('id', 'product_attribute_values.integer_value');
         $this->addFilter('name', 'attribute_options.admin_name');
-        $this->addFilter('total_base_discount_amount', DB::raw('SUM(order_items.base_total)'));
-        $this->addFilter('orders_count', DB::raw('SUM(order_items.qty_ordered)'));
+        $this->addFilter('base_total', DB::raw('SUM(order_items.base_total)'));
+        $this->addFilter('total_quantity', DB::raw('SUM(order_items.qty_ordered)'));
 
         return $queryBuilder;
     }
