@@ -3,6 +3,8 @@
 namespace Webkul\Admin\Http\Controllers\Reporting;
 
 use Illuminate\Support\Facades\DB;
+use Webkul\Admin\DataGrids\Sales\BrandProductSalesDataGrid;
+use Webkul\Admin\DataGrids\Sales\BrandsSalesDataGrid;
 use Webkul\Admin\DataGrids\Sales\CouponCodesDataGrid;
 use Webkul\Admin\DataGrids\Sales\ProductSalesDataGrid;
 
@@ -116,5 +118,34 @@ class SaleController extends Controller
         }
 
         return view('admin::reporting.sales.product-sales');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function brandsSales()
+    {
+        if (request()->ajax()) {
+            return app(BrandsSalesDataGrid::class)->toJson();
+        }
+        
+        return view('admin::reporting.sales.brands-sales');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function brandsSalesDetails($id)
+    {
+        if (request()->ajax()) {
+            request()->merge(['brand_id' => $id]);
+            return app(BrandProductSalesDataGrid::class)->toJson();
+        }
+
+        return view('admin::reporting.sales.brands-sales-details', compact('id'));
     }
 }

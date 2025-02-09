@@ -3154,7 +3154,10 @@ return [
                 'total-visits'                  => 'Total visits',
                 'total-visits-info'             => 'Total visitors on store',
                 'view-details'                  => 'View Details',
+                'brands-sales'                  => 'Brands Sales',
+                'brands-sales-details'          => 'Brands Sales Details',
             ],
+            
         ],
 
         'customers' => [

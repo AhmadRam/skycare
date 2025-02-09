@@ -310,7 +310,13 @@ return [
         'sort'       => 6,
         'icon'       => '',
     ],
-
+    [
+        'key'        => 'reporting.brands_sales_report',
+        'name'       => 'admin::app.reporting.sales.index.brands-sales',
+        'route'      => 'admin.reporting.brands_sales_report.index',
+        'sort'       => 7,
+        'icon'       => '',
+    ],
     /**
      * Settings.
      */

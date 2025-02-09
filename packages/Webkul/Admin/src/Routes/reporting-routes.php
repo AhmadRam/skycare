@@ -60,6 +60,10 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
 
             Route::get('coupon-codes/{id}', 'couponCodeDetails')->name('admin.reporting.coupon_codes_report.view');
 
+            Route::get('brands-sales', 'brandsSales')->name('admin.reporting.brands_sales_report.index');
+
+            Route::get('brands-sales/{id}', 'brandsSalesDetails')->name('admin.reporting.brands_sales_report.view');
+
             Route::get('product-sales', 'productSales')->name('admin.reporting.product_sales_report.index');
         });
     });
