@@ -21,7 +21,7 @@ class BrandsSalesDataGrid extends DataGrid
 
         $attributeId = 25;
         $customer_group = request()->customer_group_id ?? null;
-        dd($customer_group);
+
         $queryBuilder = DB::table('attribute_options')
             ->join('product_attribute_values', 'attribute_options.id', '=', 'product_attribute_values.integer_value')
             ->join('order_items', 'product_attribute_values.product_id', '=', 'order_items.product_id')
