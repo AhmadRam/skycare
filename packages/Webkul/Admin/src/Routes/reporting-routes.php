@@ -62,7 +62,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
 
             Route::get('brands-sales', 'brandsSales')->name('admin.reporting.brands_sales_report.index');
 
-            Route::get('brands-sales/{id}', 'brandsSalesDetails')->name('admin.reporting.brands_sales_report.view');
+            Route::get('brands-sales-details/{id}/{customer_group_id}', 'brandsSalesDetails')->name('admin.reporting.brands_sales_report.view');
 
             Route::get('product-sales', 'productSales')->name('admin.reporting.product_sales_report.index');
         });

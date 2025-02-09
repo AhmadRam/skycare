@@ -10,7 +10,26 @@
         </p>
     </div>
 
-    <x-admin::datagrid :src="route('admin.reporting.brands_sales_report.index')" :isMultiRow="false">
+    <div class="flex gap-4">
+
+        <a href="{{ route('admin.reporting.brands_sales_report.index') }}"
+            class="text-sm text-blue-600 cursor-pointer transition-all hover:underline">
+            All
+        </a>
+
+        <a href="{{ route('admin.reporting.brands_sales_report.index') }}?customer_group=2"
+            class="text-sm text-blue-600 cursor-pointer transition-all hover:underline">
+            @lang('admin::app.settings.roles.edit.general')
+        </a>
+
+        <a href="{{ route('admin.reporting.brands_sales_report.index') }}?customer_group=3"
+            class="text-sm text-blue-600 cursor-pointer transition-all hover:underline">
+            @lang('admin::app.reporting.products.sales.wholesale')
+        </a>
+
+    </div>
+
+    <x-admin::datagrid :src="route('admin.reporting.brands_sales_report.index', ['customer_group_id' => request()->customer_group_id])" :isMultiRow="false">
 
     </x-admin::datagrid>
 </x-admin::layouts>

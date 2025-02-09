@@ -139,13 +139,13 @@ class SaleController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function brandsSalesDetails($id)
+    public function brandsSalesDetails($id, $customer_group_id)
     {
         if (request()->ajax()) {
-            request()->merge(['brand_id' => $id]);
+            request()->merge(['brand_id' => $id, 'customer_group_id' => $customer_group_id]);
             return app(BrandProductSalesDataGrid::class)->toJson();
         }
 
-        return view('admin::reporting.sales.brands-sales-details', compact('id'));
+        return view('admin::reporting.sales.brands-sales-details', compact('id', 'customer_group_id'));
     }
 }

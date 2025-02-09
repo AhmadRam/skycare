@@ -21,13 +21,28 @@ class BrandProductSalesDataGrid extends DataGrid
 
         $attributeId = 25;
         $attributeValueId = $data['brand_id'] ?? 0;
+        
+        $customer_group =  $data['customer_group_id'] ?? 0;
 
         $queryBuilder = DB::table('order_items')
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
             // ->join('product_flat', 'order_items.product_id', '=', 'product_flat.product_id')
             ->join('product_attribute_values', 'order_items.product_id', '=', 'product_attribute_values.product_id')
-            ->join('attribute_options', 'product_attribute_values.integer_value', '=', 'attribute_options.id')
-            ->where('product_attribute_values.attribute_id', $attributeId)
+            ->join('attribute_options', 'product_attribute_values.integer_value', '=', 'attribute_options.id');
+
+            if ($customer_group != null && $customer_group != 0) {
+                $group_condition = ['=', $customer_group];
+                $queryBuilder = $queryBuilder->join('customers', 'orders.customer_id', '=', 'customers.id')
+                    ->join('customer_groups', 'customers.customer_group_id', '=', 'customer_groups.id')
+                    ->where(function ($query) use ($group_condition) {
+                        $query->where('customers.customer_group_id', $group_condition[0], $group_condition[1]);
+                        if ($group_condition[1] == "2" || $group_condition[1] == 2) {
+                            $query->orWhereNull('orders.customer_id');
+                        }
+                    });
+            }
+    
+            $queryBuilder = $queryBuilder->where('product_attribute_values.attribute_id', $attributeId)
             ->where('orders.status', 'completed')
             ->where('product_attribute_values.integer_value', $attributeValueId)
             ->whereBetween('orders.created_at', [$start_date, $end_date])

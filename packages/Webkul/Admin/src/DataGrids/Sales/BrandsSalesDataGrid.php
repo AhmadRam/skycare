@@ -20,12 +20,25 @@ class BrandsSalesDataGrid extends DataGrid
 
 
         $attributeId = 25;
-
+        $customer_group = request()->customer_group_id ?? null;
         $queryBuilder = DB::table('attribute_options')
             ->join('product_attribute_values', 'attribute_options.id', '=', 'product_attribute_values.integer_value')
             ->join('order_items', 'product_attribute_values.product_id', '=', 'order_items.product_id')
-            ->join('orders', 'order_items.order_id', '=', 'orders.id')
-            ->where('orders.status', 'completed')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id');
+
+        if ($customer_group != null && $customer_group != 0) {
+            $group_condition = ['=', $customer_group];
+            $queryBuilder = $queryBuilder->join('customers', 'orders.customer_id', '=', 'customers.id')
+                ->join('customer_groups', 'customers.customer_group_id', '=', 'customer_groups.id')
+                ->where(function ($query) use ($group_condition) {
+                    $query->where('customers.customer_group_id', $group_condition[0], $group_condition[1]);
+                    if ($group_condition[1] == "2" || $group_condition[1] == 2) {
+                        $query->orWhereNull('orders.customer_id');
+                    }
+                });
+        }
+
+        $queryBuilder = $queryBuilder->where('orders.status', 'completed')
             ->where('attribute_options.attribute_id', $attributeId)
             ->whereBetween('order_items.created_at', [$start_date, $end_date])
             // ->where('product_attribute_values.integer_value', 15)
@@ -105,7 +118,7 @@ class BrandsSalesDataGrid extends DataGrid
             'title'  => trans('admin::app.sales.orders.index.datagrid.view'),
             'method' => 'GET',
             'url'    => function ($row) {
-                return route('admin.reporting.brands_sales_report.view', $row->id);
+                return route('admin.reporting.brands_sales_report.view', ['id' => $row->id, 'customer_group_id' => request()->customer_group_id ?? 0]);
             },
         ]);
     }
