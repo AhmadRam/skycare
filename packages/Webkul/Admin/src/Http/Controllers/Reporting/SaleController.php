@@ -76,7 +76,7 @@ class SaleController extends Controller
             ->join('product_flat', 'order_items.product_id', '=', 'product_flat.product_id')
             ->join('product_attribute_values', 'product_flat.product_id', '=', 'product_attribute_values.product_id')
             ->join('attribute_options', 'product_attribute_values.integer_value', '=', 'attribute_options.id')
-            
+
             ->join('customers', 'orders.customer_id', '=', 'customers.id')
             ->join('customer_groups', 'customers.customer_group_id', '=', 'customer_groups.id')
             ->where(function ($query) {
@@ -85,7 +85,7 @@ class SaleController extends Controller
 
             ->where('product_attribute_values.attribute_id', $attributeId)
             ->where('order_items.discount_amount', '!=', 0)
-            ->where('orders.status', 'completed')
+            ->whereNotIn('orders.status', ['no_status', 'canceled', 'closed', 'fraud'])
             ->where('product_flat.locale', 'en')
             ->whereIn('orders.id', $orders)
             ->groupBy('product_attribute_values.integer_value', 'attribute_options.admin_name')
@@ -139,7 +139,7 @@ class SaleController extends Controller
         if (request()->ajax()) {
             return app(BrandsSalesDataGrid::class)->toJson();
         }
-        
+
         return view('admin::reporting.sales.brands-sales');
     }
 

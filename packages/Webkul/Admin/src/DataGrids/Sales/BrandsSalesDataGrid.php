@@ -28,18 +28,18 @@ class BrandsSalesDataGrid extends DataGrid
             ->join('orders', 'order_items.order_id', '=', 'orders.id');
 
         if ($customer_group != null && $customer_group != 0) {
-            $group_condition = ['=', $customer_group];
-            $queryBuilder = $queryBuilder->join('customers', 'orders.customer_id', '=', 'customers.id')
-                ->join('customer_groups', 'customers.customer_group_id', '=', 'customer_groups.id')
+            $customer_group = (int) $customer_group;
+            $group_condition = $customer_group != 3 ? ['!=', 3] : ['=', $customer_group];
+            $queryBuilder = $queryBuilder->leftjoin('customers', 'orders.customer_id', '=', 'customers.id')
                 ->where(function ($query) use ($group_condition) {
                     $query->where('customers.customer_group_id', $group_condition[0], $group_condition[1]);
-                    if ($group_condition[1] != "3") {
+                    if ($group_condition[0] == "!=") {
                         $query->orWhereNull('orders.customer_id');
                     }
                 });
         }
 
-        $queryBuilder = $queryBuilder->where('orders.status', 'completed')
+        $queryBuilder = $queryBuilder->whereNotIn('orders.status', ['no_status', 'canceled', 'closed', 'fraud'])
             ->where('attribute_options.attribute_id', $attributeId)
             ->whereBetween('order_items.created_at', [$start_date, $end_date])
             // ->where('product_attribute_values.integer_value', 15)
