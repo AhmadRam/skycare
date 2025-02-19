@@ -79,6 +79,7 @@
                     class="max-h-[610px] max-w-[560px]"
                     v-show="! isMediaLoading"
                 >
+                    <img loading="lazy" width="75" height="75" decoding="async" data-nimg="1" src="{{ asset('themes/shop/default/build/assets/ya-hala.webp') }}" style="color: transparent; position: absolute; top: 0px; right: 20%; z-index: 2;">
                     <img
                         class="min-w-[450px] cursor-pointer rounded-xl"
                         :src="baseFile.path"

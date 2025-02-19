@@ -33,6 +33,7 @@
                 {!! view_render_event('bagisto.shop.components.products.card.image.after') !!}
 
                 <div class="action-items bg-black">
+
                     <p
                         class="inline-block absolute top-2.5 ltr:left-3 rtl:right-3 px-2.5  bg-[#E51A1A] rounded-[44px] text-white text-sm"
                         v-if="product.on_sale && product.is_saleable"
@@ -60,6 +61,8 @@
                     >
                         @lang('shop::app.components.products.card.out-of-stock')
                     </p>
+
+                    <img loading="lazy" width="75" height="75" decoding="async" data-nimg="1" src="{{ asset('themes/shop/default/build/assets/ya-hala.webp') }}" style="color: transparent; position: absolute; bottom: 0px; right: 5px; z-index: 2;">
 
                     <div class="group-hover:bottom-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
 
