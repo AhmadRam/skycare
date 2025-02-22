@@ -41,7 +41,7 @@ class Shipping
             unset($shippingCarriers['custom']);
             if ($cart->billing_address) {
                 if ($cart->billing_address->country == "KW") {
-                    if ($cart->base_sub_total > 5) {
+                    if ($cart->base_grand_total > 5) {
                         unset($shippingCarriers['flatrate']);
                         unset($shippingCarriers['internal']);
                     } else {

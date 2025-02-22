@@ -254,6 +254,9 @@ class CartRule
                                     $rulePercent = min(100, $value);
                                     break;
                                 }
+                                if ($items_count > $key) {
+                                    $rulePercent = min(100, $value);
+                                }
                             }
                         }
 
