@@ -20,30 +20,37 @@ class ProductSalesDataGrid extends DataGrid
 
         $queryBuilder = DB::table('order_items')
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
-            ->join('customers', 'orders.customer_id', '=', 'customers.id')
             ->join('product_flat', 'order_items.product_id', '=', 'product_flat.product_id')->where('product_flat.locale', 'en')
             ->join('product_attribute_values as pav', function ($join) {
                 $join->on('order_items.product_id', '=', 'pav.product_id')
                     ->where('pav.attribute_id', '=', 12);
-            })
-            ->addSelect(
-                'customers.customer_group_id',
-                'order_items.product_id as id',
-                'product_flat.sku as sku',
-                'product_flat.name as name',
-                DB::raw('SUM(base_total_invoiced - base_amount_refunded) as revenue'),
-                DB::raw('SUM(qty_invoiced - qty_refunded) as total_qty'),
-                DB::raw('SUM(pav.float_value * (qty_invoiced - qty_refunded)) as total_cost'),
-                DB::raw('SUM((base_total_invoiced - base_amount_refunded) - (pav.float_value * (qty_invoiced - qty_refunded))) as profit')
-            )
+            });
+
+        $customer_group =  $data['customer_group'] ?? 0;
+        if ($customer_group != null && $customer_group != 0) {
+            $customer_group = (int) $customer_group;
+            $group_condition = $customer_group != 3 ? ['!=', 3] : ['=', $customer_group];
+            $queryBuilder = $queryBuilder->leftjoin('customers', 'orders.customer_id', '=', 'customers.id')
+                ->where(function ($query) use ($group_condition) {
+                    $query->where('customers.customer_group_id', $group_condition[0], $group_condition[1]);
+                    if ($group_condition[0] == "!=") {
+                        $query->orWhereNull('orders.customer_id');
+                    }
+                });
+        }
+
+        $queryBuilder = $queryBuilder->addSelect(
+            'order_items.product_id as id',
+            'product_flat.sku as sku',
+            'product_flat.name as name',
+            DB::raw('SUM(base_total_invoiced - base_amount_refunded) as revenue'),
+            DB::raw('SUM(qty_invoiced - qty_refunded) as total_qty'),
+            DB::raw('SUM(pav.float_value * (qty_invoiced - qty_refunded)) as total_cost'),
+            DB::raw('SUM((base_total_invoiced - base_amount_refunded) - (pav.float_value * (qty_invoiced - qty_refunded))) as profit')
+        )
             ->whereNull('order_items.parent_id')
             ->where('orders.status', 'completed')
             ->whereBetween('order_items.created_at', [$start_date, $end_date]);
-
-
-        if (isset($data['customer_group'])) {
-            $queryBuilder->where('customers.customer_group_id', $data['customer_group']);
-        }
 
         $queryBuilder->having(DB::raw('SUM(base_total_invoiced - base_amount_refunded)'), '>', 0)
             ->groupBy('order_items.product_id');
