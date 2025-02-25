@@ -317,6 +317,13 @@ return [
         'sort'       => 7,
         'icon'       => '',
     ],
+    [
+        'key'        => 'reporting.order_items_sales_report',
+        'name'       => 'Items',
+        'route'      => 'admin.reporting.order_items_sales_report.index',
+        'sort'       => 7,
+        'icon'       => '',
+    ],
     /**
      * Settings.
      */
