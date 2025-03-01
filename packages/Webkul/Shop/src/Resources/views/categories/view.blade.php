@@ -28,10 +28,9 @@
 @endpush
 @push('meta')
 
-    <meta name="title"
-        content="{{ trim($category->meta_title) != '' ? $category->meta_title : $category->name }}" />
+    <meta name="title" content="{{ trim($category->meta_title) != '' ? $category->meta_title : $category->name }}" />
 
-        <meta name="description"
+    <meta name="description"
         content="{{ trim($category->meta_description) != '' ? $category->meta_description : \Illuminate\Support\Str::limit(strip_tags($category->description), 120, '') }}" />
 
     <meta name="keywords" content="{{ $category->meta_keywords }}" />
@@ -65,8 +64,12 @@
 
     {!! view_render_event('bagisto.shop.categories.view.description.before') !!}
 
+    <div class="container mt-8 px-[60px] max-lg:px-8 max-sm:px-4">
+        <h1>{{ $category->name }}</h1>
+    </div>
+
     @if (in_array($category->display_mode, [null, 'description_only', 'products_and_description']))
-        @if ($category->description)
+        @if ($category->description && strip_tags($category->description) != $category->name)
             <div class="container mt-8 px-[60px] max-lg:px-8 max-sm:px-4">
                 {!! $category->description !!}
             </div>

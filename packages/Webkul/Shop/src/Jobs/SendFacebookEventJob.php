@@ -68,9 +68,9 @@ class SendFacebookEventJob implements ShouldQueue
             ]);
 
             // Log success
-            Log::info("Facebook Event '{$this->eventName}' sent successfully.", [
-                'response' => json_decode($response->getBody(), true),
-            ]);
+            // Log::info("Facebook Event '{$this->eventName}' sent successfully.", [
+            //     'response' => json_decode($response->getBody(), true),
+            // ]);
         } catch (\Exception $e) {
             // Log error
             Log::error("Error sending Facebook Event '{$this->eventName}': " . $e->getMessage());

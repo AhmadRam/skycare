@@ -18,8 +18,7 @@ class ProductController extends APIController
     public function __construct(
         protected CategoryRepository $categoryRepository,
         protected ProductRepository $productRepository
-    ) {
-    }
+    ) {}
 
     /**
      * Product listings.
@@ -58,6 +57,16 @@ class ProductController extends APIController
         $relatedProducts = $product->related_products()
             ->take(core()->getConfigData('catalog.products.product_view_page.no_of_related_products'))
             ->get();
+
+        if ($relatedProducts->count() == 0) {
+            $relatedCategory = $product->categories()->orderBy('id', 'desc')->first();
+            if ($relatedCategory != null) {
+                $relatedProducts = $relatedCategory->products()->where('id', '!=', $product->id)->take(core()->getConfigData('catalog.products.product_view_page.no_of_related_products'))->get();
+            } else {
+                request()->merge(['brand' => $product->brand]);
+                $relatedProducts = $this->productRepository->getAll();
+            }
+        }
 
         return ProductResource::collection($relatedProducts);
     }
