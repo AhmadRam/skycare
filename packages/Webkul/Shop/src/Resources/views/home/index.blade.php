@@ -3,7 +3,7 @@
 @endphp
 
 <!-- SEO Meta Content -->
-@push ('meta')
+@push('meta')
     <meta name="title" content="{{ $channel->home_seo['meta_title'] ?? '' }}" />
 
     <meta name="description" content="{{ $channel->home_seo['meta_description'] ?? '' }}" />
@@ -14,24 +14,24 @@
 <x-shop::layouts>
     <!-- Page Title -->
     <x-slot:title>
-        {{  $channel->home_seo['meta_title'] ?? '' }}
+        {{ $channel->home_seo['meta_title'] ?? '' }}
     </x-slot>
 
     <!-- Loop over the theme customization -->
     @foreach ($customizations as $customization)
-        @php ($data = $customization->options) @endphp
+        @php($data = $customization->options) @endphp
 
         <!-- Static content -->
         @switch ($customization->type)
             @case ($customization::IMAGE_CAROUSEL)
                 <!-- Image Carousel -->
                 <x-shop::carousel :options="$data" />
+            @break
 
-                @break
             @case ($customization::STATIC_CONTENT)
                 <!-- push style -->
-                @if (! empty($data['css']))
-                    @push ('styles')
+                @if (!empty($data['css']))
+                    @push('styles')
                         <style>
                             {{ $data['css'] }}
                         </style>
@@ -39,33 +39,26 @@
                 @endif
 
                 <!-- render html -->
-                @if (! empty($data['html']))
+                @if (!empty($data['html']))
                     {!! $data['html'] !!}
                 @endif
+            @break
 
-                @break
             @case ($customization::CATEGORY_CAROUSEL)
                 <!-- Categories carousel -->
-                <x-shop::categories.carousel
-                    :title="$data['title'] ?? ''"
-                    :src="route('shop.api.categories.index', $data['filters'] ?? [])"
-                    :navigation-link="route('shop.home.index')"
-                />
+                <x-shop::categories.carousel :title="$data['title'] ?? ''" :src="route('shop.api.categories.index', $data['filters'] ?? [])" :navigation-link="route('shop.home.index')" />
+            @break
 
-                @break
             @case ($customization::PRODUCT_CAROUSEL)
                 <!-- Product Carousel -->
-                <x-shop::products.carousel
-                    :title="$data['title'] ?? ''"
-                    :src="route('shop.api.products.index', $data['filters'] ?? [])"
-                    :navigation-link="route('shop.search.index', $data['filters'] ?? [])"
-                />
-
-                @break
+                <x-shop::products.carousel :title="$data['title'] ?? ''" :src="route('shop.api.products.index', $data['filters'] ?? [])" :navigation-link="route('shop.search.index', $data['filters'] ?? [])" />
+            @break
         @endswitch
     @endforeach
 
     <div class="container mt-20 max-lg:px-8 max-md:mt-8 max-sm:mt-7 max-sm:!px-4">
-        <div class="elfsight-app-6b83226e-9d00-4db3-ab16-dfc624716697" data-elfsight-app-lazy></div>
+        {{-- <div class="elfsight-app-6b83226e-9d00-4db3-ab16-dfc624716697" data-elfsight-app-lazy></div> --}}
+        <!-- Elfsight Instagram Feed | Untitled Instagram Feed 2 -->
+        <div class="elfsight-app-c7a81acd-d8da-4140-9d95-2920ba71f64f" data-elfsight-app-lazy></div>
     </div>
 </x-shop::layouts>
