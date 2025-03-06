@@ -57,8 +57,6 @@
     @endforeach
 
     <div class="container mt-20 max-lg:px-8 max-md:mt-8 max-sm:mt-7 max-sm:!px-4">
-        {{-- <div class="elfsight-app-6b83226e-9d00-4db3-ab16-dfc624716697" data-elfsight-app-lazy></div> --}}
-        <!-- Elfsight Instagram Feed | Untitled Instagram Feed 2 -->
         <div class="elfsight-app-c7a81acd-d8da-4140-9d95-2920ba71f64f" data-elfsight-app-lazy></div>
     </div>
 </x-shop::layouts>
