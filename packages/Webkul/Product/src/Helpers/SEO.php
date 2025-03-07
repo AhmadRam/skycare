@@ -31,7 +31,8 @@ class SEO
         }
 
         if (core()->getConfigData('catalog.rich_snippets.products.show_categories')) {
-            $data['categories'] = $this->getProductCategories($product);
+            // $data['categories'] = $this->getProductCategories($product);
+            $data['category'] = $this->getProductCategories($product);
         }
 
         if (core()->getConfigData('catalog.rich_snippets.products.show_images')) {
