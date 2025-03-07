@@ -14,6 +14,7 @@ use Webkul\Attribute\Repositories\AttributeRepository;
 use Webkul\Category\Repositories\CategoryRepository;
 use Webkul\Core\Repositories\ChannelRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Maatwebsite\Excel\Facades\Excel;
 use Webkul\Core\Repositories\LocaleRepository;
 
@@ -29,8 +30,7 @@ class CategoryController extends Controller
         protected CategoryRepository $categoryRepository,
         protected AttributeRepository $attributeRepository,
         protected LocaleRepository $localeRepository
-    ) {
-    }
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -86,6 +86,8 @@ class CategoryController extends Controller
             'banner_path',
         ]));
 
+        $this->forgetCache($category);
+
         Event::dispatch('catalog.category.create.after', $category);
 
         session()->flash('success', trans('admin::app.catalog.categories.create-success'));
@@ -131,6 +133,8 @@ class CategoryController extends Controller
             $categoryRequest->locale
         ), $id);
 
+        $this->forgetCache($category);
+
         Event::dispatch('catalog.category.update.after', $category);
 
         session()->flash('success', trans('admin::app.catalog.categories.update-success'));
@@ -153,6 +157,8 @@ class CategoryController extends Controller
 
         try {
             Event::dispatch('catalog.category.delete.before', $id);
+
+            $this->forgetCache($category);
 
             $category->delete($id);
 
@@ -195,6 +201,8 @@ class CategoryController extends Controller
 
                         Event::dispatch('catalog.category.delete.before', $categoryId);
 
+                        $this->forgetCache($category);
+
                         $this->categoryRepository->delete($categoryId);
 
                         Event::dispatch('catalog.category.delete.after', $categoryId);
@@ -216,7 +224,9 @@ class CategoryController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.catalog.categories.index');
+        return new JsonResponse([
+            'message' => trans('admin::app.catalog.categories.delete-success'),
+        ]);
     }
 
     /**
@@ -239,6 +249,8 @@ class CategoryController extends Controller
                 $category->status = $massUpdateRequest->input('value');
 
                 $category->save();
+
+                $this->forgetCache($category);
 
                 Event::dispatch('catalog.categories.mass-update.after', $category);
             }
@@ -278,7 +290,11 @@ class CategoryController extends Controller
      */
     public function tree()
     {
-        $categories = $this->categoryRepository->getVisibleCategoryTree(core()->getCurrentChannel()->root_category_id);
+        $cacheKey = "categories_tree_" . core()->getRequestedLocaleCode() . "_" . core()->getCurrentChannelCode();
+
+        $categories = Cache::rememberForever($cacheKey , function () {
+            return $this->categoryRepository->getVisibleCategoryTree(core()->getCurrentChannel()->root_category_id);
+        });
 
         return CategoryTreeResource::collection($categories);
     }
@@ -386,5 +402,27 @@ class CategoryController extends Controller
         session()->flash('success', 'تم الإستيراد بنجاح');
 
         return response()->json(['message' => 'تم الإستيراد بنجاح']);
+    }
+
+
+    public function forgetCache($category)
+    {
+        Cache::forget('category_tree_en_default');
+        Cache::forget('category_tree_ar_default');
+    {
+        Cache::forget('categories_tree_en_default');
+        Cache::forget('categories_tree_ar_default');
+
+        Cache::forget('category_index_en_default');
+        Cache::forget('category_index_ar_default');
+
+        Cache::forget('category_index_en_default');
+        Cache::forget('category_index_ar_default');
+
+        Cache::forget('filterable_attributes_all_en_default');
+        Cache::forget('filterable_attributes_all_ar_default');
+
+        Cache::forget('filterable_attributes_' . $category->id . '_en_default');
+        Cache::forget('filterable_attributes_' . $category->id . '_ar_default');
     }
 }

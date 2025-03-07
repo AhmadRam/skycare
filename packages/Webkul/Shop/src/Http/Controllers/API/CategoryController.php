@@ -10,6 +10,7 @@ use Webkul\Product\Repositories\ProductRepository;
 use Webkul\Shop\Http\Resources\AttributeResource;
 use Webkul\Shop\Http\Resources\CategoryResource;
 use Webkul\Shop\Http\Resources\CategoryTreeResource;
+use Illuminate\Support\Facades\Cache;
 
 class CategoryController extends APIController
 {
@@ -29,36 +30,44 @@ class CategoryController extends APIController
      */
     public function index(): JsonResource
     {
-        /**
-         * These are the default parameters. By default, only the enabled category
-         * will be shown in the current locale.
-         */
-        $defaultParams = [
-            'status' => 1,
-            'locale' => app()->getLocale(),
-        ];
 
-        $categories = $this->categoryRepository->getAll(array_merge($defaultParams, request()->all()));
+        // Define a unique cache key for this function
+        $cacheKey = 'category_index_' . core()->getRequestedLocaleCode() . '_' . core()->getCurrentChannelCode();
 
-        $brand = $this->categoryRepository->findBySlug('brands');
-        $parentObject = new stdClass;
-        $parentObject->id = 1000;
-        $parentObject->parent_id = 1;
-        $parentObject->name = __('admin::app.components.layouts.sidebar.brands');
-        $parentObject->slug = $brand->slug ?? 'brands';
-        $parentObject->url = 'brands';
-        $parentObject->position = $brand->position ?? 0;
-        $parentObject->display_mode = '';
-        $parentObject->description = '';
-        $parentObject->banner_path = $brand->banner_path ?? '';
-        $parentObject->logo_path = $brand->logo_path ?? '';
-        $parentObject->meta_title = '';
-        $parentObject->meta_keywords = '';
-        $parentObject->meta_description = '';
-        $parentObject->status = true;
-        $parentObject->children = [];
+        // Attempt to retrieve the cached data
+        $categories = Cache::rememberForever($cacheKey, function () {
+            /**
+             * These are the default parameters. By default, only the enabled category
+             * will be shown in the current locale.
+             */
+            $defaultParams = [
+                'status' => 1,
+                'locale' => app()->getLocale(),
+            ];
 
-        $categories->prepend($parentObject);
+            $categories = $this->categoryRepository->getAll(array_merge($defaultParams, request()->all()));
+
+            $brand = $this->categoryRepository->findBySlug('brands');
+            $parentObject = new stdClass;
+            $parentObject->id = 1000;
+            $parentObject->parent_id = 1;
+            $parentObject->name = __('admin::app.components.layouts.sidebar.brands');
+            $parentObject->slug = $brand->slug ?? 'brands';
+            $parentObject->url = 'brands';
+            $parentObject->position = $brand->position ?? 0;
+            $parentObject->display_mode = '';
+            $parentObject->description = '';
+            $parentObject->banner_path = $brand->banner_path ?? '';
+            $parentObject->logo_path = $brand->logo_path ?? '';
+            $parentObject->meta_title = '';
+            $parentObject->meta_keywords = '';
+            $parentObject->meta_description = '';
+            $parentObject->status = true;
+            $parentObject->children = [];
+
+            $categories->prepend($parentObject);
+            return $categories;
+        });
 
         return CategoryResource::collection($categories);
     }
@@ -68,44 +77,53 @@ class CategoryController extends APIController
      */
     public function tree(): JsonResource
     {
-        $categories = $this->categoryRepository->getVisibleCategoryTree(core()->getCurrentChannel()->root_category_id);
+        // Define a unique cache key for this function
+        $cacheKey = 'category_tree_' . core()->getRequestedLocaleCode() . '_' . core()->getCurrentChannelCode();
 
-        $attribute = $this->attributeRepository->getAttributeByCode('brand');
+        // Attempt to retrieve the cached data
+        $categories = Cache::rememberForever($cacheKey, function () {
+            // If the data is not in the cache, execute the original logic
+            $categories = $this->categoryRepository->getVisibleCategoryTree(core()->getCurrentChannel()->root_category_id);
 
-        $parentObject = new stdClass;
-        $parentObject->id = 1000;
-        $parentObject->parent_id = 1;
-        $parentObject->name = __('admin::app.components.layouts.sidebar.brands');
-        $parentObject->slug = 'brands';
-        $parentObject->url =  '/brands';
-        $parentObject->status = true;
-        $parentObject->children = [];
+            $attribute = $this->attributeRepository->getAttributeByCode('brand');
 
-        foreach ($attribute->options as $brand) {
-            $childObject = new stdClass;
-            $childObject->id = $brand->id;
-            $childObject->parent_id = 1;
-            $childObject->name = $brand->label;
-            $childObject->slug = $brand->admin_name . '?' . 'brand=' . $brand->id;
-            $childObject->url = '/' . $brand->admin_name . '?' . 'brand=' . $brand->id;
-            $childObject->status = true;
-            $childObject->children = [];
+            $parentObject = new stdClass;
+            $parentObject->id = 1000;
+            $parentObject->parent_id = 1;
+            $parentObject->name = __('admin::app.components.layouts.sidebar.brands');
+            $parentObject->slug = 'brands';
+            $parentObject->url =  '/brands';
+            $parentObject->status = true;
+            $parentObject->children = [];
 
-            $parentObject->children[] = $childObject;
-        }
+            foreach ($attribute->options as $brand) {
+                $childObject = new stdClass;
+                $childObject->id = $brand->id;
+                $childObject->parent_id = 1;
+                $childObject->name = $brand->label;
+                $childObject->slug = $brand->admin_name . '?' . 'brand=' . $brand->id;
+                $childObject->url = '/' . $brand->admin_name . '?' . 'brand=' . $brand->id;
+                $childObject->status = true;
+                $childObject->children = [];
 
-        $categories->push($parentObject);
+                $parentObject->children[] = $childObject;
+            }
 
-        $blogObject = new stdClass;
-        $blogObject->id = 13546;
-        $blogObject->parent_id = 1;
-        $blogObject->name = __('admin::app.components.layouts.sidebar.blog');
-        $blogObject->slug = 'blog';
-        $blogObject->url = '/blog';
-        $blogObject->status = true;
-        $blogObject->children = [];
+            $categories->push($parentObject);
 
-        $categories->push($blogObject);
+            $blogObject = new stdClass;
+            $blogObject->id = 13546;
+            $blogObject->parent_id = 1;
+            $blogObject->name = __('admin::app.components.layouts.sidebar.blog');
+            $blogObject->slug = 'blog';
+            $blogObject->url = '/blog';
+            $blogObject->status = true;
+            $blogObject->children = [];
+
+            $categories->push($blogObject);
+
+            return $categories;
+        });
 
         return CategoryTreeResource::collection($categories);
     }
@@ -115,17 +133,23 @@ class CategoryController extends APIController
      */
     public function getAttributes(): JsonResource
     {
-        if (!request('category_id')) {
-            $filterableAttributes = $this->attributeRepository->getFilterableAttributes();
+        // Define a unique cache key based on the category_id (if provided)
+        $cacheKey = 'filterable_attributes_' . (request('category_id') ?? 'all') . '_' . core()->getRequestedLocaleCode() . '_' . core()->getCurrentChannelCode();
 
-            return AttributeResource::collection($filterableAttributes);
-        }
+        // Attempt to retrieve the cached data
+        $filterableAttributes = Cache::remember($cacheKey, now()->addHours(24), function () {
+            if (!request('category_id')) {
+                return $this->attributeRepository->getFilterableAttributes();
+            }
 
-        $category = $this->categoryRepository->findOrFail(request('category_id'));
+            $category = $this->categoryRepository->findOrFail(request('category_id'));
 
-        if (empty($filterableAttributes = $category->filterableAttributes)) {
-            $filterableAttributes = $this->attributeRepository->getFilterableAttributes();
-        }
+            if (empty($filterableAttributes = $category->filterableAttributes)) {
+                return $this->attributeRepository->getFilterableAttributes();
+            }
+
+            return $filterableAttributes;
+        });
 
         return AttributeResource::collection($filterableAttributes);
     }

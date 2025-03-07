@@ -6,7 +6,9 @@ use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Webkul\Attribute\Repositories\AttributeRepository;
 use Webkul\Core\Eloquent\Repository;
 use Webkul\Customer\Repositories\CustomerRepository;
@@ -70,6 +72,9 @@ class ProductRepository extends Repository
         if (isset($data['channels'])) {
             $product['channels'] = $data['channels'];
         }
+
+        $this->clearCacheKey('product_keys');
+        $this->clearCacheKey('search_cache_keys');
 
         return $product;
     }
@@ -216,190 +221,198 @@ class ProductRepository extends Repository
             'url_key'              => null,
         ], request()->input());
 
-        if (!empty($params['query'])) {
-            // $params['name'] = $params['query'];
+        // Generate cache key
+        $cacheKey = 'searchFromDatabase_' . md5(json_encode($params));
 
-            $synonyms = $this->searchSynonymRepository->getSynonymsByQuery(urldecode($params['query']));
-            foreach ($synonyms as $synonym) {
-                $attr = $this->attributeRepository->findOneByField('code', 'brand');
-                $brand_id = $attr->options()->whereTranslation('label', $synonym)->first()->id ?? null;
-                if ($brand_id) {
-                    $brands[] = $brand_id;
+        // Check if the results are cached
+        return Cache::remember($cacheKey, (3600 * 3), function () use ($params, $cacheKey) {
+            Redis::sadd('search_cache_keys', $cacheKey);
+
+            if (!empty($params['query'])) {
+                // $params['name'] = $params['query'];
+
+                $synonyms = $this->searchSynonymRepository->getSynonymsByQuery(urldecode($params['query']));
+                foreach ($synonyms as $synonym) {
+                    $attr = $this->attributeRepository->findOneByField('code', 'brand');
+                    $brand_id = $attr->options()->whereTranslation('label', $synonym)->first()->id ?? null;
+                    if ($brand_id) {
+                        $brands[] = $brand_id;
+                    }
+                    $params['brand'] = implode(',', $brands ?? []);
                 }
-                $params['brand'] = implode(',', $brands ?? []);
+
+                if (!isset($brands)) {
+                    unset($params['brand']);
+                    $params['name'] = $params['query'];
+                }
             }
 
-            if (!isset($brands)) {
-                unset($params['brand']);
-                $params['name'] = $params['query'];
-            }
-        }
+            $query = $this->with([
+                'attribute_family',
+                'images',
+                'videos',
+                'attribute_values',
+                'price_indices',
+                'inventory_indices',
+                'reviews',
+            ])->scopeQuery(function ($query) use ($params) {
+                $prefix = DB::getTablePrefix();
 
-        $query = $this->with([
-            'attribute_family',
-            'images',
-            'videos',
-            'attribute_values',
-            'price_indices',
-            'inventory_indices',
-            'reviews',
-        ])->scopeQuery(function ($query) use ($params) {
-            $prefix = DB::getTablePrefix();
+                $qb = $query->distinct()
+                    ->select('products.*')
+                    ->leftJoin('products as variants', DB::raw('COALESCE(' . $prefix . 'variants.parent_id, ' . $prefix . 'variants.id)'), '=', 'products.id')
+                    ->leftJoin('product_price_indices', function ($join) {
+                        $customerGroup = $this->customerRepository->getCurrentGroup();
 
-            $qb = $query->distinct()
-                ->select('products.*')
-                ->leftJoin('products as variants', DB::raw('COALESCE(' . $prefix . 'variants.parent_id, ' . $prefix . 'variants.id)'), '=', 'products.id')
-                ->leftJoin('product_price_indices', function ($join) {
-                    $customerGroup = $this->customerRepository->getCurrentGroup();
-
-                    $join->on('products.id', '=', 'product_price_indices.product_id')
-                        ->where('product_price_indices.customer_group_id', $customerGroup->id);
-                });
-
-            if (!empty($params['category_id'])) {
-                $qb->leftJoin('product_categories', 'product_categories.product_id', '=', 'products.id')
-                    ->whereIn('product_categories.category_id', explode(',', $params['category_id']));
-            }
-
-            if (!empty($params['type'])) {
-                $qb->where('products.type', $params['type']);
-            }
-
-            /**
-             * Filter query by price.
-             */
-            if (!empty($params['price'])) {
-                $priceRange = explode(',', $params['price']);
-
-                $qb->whereBetween('product_price_indices.min_price', [
-                    core()->convertToBasePrice(current($priceRange)),
-                    core()->convertToBasePrice(end($priceRange)),
-                ]);
-            }
-
-            /**
-             * Retrieve all the filterable attributes.
-             */
-            $filterableAttributes = $this->attributeRepository->getProductDefaultAttributes(array_keys($params));
-            // $filterableAttributes = $this->attributeRepository->getProductDefaultAttributes(["*"]);
-
-            /**
-             * Filter the required attributes.
-             */
-            $attributes = $filterableAttributes->whereIn('code', [
-                'name',
-                'status',
-                'visible_individually',
-                'url_key',
-            ]);
-
-            /**
-             * Filter collection by required attributes.
-             */
-            foreach ($attributes as $attribute) {
-                $alias = $attribute->code . '_product_attribute_values';
-
-                $qb->leftJoin('product_attribute_values as ' . $alias, 'products.id', '=', $alias . '.product_id')
-                    ->where($alias . '.attribute_id', $attribute->id);
-
-                if ($attribute->code == 'name') {
-                    $synonyms = $this->searchSynonymRepository->getSynonymsByQuery(urldecode($params['name']));
-
-                    $qb->where(function ($subQuery) use ($alias, $synonyms) {
-                        foreach ($synonyms as $synonym) {
-                            $subQuery->orWhere($alias . '.text_value', 'like', '%' . $synonym . '%');
-                        }
+                        $join->on('products.id', '=', 'product_price_indices.product_id')
+                            ->where('product_price_indices.customer_group_id', $customerGroup->id);
                     });
-                } elseif ($attribute->code == 'url_key') {
-                    if (empty($params['url_key'])) {
-                        $qb->whereNotNull($alias . '.text_value');
-                    } else {
-                        $qb->where($alias . '.text_value', 'like', '%' . urldecode($params['url_key']) . '%');
-                    }
-                } else {
-                    if (is_null($params[$attribute->code])) {
-                        continue;
-                    }
 
-                    $qb->where($alias . '.' . $attribute->column_name, 1);
+                if (!empty($params['category_id'])) {
+                    $qb->leftJoin('product_categories', 'product_categories.product_id', '=', 'products.id')
+                        ->whereIn('product_categories.category_id', explode(',', $params['category_id']));
                 }
-            }
 
-            /**
-             * Filter the filterable attributes.
-             */
-            $attributes = $filterableAttributes->whereNotIn('code', [
-                'price',
-                'name',
-                'status',
-                'visible_individually',
-                'url_key',
-            ]);
+                if (!empty($params['type'])) {
+                    $qb->where('products.type', $params['type']);
+                }
 
-            /**
-             * Filter query by attributes.
-             */
-            if ($attributes->isNotEmpty()) {
-                $qb->leftJoin('product_attribute_values', 'products.id', '=', 'product_attribute_values.product_id');
+                /**
+                 * Filter query by price.
+                 */
+                if (!empty($params['price'])) {
+                    $priceRange = explode(',', $params['price']);
 
-                $qb->where(function ($filterQuery) use ($params, $attributes) {
-                    foreach ($attributes as $attribute) {
-                        $filterQuery->orWhere(function ($attributeQuery) use ($params, $attribute) {
-                            $attributeQuery = $attributeQuery->where('product_attribute_values.attribute_id', $attribute->id);
+                    $qb->whereBetween('product_price_indices.min_price', [
+                        core()->convertToBasePrice(current($priceRange)),
+                        core()->convertToBasePrice(end($priceRange)),
+                    ]);
+                }
 
-                            $values = explode(',', $params[$attribute->code]);
+                /**
+                 * Retrieve all the filterable attributes.
+                 */
+                $filterableAttributes = $this->attributeRepository->getProductDefaultAttributes(array_keys($params));
+                // $filterableAttributes = $this->attributeRepository->getProductDefaultAttributes(["*"]);
 
-                            if ($attribute->type == 'price') {
-                                $attributeQuery->whereBetween('product_attribute_values.' . $attribute->column_name, [
-                                    core()->convertToBasePrice(current($values)),
-                                    core()->convertToBasePrice(end($values)),
-                                ]);
-                            } else {
-                                $attributeQuery->whereIn('product_attribute_values.' . $attribute->column_name, $values);
+                /**
+                 * Filter the required attributes.
+                 */
+                $attributes = $filterableAttributes->whereIn('code', [
+                    'name',
+                    'status',
+                    'visible_individually',
+                    'url_key',
+                ]);
+
+                /**
+                 * Filter collection by required attributes.
+                 */
+                foreach ($attributes as $attribute) {
+                    $alias = $attribute->code . '_product_attribute_values';
+
+                    $qb->leftJoin('product_attribute_values as ' . $alias, 'products.id', '=', $alias . '.product_id')
+                        ->where($alias . '.attribute_id', $attribute->id);
+
+                    if ($attribute->code == 'name') {
+                        $synonyms = $this->searchSynonymRepository->getSynonymsByQuery(urldecode($params['name']));
+
+                        $qb->where(function ($subQuery) use ($alias, $synonyms) {
+                            foreach ($synonyms as $synonym) {
+                                $subQuery->orWhere($alias . '.text_value', 'like', '%' . $synonym . '%');
                             }
                         });
-                    }
-                });
-
-                $qb->groupBy('products.id');
-            }
-
-            /**
-             * Sort collection.
-             */
-            $sortOptions = $this->getSortOptions($params);
-
-            if ($sortOptions['order'] != 'rand') {
-                $attribute = $this->attributeRepository->findOneByField('code', $sortOptions['sort']);
-
-                if ($attribute) {
-                    if ($attribute->code === 'price') {
-                        $qb->orderBy('product_price_indices.min_price', $sortOptions['order']);
+                    } elseif ($attribute->code == 'url_key') {
+                        if (empty($params['url_key'])) {
+                            $qb->whereNotNull($alias . '.text_value');
+                        } else {
+                            $qb->where($alias . '.text_value', 'like', '%' . urldecode($params['url_key']) . '%');
+                        }
                     } else {
-                        $alias = 'sort_product_attribute_values';
+                        if (is_null($params[$attribute->code])) {
+                            continue;
+                        }
 
-                        $qb->leftJoin('product_attribute_values as ' . $alias, function ($join) use ($alias, $attribute) {
-                            $join->on('products.id', '=', $alias . '.product_id')
-                                ->where($alias . '.attribute_id', $attribute->id)
-                                ->where($alias . '.channel', core()->getRequestedChannelCode())
-                                ->where($alias . '.locale', core()->getRequestedLocaleCode());
-                        })
-                            ->orderBy($alias . '.' . $attribute->column_name, $sortOptions['order']);
+                        $qb->where($alias . '.' . $attribute->column_name, 1);
+                    }
+                }
+
+                /**
+                 * Filter the filterable attributes.
+                 */
+                $attributes = $filterableAttributes->whereNotIn('code', [
+                    'price',
+                    'name',
+                    'status',
+                    'visible_individually',
+                    'url_key',
+                ]);
+
+                /**
+                 * Filter query by attributes.
+                 */
+                if ($attributes->isNotEmpty()) {
+                    $qb->leftJoin('product_attribute_values', 'products.id', '=', 'product_attribute_values.product_id');
+
+                    $qb->where(function ($filterQuery) use ($params, $attributes) {
+                        foreach ($attributes as $attribute) {
+                            $filterQuery->orWhere(function ($attributeQuery) use ($params, $attribute) {
+                                $attributeQuery = $attributeQuery->where('product_attribute_values.attribute_id', $attribute->id);
+
+                                $values = explode(',', $params[$attribute->code]);
+
+                                if ($attribute->type == 'price') {
+                                    $attributeQuery->whereBetween('product_attribute_values.' . $attribute->column_name, [
+                                        core()->convertToBasePrice(current($values)),
+                                        core()->convertToBasePrice(end($values)),
+                                    ]);
+                                } else {
+                                    $attributeQuery->whereIn('product_attribute_values.' . $attribute->column_name, $values);
+                                }
+                            });
+                        }
+                    });
+
+                    $qb->groupBy('products.id');
+                }
+
+                /**
+                 * Sort collection.
+                 */
+                $sortOptions = $this->getSortOptions($params);
+
+                if ($sortOptions['order'] != 'rand') {
+                    $attribute = $this->attributeRepository->findOneByField('code', $sortOptions['sort']);
+
+                    if ($attribute) {
+                        if ($attribute->code === 'price') {
+                            $qb->orderBy('product_price_indices.min_price', $sortOptions['order']);
+                        } else {
+                            $alias = 'sort_product_attribute_values';
+
+                            $qb->leftJoin('product_attribute_values as ' . $alias, function ($join) use ($alias, $attribute) {
+                                $join->on('products.id', '=', $alias . '.product_id')
+                                    ->where($alias . '.attribute_id', $attribute->id)
+                                    ->where($alias . '.channel', core()->getRequestedChannelCode())
+                                    ->where($alias . '.locale', core()->getRequestedLocaleCode());
+                            })
+                                ->orderBy($alias . '.' . $attribute->column_name, $sortOptions['order']);
+                        }
+                    } else {
+                        /* `created_at` is not an attribute so it will be in else case */
+                        $qb->orderBy('products.created_at', $sortOptions['order']);
                     }
                 } else {
-                    /* `created_at` is not an attribute so it will be in else case */
-                    $qb->orderBy('products.created_at', $sortOptions['order']);
+                    return $qb->inRandomOrder();
                 }
-            } else {
-                return $qb->inRandomOrder();
-            }
 
-            return $qb->groupBy('products.id');
+                return $qb->groupBy('products.id');
+            });
+
+            $limit = $this->getPerPageLimit($params);
+
+            return $query->paginate($limit);
         });
-
-        $limit = $this->getPerPageLimit($params);
-
-        return $query->paginate($limit);
     }
 
     /**
@@ -519,5 +532,14 @@ class ProductRepository extends Repository
         }
 
         return $query->max('min_price') ?? 0;
+    }
+
+    public function clearCacheKey($cache_key)
+    {
+        $keys = Redis::smembers($cache_key);
+        foreach ($keys as $key) {
+            Cache::forget($key);
+            Redis::srem($cache_key, $key);
+        }
     }
 }
