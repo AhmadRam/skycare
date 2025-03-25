@@ -135,4 +135,21 @@ class RefundController extends Controller
 
         return view('admin::sales.refunds.view', compact('refund'));
     }
+
+    /**
+     * Print and download the for the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function printRefund(int $id)
+    {
+        app()->setLocale('ar');
+        $refund = $this->refundRepository->findOrFail($id);
+        return view('admin::sales.refunds.pdf', compact('refund'));
+
+        return $this->downloadPDF(
+            view('admin::sales.refunds.pdf', compact('refund'))->render(),
+            'refund-' . $refund->created_at->format('d-m-Y')
+        );
+    }
 }

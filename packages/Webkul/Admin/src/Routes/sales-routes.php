@@ -60,6 +60,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
             Route::post('update-qty/{order_id}', 'updateQty')->name('admin.sales.refunds.update_qty');
 
             Route::get('view/{id}', 'view')->name('admin.sales.refunds.view');
+
+            Route::get('print/{id}', 'printRefund')->name('admin.sales.refunds.print');
         });
 
         /**

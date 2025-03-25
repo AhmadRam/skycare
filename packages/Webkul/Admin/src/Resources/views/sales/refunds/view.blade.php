@@ -25,6 +25,37 @@
         </div>
     </div>
 
+       <!-- Filter row -->
+       <div class="flex  gap-4 justify-between items-center mt-7 max-md:flex-wrap">
+        <div class="flex gap-x-1 gap-y-2 items-center flex-wrap">
+            {!! view_render_event('sales.refund.page_action.before', ['refund' => $refund]) !!}
+
+            <a href="{{ route('admin.sales.refunds.print', $refund->id) }}" onclick="openSmallWindow(event)"
+                class="inline-flex gap-x-2 items-center justify-between w-full max-w-max px-1 py-1.5 text-gray-600 dark:text-gray-300 font-semibold text-center cursor-pointer transition-all hover:bg-gray-200 dark:hover:bg-gray-800 hover:rounded-md">
+                <span class="icon-printer text-2xl"></span>
+
+                @lang('admin::app.sales.invoices.view.print')
+            </a>
+
+            <script>
+                function openSmallWindow(event) {
+                    event.preventDefault();
+                    var url = event.target.href;
+                    var windowName = 'Print_Window';
+                    var windowFeatures = 'width=800,height=800';
+                    var newWindow = window.open(url, windowName, windowFeatures);
+                    newWindow.onload = function() {
+                        newWindow.print();
+                    };
+                }
+            </script>
+
+            {!! view_render_event('sales.refund.page_action.after', ['refund' => $refund]) !!}
+
+        </div>
+    </div>
+
+
     <!-- Body Content -->
     <div class="flex gap-2.5 mt-3.5 max-xl:flex-wrap">
         <!-- Left sub-component -->
