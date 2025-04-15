@@ -417,9 +417,9 @@
                                 @endif
                                 <td class="text-center">{!! core()->formatBasePrice($item->base_total, true) !!}</td>
 
-                                <td class="text-center">{!! core()->formatBasePrice($item->base_discount_amount, true) !!}</td>
+                                <td class="text-center">{!! core()->formatBasePrice($item->discount_amount, true) !!}</td>
 
-                                <td class="text-center">{!! core()->formatBasePrice($item->base_grand_total, true) !!}</td>
+                                <td class="text-center">{!! core()->formatBasePrice($item->base_total + $item->base_tax_amount - $item->discount_amount, true) !!}</td>
                             </tr>
                         @endforeach
                     </tbody>
