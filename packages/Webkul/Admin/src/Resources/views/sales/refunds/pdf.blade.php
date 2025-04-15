@@ -461,7 +461,7 @@
                 <tr>
                     <td>@lang('admin::app.sales.invoices.invoice-pdf.grand-total')</td>
                     <td>-</td>
-                    <td>{!! core()->formatBasePrice($refund->order->base_grand_total, true) !!}</td>
+                    <td>{!! core()->formatBasePrice($refund->base_grand_total, true) !!}</td>
                 </tr>
             </table>
         </div>
