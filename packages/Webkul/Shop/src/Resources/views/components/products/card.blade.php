@@ -62,7 +62,7 @@
                         @lang('shop::app.components.products.card.out-of-stock')
                     </p>
 
-                    <img loading="lazy" width="75" height="75" decoding="async" data-nimg="1" src="{{ asset('themes/shop/default/build/assets/ya-hala.webp') }}" style="color: transparent; position: absolute; bottom: 0px; right: 5px; z-index: 2;">
+                    {{-- <img loading="lazy" width="75" height="75" decoding="async" data-nimg="1" src="{{ asset('themes/shop/default/build/assets/ya-hala.webp') }}" style="color: transparent; position: absolute; bottom: 0px; right: 5px; z-index: 2;"> --}}
 
                     <div class="group-hover:bottom-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
 
