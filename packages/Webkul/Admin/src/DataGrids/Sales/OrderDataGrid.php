@@ -59,7 +59,7 @@ class OrderDataGrid extends DataGrid
         $this->addFilter('phone', DB::raw('COALESCE(order_address_shipping.phone, order_address_billing.phone)'));
         $this->addFilter('customer_group', 'customer_groups.code');
         $this->addFilter('created_at', 'orders.created_at');
-
+        $this->addFilter('status', 'orders.status');
 
         return $queryBuilder;
     }
