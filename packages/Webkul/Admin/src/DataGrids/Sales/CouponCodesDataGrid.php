@@ -29,8 +29,9 @@ class CouponCodesDataGrid extends DataGrid
                     ->where('cart_rule_coupons.is_primary', 1);
             })
             ->leftJoin('orders', function ($leftJoin) use ($start_date, $end_date) {
-                $leftJoin->on('cart_rules.id', '=', 'orders.applied_cart_rule_ids')
-                    ->whereBetween('orders.created_at', [$start_date, $end_date]);
+                $leftJoin->whereNotIn('orders.status', ['no_status', 'canceled', 'closed', 'fraud'])
+                    ->whereBetween('orders.created_at', [$start_date, $end_date])
+                    ->whereRaw("FIND_IN_SET(cart_rules.id, orders.applied_cart_rule_ids)");
             });
 
         $queryBuilder->addSelect(
@@ -38,7 +39,7 @@ class CouponCodesDataGrid extends DataGrid
             'name',
             'cart_rule_coupons.code as coupon_code',
             'cart_rule_coupons.times_used',
-            DB::raw('SUM(orders.base_discount_amount) as total_base_discount_amount'),
+            DB::raw('ROUND(SUM(orders.base_discount_amount), 3) as total_base_discount_amount'),
             DB::raw('COUNT(orders.id) as orders_count'),
             'orders.created_at'
         );
