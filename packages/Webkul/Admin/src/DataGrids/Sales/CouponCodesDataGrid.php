@@ -24,10 +24,10 @@ class CouponCodesDataGrid extends DataGrid
         // }
 
         $queryBuilder = DB::table('cart_rules')
-            ->leftJoin('cart_rule_coupons', function ($leftJoin) {
-                $leftJoin->on('cart_rule_coupons.cart_rule_id', '=', 'cart_rules.id')
-                    ->where('cart_rule_coupons.is_primary', 1);
-            })
+            // ->leftJoin('cart_rule_coupons', function ($leftJoin) {
+            //     $leftJoin->on('cart_rule_coupons.cart_rule_id', '=', 'cart_rules.id')
+            //         ->where('cart_rule_coupons.is_primary', 1);
+            // })
             ->leftJoin('orders', function ($leftJoin) use ($start_date, $end_date) {
                 $leftJoin->whereNotIn('orders.status', ['no_status', 'canceled', 'closed', 'fraud'])
                     ->whereBetween('orders.created_at', [$start_date, $end_date])
@@ -37,9 +37,9 @@ class CouponCodesDataGrid extends DataGrid
         $queryBuilder->addSelect(
             'cart_rules.id',
             'name',
-            'cart_rule_coupons.code as coupon_code',
-            'cart_rule_coupons.times_used',
+            DB::raw('ROUND(SUM(orders.base_sub_cost), 3) as total_base_sub_cost'),
             DB::raw('ROUND(SUM(orders.base_discount_amount), 3) as total_base_discount_amount'),
+            DB::raw('ROUND((SUM(orders.base_sub_total) - SUM(orders.base_discount_amount)), 3) as total_base_sub_total'),
             DB::raw('COUNT(orders.id) as orders_count'),
             'orders.created_at'
         );
@@ -47,9 +47,9 @@ class CouponCodesDataGrid extends DataGrid
         $queryBuilder->groupBy('cart_rules.id');
 
         $this->addFilter('id', 'cart_rules.id');
-        $this->addFilter('coupon_code', 'cart_rule_coupons.code');
-        $this->addFilter('times_used', 'cart_rule_coupons.times_used');
+        $this->addFilter('total_base_sub_cost', DB::raw('SUM(orders.base_sub_cost) as total_base_sub_cost'));
         $this->addFilter('total_base_discount_amount', DB::raw('SUM(orders.base_discount_amount) as total_base_discount_amount'));
+        $this->addFilter('total_base_sub_total', DB::raw('ROUND((SUM(orders.base_sub_total) - SUM(orders.base_discount_amount)), 3) as total_base_sub_total'));
         $this->addFilter('orders_count', DB::raw('COUNT(orders.id) as orders_count'));
         $this->addFilter('created_at', 'orders.created_at');
 
@@ -82,18 +82,9 @@ class CouponCodesDataGrid extends DataGrid
         ]);
 
         $this->addColumn([
-            'index'      => 'coupon_code',
-            'label'      => trans('admin::app.marketing.promotions.cart-rules.edit.coupon-code'),
-            'type'       => 'string',
-            'searchable' => false,
-            'sortable'   => true,
-            'filterable' => true,
-        ]);
-
-        $this->addColumn([
-            'index'      => 'times_used',
-            'label'      => trans('admin::app.marketing.promotions.cart-rules-coupons.datagrid.times-used'),
-            'type'       => 'string',
+            'index'      => 'total_base_sub_cost',
+            'label'      => "Cost",
+            'type'       => 'price',
             'searchable' => false,
             'sortable'   => true,
             'filterable' => true,
@@ -101,7 +92,16 @@ class CouponCodesDataGrid extends DataGrid
 
         $this->addColumn([
             'index'      => 'total_base_discount_amount',
-            'label'      => trans('admin::app.emails.orders.grand-total'),
+            'label'      => "Discount",
+            'type'       => 'price',
+            'searchable' => false,
+            'sortable'   => true,
+            'filterable' => true,
+        ]);
+
+        $this->addColumn([
+            'index'      => 'total_base_sub_total',
+            'label'      => "Total",
             'type'       => 'price',
             'searchable' => false,
             'sortable'   => true,

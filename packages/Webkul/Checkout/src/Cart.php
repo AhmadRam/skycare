@@ -669,6 +669,7 @@ class Cart
 
         $cart->refresh();
 
+        $cart->base_sub_cost = 0;
         $cart->sub_total = $cart->base_sub_total = 0;
         $cart->grand_total = $cart->base_grand_total = 0;
         $cart->tax_total = $cart->base_tax_total = 0;
@@ -689,6 +690,7 @@ class Cart
             $cart->sub_total = (float) $cart->sub_total + $item->total;
             $cart->base_sub_total = (float) $cart->base_sub_total + $item->base_total;
 
+            $cart->base_sub_cost = (float) $cart->base_sub_cost + $item->base_total_cost;
             $quantities += $item->quantity;
         }
 

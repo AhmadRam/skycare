@@ -47,12 +47,16 @@ class BrandsSalesDataGrid extends DataGrid
             ->select(
                 'product_attribute_values.integer_value as id',
                 'attribute_options.admin_name as name',
+                DB::raw('SUM(order_items.base_total_cost) as base_total_cost'),
+                DB::raw('SUM(order_items.base_discount_amount) as base_discount_amount'),
                 DB::raw('SUM(order_items.base_total) as base_total'),
                 DB::raw('SUM(order_items.qty_ordered) as total_quantity')
             );
 
         $this->addFilter('id', 'product_attribute_values.integer_value');
         $this->addFilter('name', 'attribute_options.admin_name');
+        $this->addFilter('base_total_cost', DB::raw('SUM(order_items.base_total_cost)'));
+        $this->addFilter('base_discount_amount', DB::raw('SUM(order_items.base_discount_amount)'));
         $this->addFilter('base_total', DB::raw('SUM(order_items.base_total)'));
         $this->addFilter('total_quantity', DB::raw('SUM(order_items.qty_ordered)'));
 
@@ -82,6 +86,30 @@ class BrandsSalesDataGrid extends DataGrid
             'searchable' => false,
             'sortable'   => true,
             'filterable' => true,
+        ]);
+
+        $this->addColumn([
+            'index'      => 'base_total_cost',
+            'label'      => "Cost",
+            'type'       => 'price',
+            'searchable' => false,
+            'filterable' => true,
+            'sortable'   => true,
+            'closure'    => function ($row) {
+                return core()->convertToBasePrice($row->base_total_cost);
+            },
+        ]);
+
+        $this->addColumn([
+            'index'      => 'base_discount_amount',
+            'label'      => "Discount",
+            'type'       => 'price',
+            'searchable' => false,
+            'filterable' => true,
+            'sortable'   => true,
+            'closure'    => function ($row) {
+                return core()->convertToBasePrice($row->base_discount_amount);
+            },
         ]);
 
         $this->addColumn([

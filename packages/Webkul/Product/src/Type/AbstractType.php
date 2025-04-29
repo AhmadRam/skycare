@@ -883,6 +883,8 @@ abstract class AbstractType
                 'price'             => $convertedPrice = core()->convertPrice($price),
                 'base_price'        => $price,
                 'total'             => $convertedPrice * $data['quantity'],
+                'base_cost'         => $this->product->cost,
+                'base_total_cost'   => $this->product->cost * $data['quantity'],
                 'base_total'        => $price * $data['quantity'],
                 'weight'            => $weight ?? 0,
                 'total_weight'      => ($weight ?? 0) * $data['quantity'],

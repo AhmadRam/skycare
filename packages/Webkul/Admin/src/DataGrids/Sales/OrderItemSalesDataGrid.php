@@ -49,6 +49,7 @@ class OrderItemSalesDataGrid extends DataGrid
                 'order_items.coupon_code',
                 'order_items.qty_ordered',
                 'order_items.base_price',
+                'order_items.base_total_cost',
                 DB::raw('order_items.base_price * order_items.qty_ordered AS sub_total'),
                 DB::raw('order_items.base_total - order_items.discount_amount AS base_total'),
                 'order_items.discount_amount',
@@ -61,6 +62,7 @@ class OrderItemSalesDataGrid extends DataGrid
         $this->addFilter('coupon_code', 'order_items.coupon_code');
         $this->addFilter('qty_ordered', 'order_items.qty_ordered');
         $this->addFilter('base_price', 'order_items.base_price');
+        $this->addFilter('base_total_cost', 'order_items.base_total_cost');
         $this->addFilter('sub_total', DB::raw('order_items.base_total * order_items.qty_ordered'));
         $this->addFilter('base_total', DB::raw('order_items.base_total - order_items.discount_amount'));
         $this->addFilter('discount_amount', 'order_items.discount_amount');
@@ -144,6 +146,15 @@ class OrderItemSalesDataGrid extends DataGrid
         $this->addColumn([
             'index'      => 'qty_ordered',
             'label'      => trans('admin::app.sales.invoices.invoice-pdf.qty'),
+            'type'       => 'number',
+            'searchable' => false,
+            'sortable'   => true,
+            'filterable' => true,
+        ]);
+
+        $this->addColumn([
+            'index'      => 'base_total_cost',
+            'label'      => "Cost",
             'type'       => 'number',
             'searchable' => false,
             'sortable'   => true,
