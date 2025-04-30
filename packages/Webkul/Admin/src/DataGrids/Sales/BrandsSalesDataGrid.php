@@ -50,6 +50,7 @@ class BrandsSalesDataGrid extends DataGrid
                 DB::raw('SUM(order_items.base_total_cost) as base_total_cost'),
                 DB::raw('SUM(order_items.base_discount_amount) as base_discount_amount'),
                 DB::raw('SUM(order_items.base_total) as base_total'),
+                DB::raw('SUM(order_items.base_total) - SUM(order_items.base_total_cost)as profit'),
                 DB::raw('SUM(order_items.qty_ordered) as total_quantity')
             );
 
@@ -58,6 +59,7 @@ class BrandsSalesDataGrid extends DataGrid
         $this->addFilter('base_total_cost', DB::raw('SUM(order_items.base_total_cost)'));
         $this->addFilter('base_discount_amount', DB::raw('SUM(order_items.base_discount_amount)'));
         $this->addFilter('base_total', DB::raw('SUM(order_items.base_total)'));
+        $this->addFilter('profit', DB::raw('SUM(order_items.base_total) - SUM(order_items.base_total_cost)'));
         $this->addFilter('total_quantity', DB::raw('SUM(order_items.qty_ordered)'));
 
         return $queryBuilder;
@@ -122,6 +124,15 @@ class BrandsSalesDataGrid extends DataGrid
             'closure'    => function ($row) {
                 return core()->convertToBasePrice($row->base_total);
             },
+        ]);
+
+        $this->addColumn([
+            'index'      => 'profit',
+            'label'      => trans('admin::app.reporting.products.sales.profit'),
+            'type'       => 'price',
+            'searchable' => false,
+            'sortable'   => true,
+            'filterable' => true,
         ]);
 
         $this->addColumn([

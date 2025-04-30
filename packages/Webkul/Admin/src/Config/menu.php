@@ -321,7 +321,14 @@ return [
         'key'        => 'reporting.order_items_sales_report',
         'name'       => 'Items',
         'route'      => 'admin.reporting.order_items_sales_report.index',
-        'sort'       => 7,
+        'sort'       => 8,
+        'icon'       => '',
+    ],
+    [
+        'key'        => 'reporting.customers_sales',
+        'name'       => 'Customers sales',
+        'route'      => 'admin.reporting.customers_sales.index',
+        'sort'       => 9,
         'icon'       => '',
     ],
     /**

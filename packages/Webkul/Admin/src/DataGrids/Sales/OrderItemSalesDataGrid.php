@@ -50,8 +50,9 @@ class OrderItemSalesDataGrid extends DataGrid
                 'order_items.qty_ordered',
                 'order_items.base_price',
                 'order_items.base_total_cost',
-                DB::raw('order_items.base_price * order_items.qty_ordered AS sub_total'),
+                // DB::raw('order_items.base_price * order_items.qty_ordered AS sub_total'),
                 DB::raw('order_items.base_total - order_items.discount_amount AS base_total'),
+                DB::raw('order_items.base_total - order_items.discount_amount - order_items.base_total_cost AS profit'),
                 'order_items.discount_amount',
                 'order_items.created_at',
             );
@@ -63,7 +64,7 @@ class OrderItemSalesDataGrid extends DataGrid
         $this->addFilter('qty_ordered', 'order_items.qty_ordered');
         $this->addFilter('base_price', 'order_items.base_price');
         $this->addFilter('base_total_cost', 'order_items.base_total_cost');
-        $this->addFilter('sub_total', DB::raw('order_items.base_total * order_items.qty_ordered'));
+        // $this->addFilter('sub_total', DB::raw('order_items.base_total * order_items.qty_ordered'));
         $this->addFilter('base_total', DB::raw('order_items.base_total - order_items.discount_amount'));
         $this->addFilter('discount_amount', 'order_items.discount_amount');
         $this->addFilter('created_at', 'order_items.created_at');
@@ -162,15 +163,6 @@ class OrderItemSalesDataGrid extends DataGrid
         ]);
 
         $this->addColumn([
-            'index'      => 'sub_total',
-            'label'      => trans('admin::app.sales.refunds.view.sub-total'),
-            'type'       => 'number',
-            'searchable' => false,
-            'sortable'   => true,
-            'filterable' => true,
-        ]);
-
-        $this->addColumn([
             'index'      => 'discount_amount',
             'label'      => trans('admin::app.sales.refunds.create.discount-amount'),
             'type'       => 'number',
@@ -181,13 +173,21 @@ class OrderItemSalesDataGrid extends DataGrid
 
         $this->addColumn([
             'index'      => 'base_total',
-            'label'      => trans('admin::app.reporting.sales.index.total'),
+            'label'      => trans('admin::app.sales.refunds.view.sub-total'),
             'type'       => 'number',
             'searchable' => false,
             'sortable'   => true,
             'filterable' => true,
         ]);
 
+        $this->addColumn([
+            'index'      => 'profit',
+            'label'      => trans('admin::app.reporting.products.sales.profit'),
+            'type'       => 'price',
+            'searchable' => false,
+            'sortable'   => true,
+            'filterable' => true,
+        ]);
 
         $this->addColumn([
             'index'      => 'created_at',

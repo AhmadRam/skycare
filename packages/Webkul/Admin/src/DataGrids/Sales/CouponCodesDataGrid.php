@@ -40,6 +40,7 @@ class CouponCodesDataGrid extends DataGrid
             DB::raw('ROUND(SUM(orders.base_sub_cost), 3) as total_base_sub_cost'),
             DB::raw('ROUND(SUM(orders.base_discount_amount), 3) as total_base_discount_amount'),
             DB::raw('ROUND((SUM(orders.base_sub_total) - SUM(orders.base_discount_amount)), 3) as total_base_sub_total'),
+            DB::raw('ROUND((SUM(orders.base_sub_total) - SUM(orders.base_discount_amount) - SUM(orders.base_sub_cost)), 3) as profit'),
             DB::raw('COUNT(orders.id) as orders_count'),
             'orders.created_at'
         );
@@ -82,6 +83,15 @@ class CouponCodesDataGrid extends DataGrid
         ]);
 
         $this->addColumn([
+            'index'      => 'orders_count',
+            'label'      => trans('admin::app.reporting.sales.index.count'),
+            'type'       => 'number',
+            'searchable' => false,
+            'sortable'   => true,
+            'filterable' => true,
+        ]);
+
+        $this->addColumn([
             'index'      => 'total_base_sub_cost',
             'label'      => "Cost",
             'type'       => 'price',
@@ -109,21 +119,12 @@ class CouponCodesDataGrid extends DataGrid
         ]);
 
         $this->addColumn([
-            'index'      => 'orders_count',
-            'label'      => trans('admin::app.reporting.sales.index.count'),
-            'type'       => 'number',
+            'index'      => 'profit',
+            'label'      => trans('admin::app.reporting.products.sales.profit'),
+            'type'       => 'price',
             'searchable' => false,
             'sortable'   => true,
             'filterable' => true,
-        ]);
-
-        $this->addColumn([
-            'index'      => 'created_at',
-            'label'      => trans('admin::app.sales.orders.index.datagrid.date'),
-            'type'       => 'date_range',
-            'searchable' => false,
-            'filterable' => true,
-            'sortable'   => true,
         ]);
     }
 

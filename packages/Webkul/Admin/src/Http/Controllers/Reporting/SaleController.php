@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Webkul\Admin\DataGrids\Sales\BrandProductSalesDataGrid;
 use Webkul\Admin\DataGrids\Sales\BrandsSalesDataGrid;
 use Webkul\Admin\DataGrids\Sales\CouponCodesDataGrid;
+use Webkul\Admin\DataGrids\Sales\CustomersSalesDataGrid;
 use Webkul\Admin\DataGrids\Sales\OrderItemSalesDataGrid;
 use Webkul\Admin\DataGrids\Sales\ProductSalesDataGrid;
 
@@ -184,5 +185,19 @@ class SaleController extends Controller
         }
 
         return view('admin::reporting.sales.order-items-sales');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function customersSales()
+    {
+        if (request()->ajax()) {
+            return app(CustomersSalesDataGrid::class)->toJson();
+        }
+
+        return view('admin::reporting.sales.customers-sales');
     }
 }
