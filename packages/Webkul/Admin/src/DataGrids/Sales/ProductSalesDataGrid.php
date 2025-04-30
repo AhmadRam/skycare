@@ -19,12 +19,7 @@ class ProductSalesDataGrid extends DataGrid
         $end_date = $data['filters']['created_at'][1] ?? '2999-01-01';
 
         $queryBuilder = DB::table('order_items')
-            ->join('orders', 'order_items.order_id', '=', 'orders.id')
-            ->join('product_flat', 'order_items.product_id', '=', 'product_flat.product_id')->where('product_flat.locale', 'en')
-            ->join('product_attribute_values as pav', function ($join) {
-                $join->on('order_items.product_id', '=', 'pav.product_id')
-                    ->where('pav.attribute_id', '=', 12);
-            });
+            ->join('orders', 'order_items.order_id', '=', 'orders.id');
 
         $customer_group =  $data['customer_group'] ?? 0;
         if ($customer_group != null && $customer_group != 0) {
@@ -41,12 +36,13 @@ class ProductSalesDataGrid extends DataGrid
 
         $queryBuilder = $queryBuilder->addSelect(
             'order_items.product_id as id',
-            'product_flat.sku as sku',
-            'product_flat.name as name',
+            'order_items.sku as sku',
+            'order_items.name as name',
             DB::raw('SUM(base_total_invoiced - base_amount_refunded) as revenue'),
             DB::raw('SUM(qty_invoiced - qty_refunded) as total_qty'),
-            DB::raw('SUM(pav.float_value * (qty_invoiced - qty_refunded)) as total_cost'),
-            DB::raw('SUM((base_total_invoiced - base_amount_refunded) - (pav.float_value * (qty_invoiced - qty_refunded))) as profit')
+            DB::raw('SUM(order_items.base_cost * (qty_invoiced - qty_refunded)) as total_cost'),
+            "order_items.base_discount_amount",
+            DB::raw('SUM((base_total_invoiced - base_amount_refunded) - (order_items.base_cost * (qty_invoiced - qty_refunded))) as profit')
         )
             ->whereNull('order_items.parent_id')
             ->where('orders.status', 'completed')
@@ -55,12 +51,14 @@ class ProductSalesDataGrid extends DataGrid
         $queryBuilder->having(DB::raw('SUM(base_total_invoiced - base_amount_refunded)'), '>', 0)
             ->groupBy('order_items.product_id');
 
-        $this->addFilter('id', 'product_flat.product_id');
-        $this->addFilter('sku', 'product_flat.sku');
-        $this->addFilter('name', 'product_flat.name');
-        $this->addFilter('total_qty', DB::raw('SUM(qty_invoiced - qty_refunded)'));
+        $this->addFilter('id', 'order_items.product_id');
+        $this->addFilter('sku', 'order_items.sku');
+        $this->addFilter('name', 'order_items.name');
         $this->addFilter('revenue', DB::raw('SUM(base_total_invoiced - base_amount_refunded)'));
-        $this->addFilter('total_cost', DB::raw('SUM((base_total_invoiced - base_amount_refunded) - (pav.float_value * (qty_invoiced - qty_refunded)))'));
+        $this->addFilter('total_qty', DB::raw('SUM(qty_invoiced - qty_refunded)'));
+        $this->addFilter('total_cost', DB::raw('SUM(order_items.base_cost * (qty_invoiced - qty_refunded))'));
+        $this->addFilter('base_discount_amount', 'order_items.base_discount_amount');
+        $this->addFilter('profit', DB::raw('SUM((base_total_invoiced - base_amount_refunded) - (order_items.base_cost * (qty_invoiced - qty_refunded)))'));
 
         return $queryBuilder;
     }
@@ -124,6 +122,18 @@ class ProductSalesDataGrid extends DataGrid
             'searchable' => false,
             'sortable'   => true,
             'filterable' => true,
+        ]);
+
+        $this->addColumn([
+            'index'      => 'base_discount_amount',
+            'label'      => "Discount",
+            'type'       => 'price',
+            'searchable' => false,
+            'filterable' => true,
+            'sortable'   => true,
+            'closure'    => function ($row) {
+                return core()->convertToBasePrice($row->base_discount_amount);
+            },
         ]);
 
         $this->addColumn([
